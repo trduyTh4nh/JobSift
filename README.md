@@ -23,6 +23,18 @@ Và đặc biệt cảm ơn
 
 Vì đã hướng dẫn các em trong dự án này.
 
+# Last words
+## Best wishes fron Quang.
+```
+     =/\                 /\=
+     / \'._   (\_/)   _.'/ \
+    / .''._'--(o.o)--'_.''. \
+   /.' _/ |`'=/ " \='`| \_ `.\
+  /` .' `\;-,'\___/',-;/` '. '\
+ /.-'       `\(-V-)/`       `-.\
+ `            "   "            `
+```
+
 # Những thứ liên quan đến Setup
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
