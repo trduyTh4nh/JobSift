@@ -1,10 +1,38 @@
+# Đồ án CNPM NC viết bằng React Native (Javascript)
+![](https://geps.dev/progress/0)\
+Tiến độ: 0.5% (Đang chuẩn bị)
+# Nền tảng:
+Đa nền tảng (Android, iOS)
+# Back-end
+Code back-end sẽ được upload lên khi dự án đã hoàn thành giai đoạn chuẩn bị.
+Công nghệ: Node.js, PostgreSQL, Express
+# Backlog
+Sẽ được upload sau khi đã hoàn thành dự án.
+
+# Credits
+
+- Trần Duy Thanh: Leader, Full-stack, UI
+- Tiêu Trí Quang: Full-stack, UI
+- Huỳnh Vũ Anh Tuấn: Web (Front-end), UI, BA
+- Nguyễn Đức Vinh: App (Front-end), UI
+- Lâm Võ Minh Nhật: App (Front-end), UI
+- Hà Duy Long: Web (Front-end), UI
+
+Và đặc biệt cảm ơn
+- **Ths. Lê Thị Bảo Trân: Giảng viên**
+
+Vì đã hướng dẫn các em trong dự án này.
+
+# Những thứ liên quan đến Setup
 This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
 
-# Getting Started
+
+
+## Getting Started
 
 >**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
 
-## Step 1: Start the Metro Server
+### Step 1: Start the Metro Server
 
 First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
 
@@ -18,11 +46,11 @@ npm start
 yarn start
 ```
 
-## Step 2: Start your Application
+### Step 2: Start your Application
 
 Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
 
-### For Android
+#### For Android
 
 ```bash
 # using npm
@@ -32,7 +60,7 @@ npm run android
 yarn android
 ```
 
-### For iOS
+#### For iOS
 
 ```bash
 # using npm
@@ -46,7 +74,7 @@ If everything is set up _correctly_, you should see your new app running in your
 
 This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
 
-## Step 3: Modifying your App
+### Step 3: Modifying your App
 
 Now that you have successfully run the app, let's modify it.
 
@@ -59,16 +87,16 @@ Now that you have successfully run the app, let's modify it.
 
 You've successfully run and modified your React Native App. :partying_face:
 
-### Now what?
+#### Now what?
 
 - If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
 - If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
 
-# Troubleshooting
+## Troubleshooting
 
 If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
 
-# Learn More
+## Learn More
 
 To learn more about React Native, take a look at the following resources:
 
