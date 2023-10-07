@@ -33,7 +33,7 @@ const CardJob = (props) => {
     // }
 
     return (
-        <View  style={styles.cardContainer}  >
+        <View style={styles.cardContainer}  >
             <Stack.Screen name="JobDetail" component={JobDetail} />
             <TouchableOpacity onPress={goToDetailsScreen} style={styles.wrapJobCard}>
                 <View style={styles.jobCard}>

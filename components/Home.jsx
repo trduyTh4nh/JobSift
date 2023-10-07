@@ -73,76 +73,93 @@ const Home = ({ navigation }) => {
 
 
     return (
-        <View style={styles.wrap}>
-            <View style={styles.container}>
-                <View style={styles.wrap_welcome}>
-                    <Text style={styles.sayhi}>Hi, </Text>
-                    <Text style={styles.userName}>Steve 👋</Text>
+        <SafeAreaView>
+            <View style={styles.wrap}>
+                <View style={styles.header}>
+                    <View style={styles.wrap_welcome}>
+                        <Text style={styles.sayhi}>Hi, </Text>
+                        <Text style={styles.userName}>Steve 👋</Text>
+                    </View>
+                    <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
+                    <View style={styles.wrapSearch}>
+                        <TextInput
+                            style={styles.inputSearch}
+                            placeholder="Find your new job"
+                            placeholderTextColor="#999"
+                        />
+
+                        <View style={styles.wrapSearchBtn}>
+                            <TouchableOpacity style={styles.searchBtn}>
+                                <Icon name="search-line" size={40} color="#fff"></Icon>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
                 </View>
-                <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
-            </View>
 
-            <View style={styles.wrapSearch}>
-                <TextInput
-                    style={styles.inputSearch}
-                    placeholder="Find your new job"
-                    placeholderTextColor="#999"
-                />
+            <ScrollView>
 
-                <View style={styles.wrapSearchBtn}>
-                    <TouchableOpacity style={styles.searchBtn}>
-                        <Icon name="search-line" size={40} color="#fff"></Icon>
-                    </TouchableOpacity>
+
+
+                <View style={styles.body}>
+                    <View style={styles.wrapTitle}>
+                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
+
+                        <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
+                    </View>
+                    <View style={styles.container}>
+                        {isLoading ? (
+                            <Text>Loading...</Text>
+                        ) : (
+                            <FlatList
+                                data={postData}
+                                renderItem={renderItem}
+                                keyExtractor={(item) => item.id_post.toString()}
+                                horizontal={true}
+                                contentContainerStyle={{ columnGap: 20 }}
+                            />
+                        )}
+                    </View>
+
+
+                    <View style={styles.wrapTitle}>
+                        <Text style={styles.titleHomeJob}>Nearby jobs</Text>
+                    </View>
+                        <FlatList
+                            style={styles.scrollable}
+                            scrollEnabled={false}
+                            data={nearbyJobsData}
+                            renderItem={renderJobNearBy}
+                            keyExtractor={(item) => item.id.toString()}
+                        ></FlatList>
                 </View>
+            </ScrollView>
+
+
+
 
             </View>
-
-            <View style={styles.wrapTitle}>
-                <Text style={styles.titleHomeJob}>Popular jobs</Text>
-
-                <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
-            </View>
-
-
-
-
-            <View style={styles.container}>
-                {isLoading ? (
-                    <Text>Loading...</Text>
-                ) : (
-                    <FlatList
-                        data={postData}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id_post.toString()}
-                        horizontal={true}
-                        contentContainerStyle={{ columnGap: 20 }}
-                    />
-                )}
-            </View>
-
-
-            <View style={styles.wrapTitle}>
-                <Text style={styles.titleHomeJob}>Nearby jobs</Text>
-            </View>
-
-                <FlatList
-                    data={nearbyJobsData}
-                    renderItem={renderJobNearBy}
-                    keyExtractor={(item) => item.id.toString()}
-                ></FlatList>
-
-
-
-
-        </View>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
+    body: {
+        paddingLeft: 25,
+        paddingRight: 25
+    },
+    scrollable:{
+        paddingBottom: 70,
+        flex: 1
+    },
     wrap: {
-        paddingTop: 50,
-        paddingRight: 20,
-        paddingLeft: 20
+        height: '100%',
+        paddingTop: 15,
+    },
+    header: {
+        paddingLeft :25,
+        paddingRight: 25,
+        paddingBottom: 15
     },
     container: {
         container: {
@@ -188,6 +205,7 @@ const styles = StyleSheet.create({
         // fontFamily: 'RukbikNormal',
     },
     wrapSearch: {
+       
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
@@ -214,7 +232,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: { width: 1, height: 30 },
+        shadowOffset: { width: 1, height: 5 },
         shadowOpacity: 0.55,
         shadowRadius: 4.84,
         elevation: 4
@@ -235,6 +253,7 @@ const styles = StyleSheet.create({
         fontSize: 16
     },
     wrapTitle: {
+        
         marginTop: 25,
         display: "flex",
         flexDirection: "row",
