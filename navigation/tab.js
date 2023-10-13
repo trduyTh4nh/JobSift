@@ -4,7 +4,7 @@ import FavoriteJob from '../components/FavoriteJob';
 import Job from '../components/Job';
 import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
-import { Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { Text } from 'react-native-svg';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -16,6 +16,7 @@ import { useLayoutEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Header } from '../components/Header';
 import { BlurView } from 'expo-blur';
+import ChatDetails from '../components/ChatDetails';
 const Stack = createNativeStackNavigator();
 
 
@@ -48,15 +49,23 @@ const Tabs = () => {
 
     const ChatStack = () => (
         <Stack.Navigator screenOptions={{
-            header: ({navigation, route, options, back}) => {
+            headerTransparent: true,
+            headerBlurEffect: 'regular'
+        }} headerMode="screen">
+            <Stack.Screen name="Chat" component={Chat} options={{ header: ({navigation, route, options, back}) => {
                 const title = getHeaderTitle(options, route.name)
                 return (
-                    <Header title={title} LeftButton={back}></Header>
+                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
                 )
-            }
-        }}>
-            <Stack.Screen name="Chat" component={Chat} options={{  }} />
-
+            } }} />
+            <Stack.Screen name="Chat Details" component={ChatDetails} 
+            options={{ header: ({navigation, route, options, back}) => {
+                const title = getHeaderTitle(options, route.name)
+                return (
+                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                )
+            } }}
+            />
         </Stack.Navigator>
     );
 
@@ -92,7 +101,7 @@ const Tabs = () => {
 
     return (
 
-
+    
         <Tab.Navigator screenOptions={{
             tabBarShowLabel: false,
             tabBarStyle: {

@@ -8,6 +8,7 @@ import JobDetail from "../Job/JobDetail";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useFonts } from "expo-font";
 
 const Stack = createNativeStackNavigator();
 
@@ -40,15 +41,15 @@ const Home = ({ navigation }) => {
     }, []);
 
 
-    // const [fontsLoaded] = useFonts({
-    //     Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     RukbikNormal: require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
+    const [fontsLoaded] = useFonts({
+        Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        RukbikNormal: require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
 
-    // });
+    });
 
-    // if (!fontsLoaded) {
-    //     return null;
-    // }
+    if (!fontsLoaded) {
+        return null;
+    }
 
     const nearbyJobsData = [
         { id: '1', title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
@@ -167,7 +168,7 @@ const styles = StyleSheet.create({
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: 'lightblue',
-            // fontFamily: 'Raleway-Bold'
+    fontFamily: 'Rubik'
         },
         text: {
             fontSize: 18,
@@ -189,11 +190,11 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontSize: 16,
-        // fontFamily: 'Rubik',
+fontFamily: 'Rubik',
 
     },
     welcomeMessage: {
-        // fontFamily: 'RukbikNormal',
+        fontFamily: 'RukbikNormal',
         fontSize: 24
     },
     wrap_welcome: {
@@ -202,7 +203,7 @@ const styles = StyleSheet.create({
     },
     sayhi: {
         fontSize: 16,
-        // fontFamily: 'RukbikNormal',
+        fontFamily: 'RukbikNormal',
     },
     wrapSearch: {
        
@@ -221,7 +222,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 10,
         fontSize: 16,
-        // fontFamily: 'RukbikNormal'
+        fontFamily: 'RukbikNormal'
 
     },
     searchBtn: {
@@ -248,7 +249,7 @@ const styles = StyleSheet.create({
     }
     ,
     titleHomeJob: {
-        // fontFamily: "RukbikNormal",
+        fontFamily: "RukbikNormal",
         fontWeight: "700",
         fontSize: 16
     },
@@ -261,7 +262,7 @@ const styles = StyleSheet.create({
         paddingRight: 10
     },
     titleHomeShowMore: {
-        // fontFamily: "RukbikNormal",
+        fontFamily: "RukbikNormal",
         fontWeight: "500",
         color: "rgba(171,171,171,1)"
     },
