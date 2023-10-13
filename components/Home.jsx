@@ -5,31 +5,82 @@ import Icon from 'react-native-remix-icon';
 import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
+import reactNativeConfig from "../react-native.config";
+
+import { useFonts } from "expo-font";
 
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
+
+
+
+
+
+
 
 const Stack = createNativeStackNavigator();
 
+const nearbyJobsData = [
+    { id: '1', title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
+    { id: '2', title_job: 'Front-End Dev', jobCate: 'Part-time' },
+    { id: '3', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '4', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '5', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '6', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '7', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '8', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '9', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+];
+
+
+
 
 const Home = ({ navigation }) => {
+
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // dùng useEffect để fetch data từ API về
+
+    // const [fontLoaded] = useFonts({
+    //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
+    // })
+    // if(!fontLoaded){
+    //     return(
+    //         <View>
+    //             <Text>Loading..........</Text>
+    //         </View>
+    //     )
+    // }
+
+    // Use useEffect to fetch data from the API
     useEffect(() => {
-        // dùng hàm async 
+        navigation.getParent()?.setOptions({
+            tabBarStyle: {
+                position: 'absolute',
+                bottom: 15,
+                left: 20,
+                right: 20,
+                elevation: 5,
+                backgroundColor: '#232323',
+                borderRadius: 30,
+                height: 60,
+                shadowColor: '#000',
+                shadowOffset: { width: 0, height: 6 },
+                shadowOpacity: 0.25,
+                shadowRadius: 3.84,
+            }
+        })
         const fetchData = async () => {
             try {
                 const response = await fetch('http://192.168.116.1:3001');
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
-                // await là đợi thằng async đồng bộ xong nhảy vào thằng await chuyển thành
-                // json xong dùng useState set dữ liệu cho Postdata
                 const data = await response.json();
-                setPostData(data);
                 setIsLoading(false);
+                setPostData(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
                 setIsLoading(false);
@@ -40,27 +91,35 @@ const Home = ({ navigation }) => {
     }, []);
 
 
-    // const [fontsLoaded] = useFonts({
-    //     Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     RukbikNormal: require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
+    // const [postData, setPostData] = useState([]);
+    // const [isLoading, setIsLoading] = useState(true);
 
-    // });
+    // // dùng useEffect để fetch data từ API về
+    // useEffect(() => {
+    //     // dùng hàm async 
+    //     const fetchData = async () => {
+    //         try {
+    //             const response = await fetch('http://192.168.116.1:3001');
+    //             if (!response.ok) {
+    //                 throw new Error('Network response was not ok');
+    //             }
+    //             // await là đợi thằng async đồng bộ xong nhảy vào thằng await chuyển thành
+    //             // json xong dùng useState set dữ liệu cho Postdata
+    //             const data = await response.json();
+    //             setPostData(data);
+    //             setIsLoading(false);
+    //         } catch (error) {
+    //             console.log('Error fetching data:', error);
+    //             setIsLoading(false);
+    //         }
+    //     };
 
-    // if (!fontsLoaded) {
-    //     return null;
-    // }
+    //     fetchData();
+    // }, []);
 
-    const nearbyJobsData = [
-        { id: '1', title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
-        { id: '2', title_job: 'Front-End Dev', jobCate: 'Part-time' },
-        { id: '3', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '4', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '5', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '6', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '7', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '8', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-        { id: '9', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    ];
+
+
+
 
     const renderJobNearBy = ({ item }) => (
         <NearbyJob dataNearby={item} />
@@ -68,7 +127,8 @@ const Home = ({ navigation }) => {
 
 
     const renderItem = ({ item }) => (
-        <CardJob dataPost={item} onPress={() => { navigation.navigate('JobDetail', { postData: item }) }} />
+        <CardJob dataPost={item} />
+
     );
 
 
@@ -106,7 +166,7 @@ const Home = ({ navigation }) => {
 
 
 
-            <View style={styles.container}>
+            <View style={styles.container_JobList}>
                 {isLoading ? (
                     <Text>Loading...</Text>
                 ) : (
@@ -125,14 +185,12 @@ const Home = ({ navigation }) => {
                 <Text style={styles.titleHomeJob}>Nearby jobs</Text>
             </View>
 
-                <FlatList
-                    data={nearbyJobsData}
-                    renderItem={renderJobNearBy}
-                    keyExtractor={(item) => item.id.toString()}
-                ></FlatList>
-
-
-
+            <FlatList
+                style={styles.wrapJobNearBy}
+                data={nearbyJobsData}
+                renderItem={renderJobNearBy}
+                keyExtractor={(item) => item.id.toString()}
+            ></FlatList>
 
         </View>
     )
@@ -140,16 +198,18 @@ const Home = ({ navigation }) => {
 
 const styles = StyleSheet.create({
     wrap: {
-        paddingTop: 50,
-        paddingRight: 20,
-        paddingLeft: 20
+        paddingTop: 20,
     },
     container: {
+        paddingRight: 20,
+        paddingLeft: 20
+        ,
         container: {
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: 'lightblue',
+
             // fontFamily: 'Raleway-Bold'
         },
         text: {
@@ -170,14 +230,21 @@ const styles = StyleSheet.create({
         },
 
     },
+
     userName: {
         fontSize: 16,
-        // fontFamily: 'Rubik',
+        fontWeight: "800",
+        color: "#000"
 
     },
+    container_JobList: {
+        marginLeft: 10,
+        marginTop: -10
+    },
     welcomeMessage: {
-        // fontFamily: 'RukbikNormal',
-        fontSize: 24
+        fontFamily: 'RukbikNormal',
+        fontSize: 24,
+        
     },
     wrap_welcome: {
         display: 'flex',
@@ -185,14 +252,16 @@ const styles = StyleSheet.create({
     },
     sayhi: {
         fontSize: 16,
-        // fontFamily: 'RukbikNormal',
+         fontFamily: 'RukbikNormal',
     },
     wrapSearch: {
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
         alignItems: "center",
-        marginTop: 16
+        marginTop: 16,
+        paddingRight: 20,
+        paddingLeft: 20
     },
     inputSearch: {
         color: '#ABABAB',
@@ -203,7 +272,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 10,
         fontSize: 16,
-        // fontFamily: 'RukbikNormal'
+        fontFamily: 'RukbikNormal'
 
     },
     searchBtn: {
@@ -230,25 +299,32 @@ const styles = StyleSheet.create({
     }
     ,
     titleHomeJob: {
-        // fontFamily: "RukbikNormal",
+       fontFamily: "RukbikNormal",
         fontWeight: "700",
-        fontSize: 16
+        fontSize: 16,
+        marginBottom: 5
     },
     wrapTitle: {
         marginTop: 25,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingRight: 10
+        paddingRight: 20,
+        paddingLeft: 20
     },
     titleHomeShowMore: {
-        // fontFamily: "RukbikNormal",
+         fontFamily: "RukbikNormal",
         fontWeight: "500",
         color: "rgba(171,171,171,1)"
     },
     nearByJobContainer: {
         marginTop: 10
-    }
+    },
+    wrapJobNearBy: {
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+
 
 
 

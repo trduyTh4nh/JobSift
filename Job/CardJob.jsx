@@ -1,12 +1,12 @@
 import React, { useEffect, useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet } from "react-native";
-// import { useFonts } from "expo-font";
+
 import Icon from 'react-native-remix-icon';
 import JobDetail from "./JobDetail";
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-
+import CardJobDetail from "./CardJobDetail";
 import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
@@ -15,61 +15,10 @@ const CardJob = (props) => {
     const navigation = useNavigation();
     const { dataPost } = props;
     
-    const goToDetailsScreen = () => {
-        navigation.navigate('JobDetail'); // Navigate to the "DetailsScreen"
-      };
-    
-  
-
-    // const [fontsLoaded] = useFonts({
-    //     Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     RukbikNormal: require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
-
-    // });
-
-
-    // if (!fontsLoaded) {
-    //     return null; // Return null or a loading indicator while fonts are loading
-    // }
-
     return (
-        <View  style={styles.cardContainer}  >
-            <Stack.Screen name="JobDetail" component={JobDetail} />
-            <TouchableOpacity onPress={goToDetailsScreen} style={styles.wrapJobCard}>
-                <View style={styles.jobCard}>
-                    <View style={styles.jobCardInfo}>
-                        <View style={styles.jobCardHeader}>
-                            <Image source={require('../assets/logo_google.png')}
-                                style={{ width: 45, height: 45 }}
-                            ></Image>
-
-                            <View style={styles.jobCardName}>
-                                <Text style={styles.jobCardNameCompany}>{dataPost.tieu_de}</Text>
-                                <Text style={styles.jobCardAddress}>{dataPost.dia_chi}</Text>
-                            </View>
-
-                            <TouchableOpacity>
-                                <Icon name="heart-line" color="#fff" style={styles.iconFavorite} size={30}></Icon>
-                            </TouchableOpacity>
-                        </View>
-
-                        <View style={styles.jobCardBody}>
-                            <Text style={styles.nameJob}>{dataPost.nganh_nghe}</Text>
-
-                            <View style={styles.jobCate}>
-                                <Text style={styles.jobCateName}>{dataPost.job_category}</Text>
-                                <Icon name="arrow-right-s-fill" color="#fff"></Icon>
-                                <Text style={styles.jobSalary}>$750 - $900</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                </View>
-            </TouchableOpacity>
-        </View>
+        <CardJobDetail dataPostDetail={dataPost}></CardJobDetail>
     )
 }
-
 
 export default CardJob
 
