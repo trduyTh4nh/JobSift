@@ -1,10 +1,10 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
 
-const MyForm = () => {
+const MyForm = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -13,7 +13,13 @@ const MyForm = () => {
 
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
-
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        display: "none"
+      }
+    })
+  })
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -54,6 +60,7 @@ const MyForm = () => {
         }
       })
         .then((response) => {
+          navigation.navigate('LoginForm')
           console.log(JSON.stringify(response.data));
         })
         .catch((error) => {
@@ -64,11 +71,9 @@ const MyForm = () => {
     return
   };
 
-  const animatedStyle = {
-    borderColor: isFocused ? 'blue' : 'gray', // Màu viền thay đổi khi nhập liệu
-    borderWidth: isFocused ? 2 : 1, // Độ dày viền thay đổi khi nhập liệu
-    borderRadius: isFocused ? 10 : 5, // Độ cong viền thay đổi khi nhập liệu
-  };
+  const changeLoginScreen = () => {
+    navigation.navigate('LoginForm')
+  }
 
 
   return (
@@ -147,7 +152,7 @@ const MyForm = () => {
 
       <View style={styles.descBottom}>
         <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={changeLoginScreen}>
           <Text style={styles.descBottomLogin}>Login</Text>
         </TouchableOpacity>
       </View>

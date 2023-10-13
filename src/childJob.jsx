@@ -3,12 +3,12 @@ import { Text, View, StyleSheet, TouchableOpacity, Image } from "react-native";
 
 
 
-const  childInFoJob = () => {
+const  ChildInFoJob = () => {
     return (
         <View>
-            <Text>Okê tê tê</Text>
+            
         </View>
     )
 }
 
-export default childInFoJob
+export default ChildInFoJob

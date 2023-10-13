@@ -1,0 +1,1 @@
+import { creatAppContainer } from 'react-navigation'

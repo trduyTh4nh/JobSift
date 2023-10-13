@@ -11,7 +11,9 @@ const Stack = createNativeStackNavigator();
 const Main = () => {
     return (
 
-        <Tabs></Tabs>
+        <NavigationContainer>
+            <Tabs></Tabs>
+        </NavigationContainer>
     );
 }
 
