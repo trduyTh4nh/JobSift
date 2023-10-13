@@ -7,19 +7,9 @@ import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
 
-import { useFonts } from "expo-font";
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useFonts } from "expo-font";
 import { useNavigation } from '@react-navigation/native';
-
-
-
-
-
-
-
 const Stack = createNativeStackNavigator();
 
 const nearbyJobsData = [
@@ -35,44 +25,13 @@ const nearbyJobsData = [
 ];
 
 
-
-
 const Home = ({ navigation }) => {
 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-
-    // const [fontLoaded] = useFonts({
-    //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
-    // })
-    // if(!fontLoaded){
-    //     return(
-    //         <View>
-    //             <Text>Loading..........</Text>
-    //         </View>
-    //     )
-    // }
-
     // Use useEffect to fetch data from the API
     useEffect(() => {
-        navigation.getParent()?.setOptions({
-            tabBarStyle: {
-                position: 'absolute',
-                bottom: 15,
-                left: 20,
-                right: 20,
-                elevation: 5,
-                backgroundColor: '#232323',
-                borderRadius: 30,
-                height: 60,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-            }
-        })
         const fetchData = async () => {
             try {
                 const response = await fetch('http://192.168.116.1:3001');
@@ -119,9 +78,9 @@ const Home = ({ navigation }) => {
     // }, []);
 
 
+  
 
-
-
+   
     const renderJobNearBy = ({ item }) => (
         <NearbyJob dataNearby={item} />
     );
@@ -134,70 +93,27 @@ const Home = ({ navigation }) => {
 
 
     return (
-        <SafeAreaView>
-            <View style={styles.wrap}>
-                <View style={styles.header}>
-                    <View style={styles.wrap_welcome}>
-                        <Text style={styles.sayhi}>Hi, </Text>
-                        <Text style={styles.userName}>Steve 👋</Text>
-                    </View>
-                    <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
-                    <View style={styles.wrapSearch}>
-                        <TextInput
-                            style={styles.inputSearch}
-                            placeholder="Find your new job"
-                            placeholderTextColor="#999"
-                        />
-
-                        <View style={styles.wrapSearchBtn}>
-                            <TouchableOpacity style={styles.searchBtn}>
-                                <Icon name="search-line" size={40} color="#fff"></Icon>
-                            </TouchableOpacity>
-                        </View>
-
-                    </View>
+        <View style={styles.wrap}>
+            <View style={styles.container}>
+                <View style={styles.wrap_welcome}>
+                    <Text style={styles.sayhi}>Hi, </Text>
+                    <Text style={styles.userName}>Steve 👋</Text>
                 </View>
+                <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
+            </View>
 
-            <ScrollView>
+            <View style={styles.wrapSearch}>
+                <TextInput
+                    style={styles.inputSearch}
+                    placeholder="Find your new job"
+                    placeholderTextColor="#999"
+                />
 
-
-
-                <View style={styles.body}>
-                    <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
-
-                        <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
-                    </View>
-                    <View style={styles.container}>
-                        {isLoading ? (
-                            <Text>Loading...</Text>
-                        ) : (
-                            <FlatList
-                                data={postData}
-                                renderItem={renderItem}
-                                keyExtractor={(item) => item.id_post.toString()}
-                                horizontal={true}
-                                contentContainerStyle={{ columnGap: 20 }}
-                            />
-                        )}
-                    </View>
-
-
-                    <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Nearby jobs</Text>
-                    </View>
-                        <FlatList
-                            style={styles.scrollable}
-                            scrollEnabled={false}
-                            data={nearbyJobsData}
-                            renderItem={renderJobNearBy}
-                            keyExtractor={(item) => item.id.toString()}
-                        ></FlatList>
+                <View style={styles.wrapSearchBtn}>
+                    <TouchableOpacity style={styles.searchBtn}>
+                        <Icon name="search-line" size={40} color="#fff"></Icon>
+                    </TouchableOpacity>
                 </View>
-            </ScrollView>
-
-
-
 
             </View>
 
@@ -236,19 +152,11 @@ const Home = ({ navigation }) => {
                 keyExtractor={(item) => item.id.toString()}
             ></FlatList>
 
-        </SafeAreaView>
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
-    body: {
-        paddingLeft: 25,
-        paddingRight: 25
-    },
-    scrollable:{
-        paddingBottom: 70,
-        flex: 1
-    },
     wrap: {
         paddingTop: 20,
     },
@@ -285,9 +193,10 @@ const styles = StyleSheet.create({
 
     userName: {
         fontSize: 16,
+        // fontFamily: 'Rubik',
+        fontFamily: 'Rubik-Black',
         fontWeight: "800",
-        color: "#000",
-        fontFamily: 'Rubik',
+        color: "#000"
 
     },
     container_JobList: {
@@ -295,9 +204,9 @@ const styles = StyleSheet.create({
         marginTop: -10
     },
     welcomeMessage: {
-        fontFamily: 'RukbikNormal',
+        // fontFamily: 'RukbikNormal',
         fontSize: 24,
-        
+        fontFamily: 'Rubik-Black',
     },
     wrap_welcome: {
         display: 'flex',
@@ -305,10 +214,9 @@ const styles = StyleSheet.create({
     },
     sayhi: {
         fontSize: 16,
-        fontFamily: 'RukbikNormal',
+        // fontFamily: 'RukbikNormal',
     },
     wrapSearch: {
-       
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
@@ -326,7 +234,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20,
         paddingRight: 10,
         fontSize: 16,
-        fontFamily: 'RukbikNormal'
+        // fontFamily: 'RukbikNormal'
 
     },
     searchBtn: {
@@ -337,7 +245,7 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         shadowColor: "#000",
-        shadowOffset: { width: 1, height: 5 },
+        shadowOffset: { width: 1, height: 30 },
         shadowOpacity: 0.55,
         shadowRadius: 4.84,
         elevation: 4
@@ -353,13 +261,12 @@ const styles = StyleSheet.create({
     }
     ,
     titleHomeJob: {
-       fontFamily: "RukbikNormal",
+        // fontFamily: "RukbikNormal",
         fontWeight: "700",
         fontSize: 16,
         marginBottom: 5
     },
     wrapTitle: {
-        
         marginTop: 25,
         display: "flex",
         flexDirection: "row",
@@ -368,7 +275,7 @@ const styles = StyleSheet.create({
         paddingLeft: 20
     },
     titleHomeShowMore: {
-         fontFamily: "RukbikNormal",
+        // fontFamily: "RukbikNormal",
         fontWeight: "500",
         color: "rgba(171,171,171,1)"
     },

@@ -33,13 +33,12 @@ const styles = StyleSheet.create({
         elevation: 5,
         marginTop: 15,
         marginBottom: 15,
-        width: "95%",
+        width: "100%",
         backgroundColor: "#fff",
         padding: 15,
         gap: 20,
         borderRadius: 16,
-        marginLeft: 10,
-        marginRight: 10,
+        
         alignItems: "center"
     },
     nearByJobName: {
