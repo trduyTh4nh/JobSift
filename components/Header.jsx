@@ -1,3 +1,4 @@
+
 import { View, SafeAreaView, Text, Pressable, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import React from "react";
 import Icon from 'react-native-remix-icon'
@@ -47,3 +48,4 @@ const style = StyleSheet.create({
         fontWeight: 'bold'
     }
 })
+

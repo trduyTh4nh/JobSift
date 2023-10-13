@@ -3,8 +3,8 @@ import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatLis
 // import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import JobDetail from "./JobDetail";
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 
 import { useNavigation } from '@react-navigation/native';
@@ -14,27 +14,19 @@ const Stack = createNativeStackNavigator();
 const CardJob = (props) => {
     const navigation = useNavigation();
     const { dataPost } = props;
-    
+
     const goToDetailsScreen = () => {
-        navigation.navigate('JobDetail'); // Navigate to the "DetailsScreen"
-      };
-    
-  
-
-    // const [fontsLoaded] = useFonts({
-    //     Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     RukbikNormal: require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
-
-    // });
+        navigation.navigate('JobDetail', { dataPostDetail: dataPost }); // Navigate to the "DetailsScreen"
+    };
 
 
-    // if (!fontsLoaded) {
-    //     return null; // Return null or a loading indicator while fonts are loading
-    // }
 
     return (
         <View style={styles.cardContainer}  >
-            <Stack.Screen name="JobDetail" component={JobDetail} />
+
+
+            <Stack.Screen name="JobDetail" component={JobDetail} onPress={goToDetailsScreen} />
+
             <TouchableOpacity onPress={goToDetailsScreen} style={styles.wrapJobCard}>
                 <View style={styles.jobCard}>
                     <View style={styles.jobCardInfo}>

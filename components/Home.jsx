@@ -69,7 +69,7 @@ const Home = ({ navigation }) => {
 
 
     const renderItem = ({ item }) => (
-        <CardJob dataPost={item} onPress={() => { navigation.navigate('JobDetail', { postData: item }) }} />
+        <CardJob dataPost={item}  />
     );
 
 
