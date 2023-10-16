@@ -3,6 +3,7 @@ import { View, SafeAreaView, Text, Pressable, StyleSheet, TouchableOpacity, Plat
 import React from "react";
 import Icon from 'react-native-remix-icon'
 import { BlurView } from "expo-blur";
+import STYLE from "../assets/css/universal";
 export function Header({navigation, title, LeftButton}) {
     const back = () => {
         navigation.goBack()
@@ -11,21 +12,8 @@ export function Header({navigation, title, LeftButton}) {
     const button = LeftButton ? (<TouchableOpacity onPress={back}>
         <Icon name="arrow-left-s-line" size={24}></Icon> 
     </TouchableOpacity>) : undefined
-    
-    if(Platform.OS == 'ios'){
-        return (
-            <BlurView>
-                <SafeAreaView style={{backgroundColor: "rgba(255,255,255,0.55)"}}>
-                    <View style={style.header}>
-                        {button}
-                        <Text style={style.text}>{title}</Text>
-                    </View>
-                </SafeAreaView>
-            </BlurView>
-        )
-    }
     return (
-        <View>
+        <View style={STYLE.headerWrap}>
             <SafeAreaView style={{backgroundColor: "rgba(255,255,255,1)"}}>
                 <View style={style.header}>
                     {button}
@@ -43,9 +31,11 @@ const style = StyleSheet.create({
         alignItems: 'center',
         gap: 16,
     },
+ 
     text: {
         fontSize: 25,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'Rubik'
     }
 })
 

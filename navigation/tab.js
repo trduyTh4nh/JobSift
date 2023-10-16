@@ -4,15 +4,13 @@ import FavoriteJob from '../components/FavoriteJob';
 import Job from '../components/Job';
 import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
-import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Text } from 'react-native-svg';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JobDetail from '../Job/JobDetail';
-import Header from '../components/HeaderThanh'
-import { useNavigation } from '@react-navigation/native';
+import HeaderThanh from '../components/HeaderThanh'
+import { useNavigation, DefaultTheme } from '@react-navigation/native';
 import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
 import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
@@ -24,13 +22,23 @@ import { StatusBar } from 'react-native';
 import { Header } from '../components/Header';
 import { BlurView } from 'expo-blur';
 import ChatDetails from '../components/ChatDetails';
+import STYLE from '../assets/css/universal';
+import { HeaderProfile } from '../components/HeaderProfile';
+import EditProfile from '../components/EditProfile';
+
 const Stack = createNativeStackNavigator();
 
 
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
-
+    const THEME = {
+        ...DefaultTheme,
+        colors: {
+            ...DefaultTheme.colors,
+            background: '#fff'
+        }
+    }
     const [fontLoaded] = useFonts({
         'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
         'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
@@ -48,17 +56,17 @@ const Tabs = () => {
 
 
     const HomeStack = () => (
-        <Stack.Navigator initialRouteName='FormSignup' options={{
+        <Stack.Navigator  initialRouteName='FormSignup' theme={THEME} options={{
         }}>
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
             <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }}/>
-            <Stack.Screen name="Home" component={Home} options={{ headerShown: false, headerLeft: null }} />
+            <Stack.Screen name="Home" component={Home} options={{ gestureEnabled: false, headerShown: false, headerLeft: null }} />
             <Stack.Screen
                 name='JobDetail'
                 component={JobDetail}
                 options={{
                     headerTitle: () => (
-                        <Header name="JobDetail"></Header>
+                        <HeaderThanh name="JobDetail"></HeaderThanh>
                     ),
                     headerBackVisible: false,
                     headerLeft: () => (
@@ -103,7 +111,7 @@ const Tabs = () => {
                 )
             }
         }}>
-            <Stack.Screen name="Job" component={Job} options={{  }} />
+            <Stack.Screen name="Favourite Job" component={Job} options={{  }} />
         </Stack.Navigator>
     )};
 
@@ -149,12 +157,12 @@ const Tabs = () => {
             header: ({navigation, route, options, back}) => {
                 const title = getHeaderTitle(options, route.name)
                 return (
-                    <Header title={title} LeftButton={back}></Header>
+                    <HeaderProfile title={title} LeftButton={back}></HeaderProfile>
                 )
             }
         }}>
             <Stack.Screen name="ProfileJob" component={Profile} options={{  }} />
-
+            <Stack.Screen name="Edit" component={EditProfile} options={{ }} />
         </Stack.Navigator>
     );
 
@@ -164,21 +172,7 @@ const Tabs = () => {
         
         <Tab.Navigator screenOptions={{
             tabBarShowLabel: false,
-            tabBarStyle: {
-                position: 'absolute',
-                bottom: 25,
-                left: 20,
-                right: 20,
-                elevation: 5,
-                backgroundColor: '#232323',
-                borderRadius: 30,
-                paddingBottom: 0,
-                height: 60,
-                shadowColor: '#000',
-                shadowOffset: { width: 0, height: 6 },
-                shadowOpacity: 0.25,
-                shadowRadius: 3.84,
-            },
+            tabBarStyle: STYLE.tabBarStyle,
             
             
         }}>

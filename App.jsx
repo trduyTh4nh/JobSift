@@ -5,10 +5,10 @@ import { useEffect, useState } from 'react';
 import Tabs from './navigation/tab';
 import { createStackNavigator } from '@react-navigation/stack';
 
-
 import FormSignup from './src/FormSignup'
 import LoginForm from './src/LoginForm';
 import Main from './components/Main';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 const Stack = createStackNavigator();
 
@@ -16,7 +16,9 @@ const Stack = createStackNavigator();
 export default function App() {
 
   return (
-    <Main></Main>
+    <RootSiblingParent>
+      <Main></Main>
+    </RootSiblingParent>
   );
 }
 

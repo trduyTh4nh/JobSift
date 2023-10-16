@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
 import axios from 'axios';
+import Toast from "react-native-toast-message";
+import { API_URL } from "../constants/etc";
 
 const LoginForm = ({navigation}) => {
   
@@ -28,7 +30,8 @@ const LoginForm = ({navigation}) => {
   }
 
   const handleSubmit = () => {
-    axios.post('http://192.168.116.1:3001/login', FormData, {
+    
+    axios.post(`${API_URL}/login`, FormData, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -36,7 +39,10 @@ const LoginForm = ({navigation}) => {
       .then((respone) => {
         console.log(JSON.stringify(respone.data))
         console.log("Login Success!")
+        global.user = respone.data
+        console.log(global.user)
         navigation.navigate('Home')
+        Toast.show('Login success', {duration: 1000})
       })
       .catch((error) => {
         console.error(error)

@@ -2,24 +2,32 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
+import { ScrollView } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
 
 
-const MyForm = ({navigation}) => {
+const MyForm = ({navigation, route}) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
-
+  const foc = useIsFocused()
 
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
   useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none"
-      }
-    })
-  })
+    if(foc){
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: "none"
+        }
+      })
+    }
+    if(global.user){
+      navigation.navigate('Home')
+    }
+  }, [foc])
+  
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -54,7 +62,7 @@ const MyForm = ({navigation}) => {
 
   const handleSubmit = () => {
     if ((password === rePassword) && (password !== '' && rePassword !== '')) {
-      axios.post('http://192.168.116.1:3001/adduser', formData, {
+      axios.post('http://192.168.1.14:3001/adduser', formData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -77,86 +85,88 @@ const MyForm = ({navigation}) => {
 
 
   return (
-    <View style={styles.container}>
-      <View style={styles.wrapHeader}>
-        <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
-        </Image>
-      </View>
-
-      <View style={styles.titlePage}>
-        <Text style={styles.textTitle}>Signup</Text>
-      </View>
-
-
-      <View style={styles.decordPage}>
-        <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
-
-        </Image>
-
-        <Text style={styles.decordPageText}>
-          Bạn đã có tài khoản chưa?
-        </Text>
-      </View>
-
-      <View style={styles.wrapInput}>
-
-        <View style={styles.wrapEmail}>
-          <Text style={styles.lableInput}>Email</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="example@gmail.com"
-            value={email}
-            onChangeText={handleChangeEmail}
-            onFocus={handleFocus}
-            onBlur={handleBlur}
-          />
+    <ScrollView>
+      <View style={styles.container}>
+        <View style={styles.wrapHeader}>
+          <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
+          </Image>
         </View>
 
-        <View style={styles.wrapFullname}>
-          <Text style={styles.lableInput}>Full name</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="steve"
-            value={username}
-            onChangeText={handleChangeUsername}
-          />
+        <View style={styles.titlePage}>
+          <Text style={styles.textTitle}>Signup</Text>
         </View>
 
-        <View style={styles.wrapPassword}>
-          <Text style={styles.lableInput}>Password</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="*********************"
-            value={password}
-            onChangeText={handleChangePassword}
-          />
+
+        <View style={styles.decordPage}>
+          <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
+
+          </Image>
+
+          <Text style={styles.decordPageText}>
+            Bạn đã có tài khoản chưa?
+          </Text>
         </View>
 
-        <View style={styles.wrapRePassword}>
-          <Text style={styles.lableInput}> Re-password</Text>
-          <TextInput
-            style={styles.inputBox}
-            placeholder="*********************"
-            value={rePassword}
-            onChangeText={handleChangeRePassword}
-          />
+        <View style={styles.wrapInput}>
+
+          <View style={styles.wrapEmail}>
+            <Text style={styles.lableInput}>Email</Text>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="example@gmail.com"
+              value={email}
+              onChangeText={handleChangeEmail}
+              onFocus={handleFocus}
+              onBlur={handleBlur}
+            />
+          </View>
+
+          <View style={styles.wrapFullname}>
+            <Text style={styles.lableInput}>Full name</Text>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="steve"
+              value={username}
+              onChangeText={handleChangeUsername}
+            />
+          </View>
+
+          <View style={styles.wrapPassword}>
+            <Text style={styles.lableInput}>Password</Text>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="*********************"
+              value={password}
+              onChangeText={handleChangePassword}
+            />
+          </View>
+
+          <View style={styles.wrapRePassword}>
+            <Text style={styles.lableInput}> Re-password</Text>
+            <TextInput
+              style={styles.inputBox}
+              placeholder="*********************"
+              value={rePassword}
+              onChangeText={handleChangeRePassword}
+            />
+          </View>
+
+          <View style={styles.wrapButtonSignup}>
+            <TouchableOpacity style={styles.btnSignup} onPress={handleSubmit}>
+              <Text style={styles.textInbtnSignup}>Signup</Text>
+            </TouchableOpacity>
+          </View>
+
         </View>
 
-        <View style={styles.wrapButtonSignup}>
-          <TouchableOpacity style={styles.btnSignup} onPress={handleSubmit}>
-            <Text style={styles.textInbtnSignup}>Signup</Text>
+        <View style={styles.descBottom}>
+          <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
+          <TouchableOpacity onPress={changeLoginScreen}>
+            <Text style={styles.descBottomLogin}>Login</Text>
           </TouchableOpacity>
         </View>
-
       </View>
-
-      <View style={styles.descBottom}>
-        <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-        <TouchableOpacity onPress={changeLoginScreen}>
-          <Text style={styles.descBottomLogin}>Login</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+    </ScrollView>
   );
 };
 
