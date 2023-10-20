@@ -13,7 +13,7 @@ export function Header({navigation, title, LeftButton}) {
         <Icon name="arrow-left-s-line" size={24}></Icon> 
     </TouchableOpacity>) : undefined
     return (
-        <View style={STYLE.headerWrap}>
+        <View style={title === 'Salary Calculator' ? {...STYLE.headerWrap, shadowOpacity: 0} : STYLE.headerWrap}>
             <SafeAreaView style={{backgroundColor: "rgba(255,255,255,1)"}}>
                 <View style={style.header}>
                     {button}

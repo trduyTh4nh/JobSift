@@ -38,7 +38,7 @@ const Profile = ({navigation}) =>{
                 <View style={styles.daugach}>
 
                 </View>
-                <TouchableOpacity style={styles.dongngang}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Salary Calculator')}} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="calculator-line"></Icon>
                         <Text style={styles.chucuaslart}> Salary Calculator </Text>
@@ -55,7 +55,7 @@ const Profile = ({navigation}) =>{
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.dongngang}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Edit Profile Info')}} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="pencil-line"></Icon>
                         <Text style={styles.chucuaslart}> Edit account info </Text>

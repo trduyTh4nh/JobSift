@@ -25,6 +25,7 @@ import ChatDetails from '../components/ChatDetails';
 import STYLE from '../assets/css/universal';
 import { HeaderProfile } from '../components/HeaderProfile';
 import EditProfile from '../components/EditProfile';
+import SalaryCalculator from '../components/SalaryCalculator';
 
 const Stack = createNativeStackNavigator();
 
@@ -157,12 +158,20 @@ const Tabs = () => {
             header: ({navigation, route, options, back}) => {
                 const title = getHeaderTitle(options, route.name)
                 return (
-                    <HeaderProfile title={title} LeftButton={back}></HeaderProfile>
+                    <HeaderProfile navigation={navigation} title={title} LeftButton={back}></HeaderProfile>
                 )
             }
         }}>
             <Stack.Screen name="ProfileJob" component={Profile} options={{  }} />
-            <Stack.Screen name="Edit" component={EditProfile} options={{ }} />
+            <Stack.Screen name="Edit Profile Info" component={EditProfile} options={{ }} />
+            <Stack.Screen name="Salary Calculator" component={SalaryCalculator} options={{header: 
+                ({navigation, route, options, back}) => {
+                const title = getHeaderTitle(options, route.name)
+                return (
+                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                )
+            }
+            }}/>
         </Stack.Navigator>
     );
 

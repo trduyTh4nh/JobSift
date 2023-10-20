@@ -25,24 +25,29 @@ export function HeaderProfile({navigation, title, LeftButton}) {
             setImage(res.assets[0].uri)
         }
     }
-    if(Platform.OS == 'ios'){
+    
         return (
             <View>
-                <SafeAreaView style={{backgroundColor: "rgba(255,255,255,0.55)"}}>
+                <SafeAreaView style={{backgroundColor: "rgba(255,255,255,1)"}}>
                     <View style={styles.wrap_welcome}>
                         <View style={styles.wrap_info}>
-                            <TouchableOpacity onPress={pickImage}>
-
-                                <Image source={{uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}} 
+                            {button}
+                           
+                            {
+                                title === 'Edit Profile Info' ? '' : (
+                                    <Image source={{uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}} 
                                     style={{
                                         width:60,
                                         height:60,
                                         borderRadius:30,
                                         }}/>
-                            </TouchableOpacity>
+                                )
+                            }
+                                
+                            
                             <View style={styles.Xuongdong} >
-                                <Text style={styles.userName}> {global.user.user.full_name} </Text>
-                                <Text style={styles.sayhi}> Candiate </Text>
+                                <Text style={styles.userName}>{global.user.user.full_name} </Text>
+                                <Text style={styles.sayhi}>Candiate </Text>
                             </View>
                         </View>
                         <View>
@@ -56,38 +61,6 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                 </SafeAreaView>
             </View>
         )
-    }
-    return (
-        <View>
-            <SafeAreaView style={{backgroundColor: "rgba(255,255,255,1)"}}>
-                <View style={style.header}>
-                    <View style={styles.wrap_welcome}>
-                            <View style={styles.wrap_info}>
-                                <View>
-                                    <Image source={{uri: 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}} 
-                                        style={{
-                                            width:60,
-                                            height:60,
-                                            borderRadius:30,
-                                            }}/>
-                                </View>
-                                <View style={styles.Xuongdong} >
-                                    <Text style={styles.userName}> Steve Tran </Text>
-                                    <Text style={styles.sayhi}> Candiate </Text>
-                                </View>
-                            </View>
-                            <View>
-                                
-                            </View>
-                                <View style={styles.wrapinFo}>
-                                <Text style={styles.welcomeMessage}>💎 231 </Text>
-                                <Text style={styles.welcomeMessage}> + </Text>
-                            </View>
-                        </View>
-                </View>
-            </SafeAreaView>
-        </View>
-    )
 }
 const style = StyleSheet.create({
     header: {
@@ -106,6 +79,7 @@ const styles = StyleSheet.create({
     wrap_info: {
         flexDirection: 'row',
         gap: 15,
+        maxWidth: '65%',
         alignItems: 'center'
     },
     wrap: {
@@ -144,12 +118,13 @@ const styles = StyleSheet.create({
     userName: {
         fontSize: 25,
         fontWeight:'900',
-        color: '#000'
+        color: '#000',
+        
         // fontFamily: 'Rubik',
-
     },
     Xuongdong:{
         display:'flex',
+        flex: 1,
         flexDirection:'column',
     },
     welcomeMessage: {
