@@ -3,17 +3,16 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ToastAndroi
 import axios from 'axios';
 
 import Toast from 'react-native-toast-message';
-import { ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 
 import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
+import { API_URL } from "../ipConfig"
 
 const MyForm = ({navigation, route}) => {
 
-import { API_URL } from "../ipConfig"
 
 
 
@@ -107,6 +106,7 @@ import { API_URL } from "../ipConfig"
   return (
 
     <ScrollView style={styles.container}>
+      
       <View style={styles.wrapHeader}>
         <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
         </Image>
@@ -125,7 +125,7 @@ import { API_URL } from "../ipConfig"
           <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
 
           </Image>
-
+        </View>
 
       <View style={styles.wrapInput}>
 

@@ -1,5 +1,4 @@
 import React from "react";
-import { useEffect, useState, useCallback } from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert } from "react-native";
 //import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
