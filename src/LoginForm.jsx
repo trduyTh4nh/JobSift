@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ToastAndroid, ToastAndroidStatic, ScrollView } from "react-native";
 import axios from 'axios';
+
+
+
 import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { useFonts } from "expo-font";
 
@@ -10,6 +13,7 @@ const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 
 const LoginForm = ({ navigation }) => {
+
 
   const [email, setEmail] = useState('')
   const [password, setPassWord] = useState('')
@@ -39,7 +43,9 @@ const LoginForm = ({ navigation }) => {
   }
 
   const handleSubmit = () => {
+
     axios.post(`http://${API_URL}:3001/login`, FormData, {
+
       headers: {
         'Content-Type': 'application/json'
       }
@@ -48,8 +54,11 @@ const LoginForm = ({ navigation }) => {
      
         console.log("Login Success!")
         global.user = respone.data
+
+        console.log(global.user)
         navigation.navigate('Home')
-        showToast()
+       showToast()
+
       })
       .catch((error) => {
         console.error(error)

@@ -8,9 +8,15 @@ import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { useFonts } from "expo-font";
+
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
+
+import { API_URL } from "../constants/etc";
+
+
+
+
 
 
 
@@ -20,21 +26,23 @@ const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 
 const nearbyJobsData = [
-    { id: '1', title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
-    { id: '2', title_job: 'Front-End Dev', jobCate: 'Part-time' },
-    { id: '3', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '4', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '5', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '6', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '7', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '8', title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '9', title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
+    { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
+    { id: '3', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '4', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '5', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '6', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '7', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '8', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    { id: '9', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
 ];
+
 
 
 const Home = ({ navigation }) => {
     
     const userDB = global.user
+
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
@@ -65,6 +73,7 @@ const Home = ({ navigation }) => {
         })
         const fetchData = async () => {
             try {
+
                 const response = await fetch(`http://${IPlD}:3001`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
@@ -74,12 +83,12 @@ const Home = ({ navigation }) => {
                 setPostData(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
-                setIsLoading(false);
+                setIsLoading(false);appappapapsdaskd
             }
         };
 
         fetchData();
-    }, []);
+    }, [navigation]);
 
 
     // const [postData, setPostData] = useState([]);
@@ -129,7 +138,9 @@ const Home = ({ navigation }) => {
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
                         <Text style={styles.sayhi}>Hi, </Text>
+
                         <Text style={styles.userName}>{userDB.user.full_name} 👋</Text>
+
                     </View>
                     <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
                     <View style={styles.wrapSearch}>

@@ -2,32 +2,49 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ToastAndroid, ScrollView } from 'react-native';
 import axios from 'axios';
 
+import Toast from 'react-native-toast-message';
+import { ScrollView } from 'react-native';
+import { useIsFocused } from '@react-navigation/native';
+
+
 import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
 
+const MyForm = ({navigation, route}) => {
+
 import { API_URL } from "../ipConfig"
 
 
-const MyForm = ({ navigation }) => {
+
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
 
+  const foc = useIsFocused()
+
+
   const showToast = () => {
     ToastAndroid.show("Signup Success!", ToastAndroid.SHORT)
   }
 
+
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
   useEffect(() => {
-    navigation.getParent()?.setOptions({
-      tabBarStyle: {
-        display: "none"
-      }
-    })
-  })
+    if(foc){
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: "none"
+        }
+      })
+    }
+    if(global.user){
+      navigation.navigate('Home')
+    }
+  }, [foc])
+  
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -62,7 +79,9 @@ const MyForm = ({ navigation }) => {
 
   const handleSubmit = () => {
     if ((password === rePassword) && (password !== '' && rePassword !== '')) {
+
       axios.post(`http://${API_URL}:3001/adduser`, formData, {
+
         headers: {
           'Content-Type': 'application/json'
         }
@@ -86,6 +105,7 @@ const MyForm = ({ navigation }) => {
 
 
   return (
+
     <ScrollView style={styles.container}>
       <View style={styles.wrapHeader}>
         <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
@@ -96,16 +116,16 @@ const MyForm = ({ navigation }) => {
         <Text style={styles.textTitle}>Signup</Text>
       </View>
 
+        <View style={styles.titlePage}>
+          <Text style={styles.textTitle}>Signup</Text>
+        </View>
 
-      <View style={styles.decordPage}>
-        <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
 
-        </Image>
+        <View style={styles.decordPage}>
+          <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
 
-        <Text style={styles.decordPageText}>
-          Bạn đã có tài khoản chưa?
-        </Text>
-      </View>
+          </Image>
+
 
       <View style={styles.wrapInput}>
 
@@ -156,14 +176,6 @@ const MyForm = ({ navigation }) => {
             <Text style={styles.textInbtnSignup}>Signup</Text>
           </TouchableOpacity>
         </View>
-
-      </View>
-
-      <View style={styles.descBottom}>
-        <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-        <TouchableOpacity onPress={changeLoginScreen}>
-          <Text style={styles.descBottomLogin}>Login</Text>
-        </TouchableOpacity>
       </View>
     </ScrollView>
   );

@@ -19,6 +19,7 @@ const CardJobDetail = (props) => {
 
     const { dataPostDetail } = props;
 
+
     const goToJobDetailScreen = () => {
         navigation.navigate("JobDetail", { postData: dataPostDetail });
     };

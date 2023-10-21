@@ -1,3 +1,4 @@
+import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import { useHeaderHeight } from "@react-navigation/elements";
 import React from "react";
 import { StyleSheet, TouchableOpacity, Text, TextInput, View, Touchable, Pressable, FlatList, Image, ScrollView } from "react-native";
@@ -95,14 +96,16 @@ const Chat = ({navigation}) => {
         }
     ]
     const HEADER_HEIGHT = useHeaderHeight()
+    const BOTTOM_TAB_HEIGHT = useBottomTabBarHeight()
     const styles = StyleSheet.create({
         body: {
-            padding: 16,
+            
             
             gap: 16,
         },
         dodgeHeader:{
-            paddingTop: HEADER_HEIGHT,
+            padding: 16,
+            paddingTop: HEADER_HEIGHT + 16,
         },
         chatList: {
             marginBottom: HEADER_HEIGHT - 46 + 100,
