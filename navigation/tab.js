@@ -4,14 +4,20 @@ import FavoriteJob from '../components/FavoriteJob';
 import Job from '../components/Job';
 import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
+
 import { getHeaderTitle } from '@react-navigation/elements';
+
+
+
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JobDetail from '../Job/JobDetail';
 import HeaderThanh from '../components/HeaderThanh'
+
 import { useNavigation, DefaultTheme } from '@react-navigation/native';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndicator } from 'react-native';
+
 import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
 import { Form } from 'react-hook-form';
@@ -20,7 +26,7 @@ import { useFonts } from "expo-font"
 import { useLayoutEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Header } from '../components/Header';
-import { BlurView } from 'expo-blur';
+
 import ChatDetails from '../components/ChatDetails';
 import STYLE from '../assets/css/universal';
 import { HeaderProfile } from '../components/HeaderProfile';
@@ -47,7 +53,7 @@ const Tabs = () => {
     if (!fontLoaded) {
         return (
             <View>
-                <Text>Loading..........</Text>
+                <ActivityIndicator></ActivityIndicator>
             </View>
         )
     }
@@ -57,7 +63,9 @@ const Tabs = () => {
 
 
     const HomeStack = () => (
-        <Stack.Navigator  initialRouteName='FormSignup' theme={THEME} options={{
+
+        <Stack.Navigator initialRouteName='LoginForm' theme={THEME} options={{
+
         }}>
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
             <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }}/>

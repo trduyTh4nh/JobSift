@@ -1,4 +1,4 @@
-import { BlurView } from "expo-blur";
+
 import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
@@ -12,6 +12,7 @@ const HeaderChat = ({navigation, title, LeftButton, image, name}) => {
     const button = LeftButton ? (<TouchableOpacity onPress={back}>
         <Icon name="arrow-left-s-line" size={24}></Icon> 
     </TouchableOpacity>) : undefined
+
     return (
         <View style={STYLE.headerWrap}>
                 <SafeAreaView style={{backgroundColor: "rgba(255,255,255, 1)"}}>

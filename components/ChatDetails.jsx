@@ -6,7 +6,7 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import Icon from "react-native-remix-icon"
 import ChatBubble from "./ChatBubble"
 import { getHeaderTitle, useHeaderHeight } from "@react-navigation/elements"
-import { BlurView } from "expo-blur"
+
 import { Header } from "../components/Header"
 import HeaderChat from "./HeaderChat"
 const ChatDetails = ({navigation}) => {
@@ -138,14 +138,14 @@ const ChatDetails = ({navigation}) => {
                     style={style.fakeBottomBar}
                 />
             </ScrollView>
-            <BlurView style={style.bottomBarWrap}>
+            <View style={style.bottomBarWrap}>
                 <View style={style.bottomBar}>
                     <TextInput onChangeText={setMessage} style={style.textEdit} placeholderTextColor={'#000'} placeholder="Chat here"/>
                     <TouchableOpacity disabled={disable} ref={sendButton} onPress={sendMessage} style={disable ? style.disabledButton : style.bottomSendButton}>
                         <Icon name="ri-send-plane-2-fill" size={24} color="black"/>
                     </TouchableOpacity>
                 </View>
-            </BlurView>
+            </View>
         </View>
     )
 }

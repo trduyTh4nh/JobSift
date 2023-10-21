@@ -6,14 +6,12 @@ import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
-
-import { useFonts } from "expo-font";
-
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
+
 import { API_URL } from "../constants/etc";
 
 
@@ -23,6 +21,9 @@ import { API_URL } from "../constants/etc";
 
 
 const Stack = createNativeStackNavigator();
+
+const IPcuaQuang = "192.168.1.113"
+const IPlD = "192.168.116.1"
 
 const nearbyJobsData = [
     { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
@@ -38,16 +39,23 @@ const nearbyJobsData = [
 
 
 
-
-const Home = ({ navigation, route }) => {
+const Home = ({ navigation }) => {
+    
+    const userDB = global.user
 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-
+    
     // const [fontLoaded] = useFonts({
     //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
+    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
+    //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+    //     'RubikBlack': require("../assets/fonts/Rubik/static/Rubik-Black.ttf"),
+    //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+    //     'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
+    //     'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
+        
     // })
     // if(!fontLoaded){
     //     return(
@@ -58,13 +66,15 @@ const Home = ({ navigation, route }) => {
     // }
 
     // Use useEffect to fetch data from the API
+    
     useEffect(() => {
         navigation.getParent()?.setOptions({
             tabBarStyle: STYLE.tabBarStyle
         })
         const fetchData = async () => {
             try {
-                const response = await fetch(API_URL);
+
+                const response = await fetch(`http://${IPlD}:3001`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -123,12 +133,14 @@ const Home = ({ navigation, route }) => {
 
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={styles.container}>
             <View style={styles.wrap}>
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
                         <Text style={styles.sayhi}>Hi, </Text>
-                        <Text style={styles.userName}>{global.user.user.full_name}</Text>
+
+                        <Text style={styles.userName}>{userDB.user.full_name} 👋</Text>
+
                     </View>
                     <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
                     <View style={styles.wrapSearch}>
@@ -146,18 +158,19 @@ const Home = ({ navigation, route }) => {
 
                     </View>
                 </View>
-
+            </View>
             <ScrollView>
-
-
-
-                <View style={styles.body}>
+                <View>
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Popular jobs</Text>
 
                         <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
                     </View>
-                    <View style={styles.container}>
+
+
+
+
+                    <View style={styles.container_JobList}>
                         {isLoading ? (
                             <Text>Loading...</Text>
                         ) : (
@@ -171,59 +184,21 @@ const Home = ({ navigation, route }) => {
                         )}
                     </View>
 
-
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Nearby jobs</Text>
                     </View>
-                        <FlatList
-                            style={styles.scrollable}
-                            scrollEnabled={false}
-                            data={nearbyJobsData}
-                            renderItem={renderJobNearBy}
-                            keyExtractor={(item) => item.id.toString()}
-                        ></FlatList>
+
+                    <FlatList
+                        style={styles.wrapJobNearBy}
+                        data={nearbyJobsData}
+                        renderItem={renderJobNearBy}
+                        keyExtractor={(item) => item.id.toString()}
+                        contentContainerStyle={{ columnGap: 20 }}
+                        scrollEnabled={false}
+                    ></FlatList>
+
                 </View>
             </ScrollView>
-
-
-
-
-            </View>
-
-            <View style={styles.wrapTitle}>
-                <Text style={styles.titleHomeJob}>Popular jobs</Text>
-
-                <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
-            </View>
-
-
-
-
-            <View style={styles.container_JobList}>
-                {isLoading ? (
-                    <Text>Loading...</Text>
-                ) : (
-                    <FlatList
-                        data={postData}
-                        renderItem={renderItem}
-                        keyExtractor={(item) => item.id_post.toString()}
-                        horizontal={true}
-                        contentContainerStyle={{ columnGap: 20 }}
-                    />
-                )}
-            </View>
-
-
-            <View style={styles.wrapTitle}>
-                <Text style={styles.titleHomeJob}>Nearby jobs</Text>
-            </View>
-
-            <FlatList
-                style={styles.wrapJobNearBy}
-                data={nearbyJobsData}
-                renderItem={renderJobNearBy}
-                keyExtractor={(item) => item.id.toString()}
-            ></FlatList>
 
         </SafeAreaView>
     )
@@ -231,19 +206,20 @@ const Home = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     body: {
-        paddingLeft: 25,
-        paddingRight: 25
+
     },
-    scrollable:{
+    scrollable: {
         paddingBottom: 70,
         flex: 1
     },
     wrap: {
         paddingTop: 20,
+        paddingLeft: 10,
+        paddingRight: 10
     },
     container: {
-        paddingRight: 20,
-        paddingLeft: 20
+        paddingRight: 10,
+        paddingLeft: 10
         ,
         container: {
             flex: 1,
@@ -274,19 +250,22 @@ const styles = StyleSheet.create({
 
     userName: {
         fontSize: 16,
-        fontWeight: "800",
         color: "#000",
         fontFamily: 'Rubik',
 
     },
+    wrapNearByJob: {
+        paddingLeft: 0,
+        paddingRight: 4,
+
+    },
     container_JobList: {
-        marginLeft: 10,
-        marginTop: -10
+
     },
     welcomeMessage: {
         fontFamily: 'RukbikNormal',
         fontSize: 24,
-        
+
     },
     wrap_welcome: {
         display: 'flex',
@@ -297,14 +276,12 @@ const styles = StyleSheet.create({
         fontFamily: 'RukbikNormal',
     },
     wrapSearch: {
-       
         display: 'flex',
         flexDirection: 'row',
         gap: 20,
         alignItems: "center",
         marginTop: 16,
-        paddingRight: 20,
-        paddingLeft: 20
+
     },
     inputSearch: {
         color: '#ABABAB',
@@ -342,31 +319,28 @@ const styles = StyleSheet.create({
     }
     ,
     titleHomeJob: {
-       fontFamily: "RukbikNormal",
-        fontWeight: "700",
+        fontFamily: "Rubik",
         fontSize: 16,
         marginBottom: 5
     },
     wrapTitle: {
-        
         marginTop: 25,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingRight: 20,
-        paddingLeft: 20
+        paddingRight: 10,
+        paddingLeft: 10
     },
     titleHomeShowMore: {
-         fontFamily: "RukbikNormal",
-        fontWeight: "500",
+        fontFamily: "Rubik",
+
         color: "rgba(171,171,171,1)"
     },
     nearByJobContainer: {
-        marginTop: 10
+
     },
     wrapJobNearBy: {
-        paddingLeft: 10,
-        paddingRight: 10
+
     },
 
 

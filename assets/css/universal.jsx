@@ -37,6 +37,7 @@ const STYLE = StyleSheet.create({
         gap: 16,
         height: '100%'
     },
+
     headerWrap: {
         shadowColor: "#000",
         shadowOffset: {
@@ -52,6 +53,13 @@ const STYLE = StyleSheet.create({
     },
     textNormal: {
         fontSize: 20
+    },
+
+    textTitle: {
+        fontFamily: "Rubik",
+        fontSize: 18,
+        color: "#000"
+
     }
 })
 export default STYLE

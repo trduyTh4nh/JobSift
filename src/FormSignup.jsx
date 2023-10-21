@@ -1,17 +1,34 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ToastAndroid, ScrollView } from 'react-native';
 import axios from 'axios';
+
 import Toast from 'react-native-toast-message';
 import { ScrollView } from 'react-native';
 import { useIsFocused } from '@react-navigation/native';
 
 
+import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { create } from "react-test-renderer";
+import { useFonts } from "expo-font";
+
 const MyForm = ({navigation, route}) => {
+
+import { API_URL } from "../ipConfig"
+
+
+
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
+
   const foc = useIsFocused()
+
+
+  const showToast = () => {
+    ToastAndroid.show("Signup Success!", ToastAndroid.SHORT)
+  }
+
 
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
@@ -62,7 +79,9 @@ const MyForm = ({navigation, route}) => {
 
   const handleSubmit = () => {
     if ((password === rePassword) && (password !== '' && rePassword !== '')) {
-      axios.post('http://192.168.1.14:3001/adduser', formData, {
+
+      axios.post(`http://${API_URL}:3001/adduser`, formData, {
+
         headers: {
           'Content-Type': 'application/json'
         }
@@ -70,6 +89,7 @@ const MyForm = ({navigation, route}) => {
         .then((response) => {
           navigation.navigate('LoginForm')
           console.log(JSON.stringify(response.data));
+          showToast()
         })
         .catch((error) => {
           console.error(error);
@@ -85,12 +105,16 @@ const MyForm = ({navigation, route}) => {
 
 
   return (
-    <ScrollView>
-      <View style={styles.container}>
-        <View style={styles.wrapHeader}>
-          <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
-          </Image>
-        </View>
+
+    <ScrollView style={styles.container}>
+      <View style={styles.wrapHeader}>
+        <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
+        </Image>
+      </View>
+
+      <View style={styles.titlePage}>
+        <Text style={styles.textTitle}>Signup</Text>
+      </View>
 
         <View style={styles.titlePage}>
           <Text style={styles.textTitle}>Signup</Text>
@@ -102,67 +126,54 @@ const MyForm = ({navigation, route}) => {
 
           </Image>
 
-          <Text style={styles.decordPageText}>
-            Bạn đã có tài khoản chưa?
-          </Text>
+
+      <View style={styles.wrapInput}>
+
+        <View style={styles.wrapEmail}>
+          {/* <Text style={styles.lableInput}>Email</Text> */}
+          <PaperTextInput
+            style={styles.inputBox}
+            label={"Email"}
+            value={email}
+            onChangeText={handleChangeEmail}
+            onFocus={handleFocus}
+            onBlur={handleBlur}
+          />
         </View>
 
-        <View style={styles.wrapInput}>
-
-          <View style={styles.wrapEmail}>
-            <Text style={styles.lableInput}>Email</Text>
-            <TextInput
-              style={styles.inputBox}
-              placeholder="example@gmail.com"
-              value={email}
-              onChangeText={handleChangeEmail}
-              onFocus={handleFocus}
-              onBlur={handleBlur}
-            />
-          </View>
-
-          <View style={styles.wrapFullname}>
-            <Text style={styles.lableInput}>Full name</Text>
-            <TextInput
-              style={styles.inputBox}
-              placeholder="steve"
-              value={username}
-              onChangeText={handleChangeUsername}
-            />
-          </View>
-
-          <View style={styles.wrapPassword}>
-            <Text style={styles.lableInput}>Password</Text>
-            <TextInput
-              style={styles.inputBox}
-              placeholder="*********************"
-              value={password}
-              onChangeText={handleChangePassword}
-            />
-          </View>
-
-          <View style={styles.wrapRePassword}>
-            <Text style={styles.lableInput}> Re-password</Text>
-            <TextInput
-              style={styles.inputBox}
-              placeholder="*********************"
-              value={rePassword}
-              onChangeText={handleChangeRePassword}
-            />
-          </View>
-
-          <View style={styles.wrapButtonSignup}>
-            <TouchableOpacity style={styles.btnSignup} onPress={handleSubmit}>
-              <Text style={styles.textInbtnSignup}>Signup</Text>
-            </TouchableOpacity>
-          </View>
-
+        <View style={styles.wrapFullname}>
+          {/* <Text style={styles.lableInput}>Full name</Text> */}
+          <PaperTextInput
+            style={styles.inputBox}
+            label={"Full name"}
+            value={username}
+            onChangeText={handleChangeUsername}
+          />
         </View>
 
-        <View style={styles.descBottom}>
-          <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-          <TouchableOpacity onPress={changeLoginScreen}>
-            <Text style={styles.descBottomLogin}>Login</Text>
+        <View style={styles.wrapPassword}>
+          {/* <Text style={styles.lableInput}>Password</Text> */}
+          <PaperTextInput
+            style={styles.inputBox}
+            label={"Password"}
+            value={password}
+            onChangeText={handleChangePassword}
+          />
+        </View>
+
+        <View style={styles.wrapRePassword}>
+          {/* <Text style={styles.lableInput}> Re-password</Text> */}
+          <PaperTextInput
+            style={styles.inputBox}
+            label={"Re-password"}
+            value={rePassword}
+            onChangeText={handleChangeRePassword}
+          />
+        </View>
+
+        <View style={styles.wrapButtonSignup}>
+          <TouchableOpacity style={styles.btnSignup} onPress={handleSubmit}>
+            <Text style={styles.textInbtnSignup}>Signup</Text>
           </TouchableOpacity>
         </View>
       </View>
@@ -183,11 +194,12 @@ const styles = StyleSheet.create({
   },
   navCustom: {},
   inputBox: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingLeft: 18,
-    borderRadius: 16,
-
+    // borderWidth: 1,
+    // borderColor: '#ccc',
+    // paddingLeft: 18,
+    // borderRadius: 16,
+    marginTop: 15,
+    width: "92%",
 
   },
   btnSignup: {
@@ -228,8 +240,9 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 26,
-    fontWeight: "900",
-    color: "#000"
+
+    color: "#000",
+    fontFamily: "Rubik"
   },
   decordPage: {
     display: "flex",
@@ -245,10 +258,11 @@ const styles = StyleSheet.create({
     height: 150
   },
   decordPageText: {
-    fontWeight: "700",
     color: "#000",
     width: 150,
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: "RukbikNormal",
+
   },
   wrapInput: {
     marginTop: 30,
@@ -274,16 +288,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10
+    gap: 10,
+    marginBottom: 40
   },
   descBottomLogin: {
     fontWeight: "800",
     color: "#0076E2",
     fontSize: 16
   },
-  desQuestion:{
+  desQuestion: {
     color: "#ccc",
     fontWeight: "500"
-  }
-  
+  },
+  wrapEmail: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapFullname: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapPassword: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapRePassword: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
 });

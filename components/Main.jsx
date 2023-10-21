@@ -6,6 +6,7 @@ import {DefaultTheme} from '@react-navigation/native'
 import { useEffect, useState } from 'react';
 import Tabs from '../navigation/tab';
 
+
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
@@ -19,6 +20,7 @@ const Main = () => {
     return (
 
         <NavigationContainer theme={THEME}>
+
             <Tabs></Tabs>
         </NavigationContainer>
     );

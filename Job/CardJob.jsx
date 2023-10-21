@@ -4,7 +4,9 @@ import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatLis
 import Icon from 'react-native-remix-icon';
 import JobDetail from "./JobDetail";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 import { NavigationContainer } from '@react-navigation/native';
+
 
 import CardJobDetail from "./CardJobDetail";
 import { useNavigation } from '@react-navigation/native';

@@ -1,13 +1,26 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ToastAndroid, ToastAndroidStatic, ScrollView } from "react-native";
 import axios from 'axios';
-import Toast from "react-native-toast-message";
-import { API_URL } from "../constants/etc";
 
-const LoginForm = ({navigation}) => {
-  
+
+
+import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { useFonts } from "expo-font";
+
+import { API_URL } from "../ipConfig"
+
+const IPcuaQuang = "192.168.1.113"
+const IPlD = "192.168.116.1"
+
+const LoginForm = ({ navigation }) => {
+
+
   const [email, setEmail] = useState('')
   const [password, setPassWord] = useState('')
+
+  const showToast = () => {
+      ToastAndroid.show("Login Success!", ToastAndroid.SHORT)
+  }
 
   const FormData = {
     email: email,
@@ -18,9 +31,9 @@ const LoginForm = ({navigation}) => {
       tabBarStyle: {
         display: "none"
       }
+    })
   })
-})
-  
+
   const handleChangeEmail = (text) => {
     setEmail(text)
   }
@@ -30,19 +43,22 @@ const LoginForm = ({navigation}) => {
   }
 
   const handleSubmit = () => {
-    
-    axios.post(`${API_URL}/login`, FormData, {
+
+    axios.post(`http://${API_URL}:3001/login`, FormData, {
+
       headers: {
         'Content-Type': 'application/json'
       }
     })
       .then((respone) => {
-        console.log(JSON.stringify(respone.data))
+     
         console.log("Login Success!")
         global.user = respone.data
+
         console.log(global.user)
         navigation.navigate('Home')
-        Toast.show('Login success', {duration: 1000})
+       showToast()
+
       })
       .catch((error) => {
         console.error(error)
@@ -56,7 +72,7 @@ const LoginForm = ({navigation}) => {
   }
 
   return (
-    <View style={styles.containerLogin}>
+    <ScrollView style={styles.containerLogin}>
       <View style={styles.wrapHeader}>
         <Image style={styles.imageLogin} source={require('../assets/JobSift.png')} >
         </Image>
@@ -80,20 +96,21 @@ const LoginForm = ({navigation}) => {
       <View style={styles.wrapInput}>
 
         <View style={styles.wrapEmail}>
-          <Text style={styles.lableInput}>Email</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}>Email</Text> */}
+          <PaperTextInput
+            label={"Email"}
             style={styles.inputBox}
-            placeholder="example@gmail.com"
+
             value={email}
             onChangeText={handleChangeEmail}
           />
         </View>
 
         <View style={styles.wrapPassword}>
-          <Text style={styles.lableInput}>Password</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}>Password</Text> */}
+          <PaperTextInput
+            label={"Password"}
             style={styles.inputBox}
-            placeholder="*********************"
             value={password}
             onChangeText={handleChangePassword}
           />
@@ -113,7 +130,7 @@ const LoginForm = ({navigation}) => {
           <Text style={styles.descBottomLogin}>Signup</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   )
 }
 
@@ -132,13 +149,15 @@ const styles = StyleSheet.create({
   },
   navCustom: {},
   inputBox: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingLeft: 18,
-    borderRadius: 16,
+    // borderWidth: 1,
+    // borderColor: '#ccc',
+    // paddingLeft: 18,
+    // borderRadius: 16,
+    marginTop: 15,
 
 
   },
+
   btnLogin: {
     backgroundColor: '#E2F367',
     width: 150,
@@ -154,7 +173,7 @@ const styles = StyleSheet.create({
 
   },
   textInbtnLogin: {
-    fontWeight: "700",
+    fontFamily: "Rubik",
     fontSize: 16,
     color: "#000"
   },
@@ -177,8 +196,8 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 26,
-    fontWeight: "900",
-    color: "#000"
+    color: "#000",
+    fontFamily: "Rubik",
   },
   decordPage: {
     display: "flex",
@@ -190,15 +209,16 @@ const styles = StyleSheet.create({
     paddingRight: 15
   },
   decordPageImage: {
-    width: 150,
+    width: "55%",
     height: 190
   },
   decordPageText: {
-    fontWeight: "700",
+    fontFamily: "RukbikNormal",
     color: "#000",
-    width: 150,
-    fontSize: 18,
-    textAlign: "center"
+    width: "50%",
+    fontSize: 17,
+    textAlign: "center",
+    marginLeft: -18
   },
   wrapInput: {
     marginTop: 30,
@@ -208,7 +228,7 @@ const styles = StyleSheet.create({
   },
   lableInput: {
     marginBottom: 8,
-    fontWeight: "700",
+    fontFamily: "Rubik",
     color: "#000",
     marginLeft: 2
   },
@@ -224,16 +244,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10
+    gap: 10,
+    marginBottom: 40
   },
   descBottomLogin: {
-    fontWeight: "800",
+    fontFamily: "Rubik",
     color: "#0076E2",
     fontSize: 16
   },
   desQuestion: {
-    color: "#ccc",
-    fontWeight: "500"
+    fontWeight: "500",
+    fontFamily: "Rubik"
   },
 
 
