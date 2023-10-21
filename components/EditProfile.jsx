@@ -1,7 +1,6 @@
 // import React from "react";
 // import { Text, View } from "react-native";
-import React from "react";
-import { useEffect, useState, useCallback } from "react";
+import React, {useState} from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, ActivityIndicator, Alert } from "react-native";
 //import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
@@ -12,30 +11,39 @@ import DatePicker from "react-native-date-picker"
 import RNPickerSelect from 'react-native-picker-select'
 import axios from "axios";
 import { API_URL } from "../constants/etc";
-const EditProfile = ({navigation}) =>{
-    const [datePickerOpen, setDatePickerOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [dateBirth, setDateBirth] = useState(new Date(global.user.user.ngaysinh))
-    const [gender, setGender] = useState('Male')
-    const [user, setUser] = useState(global.user.user)
-    const [image, setImage] = useState()
+const EditProfile = ({navigation}) => {
+    console.log(global .user)
+  const [datePickerOpen, setDatePickerOpen] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const [dateBirth, setDateBirth] = useState(new Date(global.user.user.ngaysinh)); // Initialize with a default date
+
+    
+
+    const [gender, setGender] = useState('Male');
+    const [user, setUser] = useState(global.user.user);
+    
+    const [image, setImage] = useState();
     const usr = global.user.user;
+    
     const handleEditProfile = () => {
-        setIsLoading(true)
-        axios.post(API_URL+'/updateUser', user, 
-        {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }).then((e) => {
-            console.log(e)
-            global.user.user = user
-            navigation.goBack()
-        }).catch((e) => {
-            setIsLoading(false)
-            Alert.alert('Error saving user data')
-        })
-    }
+        setIsLoading(true);
+        axios
+            .post(API_URL + '/updateUser', user, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            })
+            .then((e) => {
+                console.log(e);
+                global.user.user = user;
+                navigation.goBack();
+            })
+            .catch((e) => {
+                setIsLoading(false);
+                Alert.alert('Error saving user data: ' + e);
+            });
+    };
+    console.log('Hooks used.')
     return(
     <ScrollView style={{paddingBottom:200}}>
     <View style={styles.wrap}>

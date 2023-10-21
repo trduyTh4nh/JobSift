@@ -41,7 +41,7 @@ const ChildInFoJob = ({ route }) => {
             }
 
         }).catch((error) => {
-            console.error(error);
+            console.error('Business'+error);
         });
 
         return () => {
@@ -112,7 +112,7 @@ const ChildInFoJob = ({ route }) => {
             showToast()
             getFeed()
         }).catch((error) => {
-            console.error(error)
+            console.error('Feedback'+error)
         })
     }
 
@@ -173,7 +173,7 @@ const ChildInFoJob = ({ route }) => {
                 setFb(data.fbs)
             })
             .catch(error => {
-                console.error(error);
+                console.log('Feedback'+error);
             })
     }
 

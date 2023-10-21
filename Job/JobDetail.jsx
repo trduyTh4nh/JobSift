@@ -63,14 +63,10 @@ const JobDetail = () => {
 
     useEffect(() => {
         axios.get(`http://${API_URL}:3001/upfeedback/getrate/${postData.id_post}`, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            
         })
             .then((response) => {
                 setTotalStar(response.data.rate[0].start)
-                setQuantityUser(response.data.rate[0].user)
-
                 console.log(response.data.rate)
             })
             .catch((error) => {
@@ -90,9 +86,7 @@ const JobDetail = () => {
         let isMounted = true;
 
         axios.post(`http://${API_URL}:3001/ntd/${postData.id_ntd}`, {}, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
+            
         }).then((response) => {
             if (isMounted) {
                 setDoanhNghiep(response.data);
