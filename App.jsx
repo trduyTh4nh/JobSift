@@ -10,13 +10,14 @@ import FormSignup from './src/FormSignup'
 import LoginForm from './src/LoginForm';
 import Main from './components/Main';
 
+
 const Stack = createStackNavigator();
 
 
 export default function App() {
 
   return (
-    <Main></Main>
+      <Main></Main>
   );
 }
 
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     padding: 10
-  },
+  }, 
   headerNavigation: {
     height: 10
   },

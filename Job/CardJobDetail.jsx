@@ -18,7 +18,6 @@ const CardJobDetail = (props) => {
     const navigation = useNavigation();
 
     const { dataPostDetail } = props;
-    console.log(dataPostDetail)
 
     const goToJobDetailScreen = () => {
         navigation.navigate("JobDetail", { postData: dataPostDetail });
@@ -50,6 +49,7 @@ const CardJobDetail = (props) => {
                         <View style={styles.jobCardName}>
                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
                             <Text style={styles.jobCardAddress}>{dataPostDetail.dia_chi}</Text>
+                            
                         </View>
 
                         <TouchableOpacity>
@@ -64,6 +64,7 @@ const CardJobDetail = (props) => {
                             <Text style={styles.jobCateName}>{dataPostDetail.job_category}</Text>
                             <Icon name="arrow-right-s-fill" color="#fff"></Icon>
                             <Text style={styles.jobSalary}>$750 - $900</Text>
+                            
                         </View>
                     </View>
                 </View>

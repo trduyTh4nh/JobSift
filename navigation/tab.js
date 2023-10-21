@@ -4,16 +4,16 @@ import FavoriteJob from '../components/FavoriteJob';
 import Job from '../components/Job';
 import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
-import { Button, StyleSheet, TouchableOpacity, View } from 'react-native';
+
 import { getHeaderTitle } from '@react-navigation/elements';
-import { Text } from 'react-native-svg';
+// import { Text } from 'react-native-svg';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JobDetail from '../Job/JobDetail';
-import Header from '../components/HeaderThanh'
+import HeaderThanh from '../components/HeaderThanh'
 import { useNavigation } from '@react-navigation/native';
-import { StyleSheet, TouchableOpacity, View, Text, Image } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndicator } from 'react-native';
 import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
 import { Form } from 'react-hook-form';
@@ -22,7 +22,7 @@ import { useFonts } from "expo-font"
 import { useLayoutEffect } from 'react';
 import { StatusBar } from 'react-native';
 import { Header } from '../components/Header';
-import { BlurView } from 'expo-blur';
+
 import ChatDetails from '../components/ChatDetails';
 const Stack = createNativeStackNavigator();
 
@@ -38,7 +38,7 @@ const Tabs = () => {
     if (!fontLoaded) {
         return (
             <View>
-                <Text>Loading..........</Text>
+                <ActivityIndicator></ActivityIndicator>
             </View>
         )
     }
@@ -48,7 +48,7 @@ const Tabs = () => {
 
 
     const HomeStack = () => (
-        <Stack.Navigator initialRouteName='FormSignup' options={{
+        <Stack.Navigator initialRouteName='LoginForm' options={{
         }}>
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
             <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }}/>
@@ -58,7 +58,7 @@ const Tabs = () => {
                 component={JobDetail}
                 options={{
                     headerTitle: () => (
-                        <Header name="JobDetail"></Header>
+                        <HeaderThanh name="JobDetail"></HeaderThanh>
                     ),
                     headerBackVisible: false,
                     headerLeft: () => (

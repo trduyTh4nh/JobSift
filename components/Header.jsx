@@ -2,7 +2,7 @@
 import { View, SafeAreaView, Text, Pressable, StyleSheet, TouchableOpacity, Platform } from "react-native";
 import React from "react";
 import Icon from 'react-native-remix-icon'
-import { BlurView } from "expo-blur";
+
 export function Header({navigation, title, LeftButton}) {
     const back = () => {
         navigation.goBack()
@@ -14,14 +14,14 @@ export function Header({navigation, title, LeftButton}) {
     
     if(Platform.OS == 'ios'){
         return (
-            <BlurView>
+            <View>
                 <SafeAreaView style={{backgroundColor: "rgba(255,255,255,0.55)"}}>
                     <View style={style.header}>
                         {button}
                         <Text style={style.text}>{title}</Text>
                     </View>
                 </SafeAreaView>
-            </BlurView>
+            </View>
         )
     }
     return (

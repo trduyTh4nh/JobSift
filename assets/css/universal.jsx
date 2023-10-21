@@ -37,5 +37,10 @@ const STYLE = StyleSheet.create({
         gap: 16,
         height: '100%'
     },
+    textTitle: {
+        fontFamily: "Rubik",
+        fontSize: 18,
+        color: "#000"
+    }
 })
 export default STYLE

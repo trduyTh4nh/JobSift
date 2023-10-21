@@ -1,4 +1,4 @@
-import { BlurView } from "expo-blur";
+
 import React from "react";
 import { Image, StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native";
@@ -14,7 +14,7 @@ const HeaderChat = ({navigation, title, LeftButton, image, name}) => {
     
     if(Platform.OS == 'ios'){
         return (
-            <BlurView>
+            <View>
                 <SafeAreaView style={{backgroundColor: "rgba(255,255,255,0.55)"}}>
                     <View style={style.header}>
                         {button}
@@ -24,7 +24,7 @@ const HeaderChat = ({navigation, title, LeftButton, image, name}) => {
                         </View>
                     </View>
                 </SafeAreaView>
-            </BlurView>
+            </View>
         )
     }
     return (

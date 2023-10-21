@@ -1,15 +1,23 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, Image, ToastAndroid, ScrollView } from 'react-native';
 import axios from 'axios';
-import Toast from 'react-native-toast-message';
+
+import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
+import { create } from "react-test-renderer";
+import { useFonts } from "expo-font";
+
+import { API_URL } from "../ipConfig"
 
 
-const MyForm = ({navigation}) => {
+const MyForm = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [rePassword, setRePassword] = useState('');
 
+  const showToast = () => {
+    ToastAndroid.show("Signup Success!", ToastAndroid.SHORT)
+  }
 
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
@@ -54,7 +62,7 @@ const MyForm = ({navigation}) => {
 
   const handleSubmit = () => {
     if ((password === rePassword) && (password !== '' && rePassword !== '')) {
-      axios.post('http://192.168.116.1:3001/adduser', formData, {
+      axios.post(`http://${API_URL}:3001/adduser`, formData, {
         headers: {
           'Content-Type': 'application/json'
         }
@@ -62,6 +70,7 @@ const MyForm = ({navigation}) => {
         .then((response) => {
           navigation.navigate('LoginForm')
           console.log(JSON.stringify(response.data));
+          showToast()
         })
         .catch((error) => {
           console.error(error);
@@ -77,7 +86,7 @@ const MyForm = ({navigation}) => {
 
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container}>
       <View style={styles.wrapHeader}>
         <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
         </Image>
@@ -101,10 +110,10 @@ const MyForm = ({navigation}) => {
       <View style={styles.wrapInput}>
 
         <View style={styles.wrapEmail}>
-          <Text style={styles.lableInput}>Email</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}>Email</Text> */}
+          <PaperTextInput
             style={styles.inputBox}
-            placeholder="example@gmail.com"
+            label={"Email"}
             value={email}
             onChangeText={handleChangeEmail}
             onFocus={handleFocus}
@@ -113,30 +122,30 @@ const MyForm = ({navigation}) => {
         </View>
 
         <View style={styles.wrapFullname}>
-          <Text style={styles.lableInput}>Full name</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}>Full name</Text> */}
+          <PaperTextInput
             style={styles.inputBox}
-            placeholder="steve"
+            label={"Full name"}
             value={username}
             onChangeText={handleChangeUsername}
           />
         </View>
 
         <View style={styles.wrapPassword}>
-          <Text style={styles.lableInput}>Password</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}>Password</Text> */}
+          <PaperTextInput
             style={styles.inputBox}
-            placeholder="*********************"
+            label={"Password"}
             value={password}
             onChangeText={handleChangePassword}
           />
         </View>
 
         <View style={styles.wrapRePassword}>
-          <Text style={styles.lableInput}> Re-password</Text>
-          <TextInput
+          {/* <Text style={styles.lableInput}> Re-password</Text> */}
+          <PaperTextInput
             style={styles.inputBox}
-            placeholder="*********************"
+            label={"Re-password"}
             value={rePassword}
             onChangeText={handleChangeRePassword}
           />
@@ -156,7 +165,7 @@ const MyForm = ({navigation}) => {
           <Text style={styles.descBottomLogin}>Login</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </ScrollView>
   );
 };
 
@@ -173,11 +182,12 @@ const styles = StyleSheet.create({
   },
   navCustom: {},
   inputBox: {
-    borderWidth: 1,
-    borderColor: '#ccc',
-    paddingLeft: 18,
-    borderRadius: 16,
-
+    // borderWidth: 1,
+    // borderColor: '#ccc',
+    // paddingLeft: 18,
+    // borderRadius: 16,
+    marginTop: 15,
+    width: "92%",
 
   },
   btnSignup: {
@@ -218,8 +228,9 @@ const styles = StyleSheet.create({
   },
   textTitle: {
     fontSize: 26,
-    fontWeight: "900",
-    color: "#000"
+
+    color: "#000",
+    fontFamily: "Rubik"
   },
   decordPage: {
     display: "flex",
@@ -235,10 +246,11 @@ const styles = StyleSheet.create({
     height: 150
   },
   decordPageText: {
-    fontWeight: "700",
     color: "#000",
     width: 150,
-    fontSize: 18
+    fontSize: 18,
+    fontFamily: "RukbikNormal",
+
   },
   wrapInput: {
     marginTop: 30,
@@ -264,16 +276,37 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
-    gap: 10
+    gap: 10,
+    marginBottom: 40
   },
   descBottomLogin: {
     fontWeight: "800",
     color: "#0076E2",
     fontSize: 16
   },
-  desQuestion:{
+  desQuestion: {
     color: "#ccc",
     fontWeight: "500"
-  }
-  
+  },
+  wrapEmail: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapFullname: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapPassword: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+  wrapRePassword: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center"
+  },
+
 });

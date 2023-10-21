@@ -5,8 +5,6 @@ import Icon from 'react-native-remix-icon';
 import JobDetail from "./JobDetail";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 import CardJobDetail from "./CardJobDetail";
 import { useNavigation } from '@react-navigation/native';

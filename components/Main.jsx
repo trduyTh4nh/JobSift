@@ -6,11 +6,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useEffect, useState } from 'react';
 import Tabs from '../navigation/tab';
 
+
 const Stack = createNativeStackNavigator();
 
 const Main = () => {
     return (
-
         <NavigationContainer>
             <Tabs></Tabs>
         </NavigationContainer>

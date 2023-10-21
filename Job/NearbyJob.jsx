@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
-// import { useFonts } from "expo-font";
+ import { useFonts } from "expo-font";
 
 const NearbyJob = (props) => {
     const { dataNearby } = props
@@ -31,24 +31,21 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         elevation: 5,
-        marginTop: 15,
-        marginBottom: 15,
-        width: "100%",
+        width: "96%",
         backgroundColor: "#fff",
         padding: 15,
         gap: 20,
         borderRadius: 16,
+        alignItems: "center",
+        margin: 10
         
-        alignItems: "center"
     },
     nearByJobName: {
-        // fontFamily: "Rubik",
-        fontWeight: "700"
+        fontFamily: "Rubik",
     },
     nearByJobCategory: {
-        // fontFamily: "RukbikNormal",
+        fontFamily: "RukbikNormal",
         color: "rgba(171,171,171,1)",
-        fontWeight: "600"
     },
 
 })
