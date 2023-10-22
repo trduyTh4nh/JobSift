@@ -83,7 +83,7 @@ const Tabs = () => {
                             style={{}}
                             onPress={() => navigation.goBack()}
                         >
-                            <Icon name='arrow-left-s-line' size={34} color='#000' />
+                            <Icon name='arrow-left-s-line' size={24} color='#000' />
                         </TouchableOpacity>
                     ),
                     headerRight: () => (

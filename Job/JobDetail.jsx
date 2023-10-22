@@ -223,47 +223,43 @@ const JobDetail = () => {
                                 <View style={styles.headerJobInFo} >
                                     <View style={styles.wrapInfoJob}>
                                         <Text style={styles.nameJob}>{postData.tieu_de}</Text>
-                                        <View style={styles.wrapCompany}>
-                                            <Text style={styles.nameCompany}>
-                                                {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : "null"}
-                                            </Text>
-                                            <Icon name="git-commit-fill" size={18}></Icon>
-                                            <Text style={styles.datePost}>
-                                                Posted on {datePost.toLocaleDateString()}
-                                            </Text>
-                                        </View>
+                                        
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
                                         <TouchableOpacity style={styles.buttonApplyJob}>
-                                            <Icon name="check-fill" size={28} ></Icon>
+                                            <Icon name="check-fill" size={24} ></Icon>
                                         </TouchableOpacity>
 
                                         <View style={styles.wrapDiamond}>
-                                            <Image
-                                                source={require('../assets/diamond_pro.png')}
-                                                style={{ width: 15, height: 15 }}
-                                            ></Image>
+                                            
                                             <Text
                                                 style={styles.numberOfDiamond}
-                                            >10</Text>
+                                            >💎 10</Text>
                                         </View>
 
                                         <TouchableOpacity onPress={onShowPopUp} >
-                                            <Icon name="more-fill" size={32}></Icon>
+                                            <Icon name="more-line" size={24}></Icon>
                                         </TouchableOpacity>
                                     </View>
                                 </View>
-
+                                <View style={styles.wrapCompany}>
+                                            <Text style={styles.nameCompany}>
+                                                {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : "null"} • 
+                                            </Text>
+                                            <Text style={styles.datePost}>
+                                                Posted on {datePost.toLocaleDateString()}
+                                            </Text>
+                                </View>
                                 <View style={styles.headerRate}>
-
+                                
                                     <View style={styles.rateStar}>
                                         <View style={styles.quantityStart}>
                                             <StarRating totalStars={totalStars} userRating={userRating} />
                                         </View>
                                         <View style={styles.textStart}>
                                             <View style={styles.JobRankNumber}>
-                                                <Text style={styles.wrapNumberStartUp}>{ratingMain}</Text>
-                                                <Text style={styles.wrapNumberStart}>/5</Text>
+                                                <Text style={styles.wrapNumberStartUp}>{!isNaN(ratingMain) ? ratingMain : 0}
+                                                <Text style={styles.wrapNumberStart}>/5</Text></Text>
                                             </View>
                                         </View>
                                     </View>
@@ -292,7 +288,6 @@ const JobDetail = () => {
                             display: "flex",
                             alignItems: "center"
                         }}>
-
                             <TouchableOpacity onPress={() => setHidden(true)}
                                 style={{
                                     width: "70%", display: "flex",
@@ -300,7 +295,6 @@ const JobDetail = () => {
                                 }}>
                                 <Icon name="arrow-down-s-line" size={35}></Icon>
                             </TouchableOpacity>
-
                         </View>
                     )
                 }
@@ -387,10 +381,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     containerJobDetail: {
-        paddingTop: 15,
-        paddingLeft: 10,
-        paddingRight: 10,
-        paddingBottom: 10,
+        padding: 16
     },
     headerJobDetail: {
         display: 'flex',
@@ -399,7 +390,8 @@ const styles = StyleSheet.create({
     headerJobInFo: {
         display: 'flex',
         flexDirection: 'row',
-
+        justifyContent: 'space-between',
+        
     },
 
     wrapInfoJob: {
@@ -411,9 +403,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        gap: 10,
-        width: "50%",
-        justifyContent: 'center'
+        gap: 15,
+        justifyContent: 'flex-end'
     },
     wrapCompany: {
         display: 'flex',
@@ -454,12 +445,13 @@ const styles = StyleSheet.create({
     },
     wrapDiamond: {
         display: "flex",
+        
         alignItems: "center",
         flexDirection: "row",
         gap: 8
     },
     headerJobInFoWrap: {
-
+        gap: 5
     },
     headerRate: {
     }
@@ -489,7 +481,6 @@ const styles = StyleSheet.create({
 
     },
     bodyJobDetail: {
-        marginTop: 10,
         height: 900
     },
     tabInFoJob: {
@@ -507,7 +498,7 @@ const styles = StyleSheet.create({
     JobRankNumber: {
         display: "flex",
         flexDirection: "row",
-        alignItems: "center",
+        
     },
     wrapNumberStartUp: {
         fontFamily: "Rubik",
