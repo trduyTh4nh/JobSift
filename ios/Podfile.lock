@@ -516,7 +516,7 @@ PODS:
     - React-jsi (= 0.72.5)
     - React-logger (= 0.72.5)
     - React-perflogger (= 0.72.5)
-  - RNCPicker (2.4.10):
+  - RNCPicker (2.5.1):
     - React-Core
   - RNGestureHandler (2.12.1):
     - React-Core
@@ -808,7 +808,7 @@ SPEC CHECKSUMS:
   React-runtimescheduler: cc32add98c45c5df18436a6a52a7e1f6edec102c
   React-utils: 7a9918a1ffdd39aba67835d42386f592ea3f8e76
   ReactCommon: 91ece8350ebb3dd2be9cef662abd78b6948233c0
-  RNCPicker: 0bc2f0a29abcca7b7ed44a2d036aac9ab6d25700
+  RNCPicker: 529d564911e93598cc399b56cc0769ce3675f8c8
   RNGestureHandler: c0d04458598fcb26052494ae23dda8f8f5162b13
   RNScreens: 85d3880b52d34db7b8eeebe2f1a0e807c05e69fa
   RNSVG: d00c8f91c3cbf6d476451313a18f04d220d4f396

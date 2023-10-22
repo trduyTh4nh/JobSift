@@ -23,7 +23,7 @@ import { API_URL } from "../constants/etc";
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
-const IPlD = "192.168.116.1"
+const IPlD = "192.168.1.62"
 
 const nearbyJobsData = [
     { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
@@ -83,11 +83,11 @@ const Home = ({ navigation }) => {
                 setPostData(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
-                setIsLoading(false);appappapapsdaskd
+                setIsLoading(false);
             }
         };
 
-        fetchData();
+        fetchData().catch((e) => {console.error(e)});
     }, [navigation]);
 
 
@@ -137,10 +137,9 @@ const Home = ({ navigation }) => {
             <View style={styles.wrap}>
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
-                        <Text style={styles.sayhi}>Hi, </Text>
-
-                        <Text style={styles.userName}>{userDB.user.full_name} 👋</Text>
-
+                        <Text style={styles.sayhi}>Hi,
+                        <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
+                        </Text>
                     </View>
                     <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
                     <View style={styles.wrapSearch}>
