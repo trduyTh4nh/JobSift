@@ -12,7 +12,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
 
-import { API_URL } from "../constants/etc";
+import { API_URL } from "../ipConfig";
 
 
 
@@ -74,7 +74,7 @@ const Home = ({ navigation }) => {
         const fetchData = async () => {
             try {
 
-                const response = await fetch(`http://${IPlD}:3001`);
+                const response = await fetch(`http://${API_URL}:3001/`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -184,7 +184,7 @@ const Home = ({ navigation }) => {
                     </View>
 
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Nearby jobs</Text>
+                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
                     </View>
 
                     <FlatList

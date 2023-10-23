@@ -11,7 +11,7 @@ import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
 import { API_URL } from "../ipConfig"
 
-const MyForm = ({navigation, route}) => {
+const MyForm = ({ navigation, route }) => {
 
 
 
@@ -32,18 +32,18 @@ const MyForm = ({navigation, route}) => {
   const [isFocused, setIsFocused] = useState(false);
   const [text, setText] = useState('');
   useEffect(() => {
-    if(foc){
+    if (foc) {
       navigation.getParent()?.setOptions({
         tabBarStyle: {
           display: "none"
         }
       })
     }
-    if(global.user){
+    if (global.user) {
       navigation.navigate('Home')
     }
   }, [foc])
-  
+
   const handleFocus = () => {
     setIsFocused(true);
   };
@@ -106,7 +106,7 @@ const MyForm = ({navigation, route}) => {
   return (
 
     <ScrollView style={styles.container}>
-      
+
       <View style={styles.wrapHeader}>
         <Image style={styles.imageSignup} source={require('../assets/JobSift.png')} >
         </Image>
@@ -116,16 +116,13 @@ const MyForm = ({navigation, route}) => {
         <Text style={styles.textTitle}>Signup</Text>
       </View>
 
-        <View style={styles.titlePage}>
-          <Text style={styles.textTitle}>Signup</Text>
-        </View>
 
 
-        <View style={styles.decordPage}>
-          <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
+      <View style={styles.decordPage}>
+        <Image style={styles.decordPageImage} source={require('../assets/playerSignup.png')}>
 
-          </Image>
-        </View>
+        </Image>
+      </View>
 
       <View style={styles.wrapInput}>
 
@@ -176,7 +173,34 @@ const MyForm = ({navigation, route}) => {
             <Text style={styles.textInbtnSignup}>Signup</Text>
           </TouchableOpacity>
         </View>
+
+
+
       </View>
+
+      <View style={{
+        marginTop: 20,
+        textAlign: "center",
+        width: "100%",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        flexDirection: "row",
+        gap: 10
+      }}>
+        <Text>Bạn đã có tài khoản</Text>
+        <TouchableOpacity onPress={() => {
+          navigation.navigate('LoginForm')
+
+        }}>
+          <Text style={{
+            fontFamily: "Rubik",
+            color: "#0076E2",
+            fontSize: 16
+          }}>Login</Text>
+        </TouchableOpacity>
+      </View>
+
     </ScrollView>
   );
 };

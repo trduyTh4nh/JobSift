@@ -3,10 +3,13 @@ import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from "rea
 import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { FlatList } from "react-native-gesture-handler";
+import { API_URL } from "../ipConfig"
+import Carousel from 'react-native-snap-carousel';
+import STYLE from '../assets/css/universal'
 
 
 const imageGirdData = [
@@ -18,6 +21,8 @@ const imageGirdData = [
     { id: "6", source: require('../assets/logo_gg.png') },
 ]
 
+
+
 const ImageGird = () => {
     const renderItem = ({ item }) => {
         return (  // Add this 'return' statement
@@ -26,6 +31,8 @@ const ImageGird = () => {
             </View>
         );
     }
+
+
 
     return (
         <FlatList
@@ -36,13 +43,77 @@ const ImageGird = () => {
         />
     );
 }
+const data = [
+    'https://img.timviec.com.vn/2020/10/cong-ty-google-1.jpg',
+    'https://img.timviec.com.vn/2020/10/cong-ty-google-2.jpg',
+    'https://vcdn-sohoa.vnecdn.net/2022/09/19/-8050-1663572757.jpg',
+    'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQyUsALr1TMK7r_jxv05AGklZCkQxa7by1AAw&usqp=CAU',
+    'https://cms.dailysocial.id/wp-content/uploads/2014/12/shutterstock_192086165.jpg'
+];
 
 
-const ChildCompany = () => {
+const MyCarousel = ({ data }) => {
+    const _renderItem = ({ item, index }) => {
+        return (
+            <View>
+                <Image source={{ uri: item }} style={{ width: 300, height: 250, borderRadius: 16, elevation: 10 }} />
+            </View>
+        );
+    };
+
+    return (
+        <Carousel
+            data={data}
+            renderItem={_renderItem}
+            sliderWidth={350}
+            itemWidth={300}
+        />
+    );
+};
+
+
+const ChildCompany = ({ route }) => {
+
+
+
+    const { postData, dataDN } = route.params;
+
+    const idNTD = {
+        id_ntd: postData.id_ntd,
+        id_post: postData.id_post
+    }
+
+    console.log(postData.id_ntd + " " + postData.id_post)
+
+    const [infoNTD, setInfoNTD] = useState({})
+
+
+
+    // bug ngay đây m chưa hiểu rõ useEffect
+    useEffect(() => {
+        axios.post(`http://${API_URL}:3001/getinfontd`, idNTD, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                const data = response.data;
+                setInfoNTD({
+                    info: data.ntd,
+                    numberPost: data.numberpost,
+                    dataUserOfNtd: data.user_ntd
+                });
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }, []);
+
+    console.log("thông tin đã lấy: " + JSON.stringify(infoNTD));
+
     return (
 
         <View style={styles.container}>
-
             <ScrollView style={styles.scrollContainer}>
 
                 <View style={styles.main}>
@@ -50,7 +121,7 @@ const ChildCompany = () => {
                         <View style={styles.companyHeaderText}>
                             <Image style={{ width: 45, height: 45 }} source={require('../assets/logo_gg.png')}></Image>
                             <View style={styles.companyTitle}>
-                                <Text style={styles.companyName}>Google LLC</Text>
+                                <Text style={styles.companyName}>{infoNTD.info ? infoNTD.info.name_dn : ''}</Text>
                                 <Text style={styles.companyDes}>Enterprise</Text>
                             </View>
                         </View>
@@ -58,12 +129,6 @@ const ChildCompany = () => {
                             <TouchableOpacity style={styles.buttonApplyJob}>
                                 <Icon name="heart-line" size={28} ></Icon>
                             </TouchableOpacity>
-
-                            <View>
-                                <TouchableOpacity>
-                                    <Icon name="more-fill" size={32}></Icon>
-                                </TouchableOpacity>
-                            </View>
                         </View>
                     </View>
 
@@ -75,9 +140,7 @@ const ChildCompany = () => {
                         <View style={styles.companyBodyInfo}>
                             <Text style={styles.companyBodyInfoTitile}>Enterprise Description</Text>
                             <Text style={styles.companyBodyInfoContent}>
-                                Lorem ipsum dolor sit amet consectetur.
-                                Venenatis massa enim pretium eleifend tellus urna suspendisse nisl lorem.
-                                Faucibus diam ornare aliquet donec sit suspendisse.
+                                {infoNTD.description}
                             </Text>
                         </View>
 
@@ -102,7 +165,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="briefcase-4-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Category</Text>
-                                    <Text style={styles.jobCateDetailContent}>Computer Science & Information Technology</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.category : ''}</Text>
                                 </View>
                             </View>
 
@@ -110,7 +173,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="map-pin-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Headquarters</Text>
-                                    <Text style={styles.jobCateDetailContent}>1600 Amphitheatre ParkwayMountain View, CA 94043</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.address : ''}</Text>
                                 </View>
                             </View>
 
@@ -118,7 +181,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="user-2-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Open Position</Text>
-                                    <Text style={styles.jobCateDetailContent}>65</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.numberPost ? infoNTD.numberPost.count : ''}</Text>
                                 </View>
                             </View>
 
@@ -145,7 +208,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="mail-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Email</Text>
-                                    <Text style={styles.jobCateDetailContent}>email@domain.com</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.email_dn : ''}</Text>
                                 </View>
                             </View>
 
@@ -153,7 +216,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="map-pin-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Phone</Text>
-                                    <Text style={styles.jobCateDetailContent}>0937454345354</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.phone_dn : ''}</Text>
                                 </View>
                             </View>
 
@@ -161,7 +224,7 @@ const ChildCompany = () => {
                                 <Icon size={24} name="user-2-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
                                     <Text style={styles.jobCateDeTailTitle}>Person in charge</Text>
-                                    <Text style={styles.jobCateDetailContent}>Mr. steve</Text>
+                                    <Text style={styles.jobCateDetailContent}>{infoNTD.dataUserOfNtd ? infoNTD.dataUserOfNtd.full_name : 'no name'}</Text>
                                 </View>
                             </View>
 
@@ -170,9 +233,21 @@ const ChildCompany = () => {
 
 
                                 <View style={styles.iconContainer}>
-                                    <Icon name="facebook-circle-fill" style={styles.icon} />
-                                    <Icon name="twitter-fill" style={styles.icon} />
-                                    <Icon name="linkedin-box-fill" style={styles.icon} />
+
+                                    <TouchableOpacity>
+                                        <Icon name="facebook-circle-fill" style={styles.icon} size={30} color="#1877F2" />
+                                    </TouchableOpacity>
+
+
+                                    <TouchableOpacity>
+                                        <Icon name="twitter-fill" style={styles.icon} size={30} color="#1DA1F2" />
+                                    </TouchableOpacity>
+
+
+                                    <TouchableOpacity>
+                                        <Icon name="linkedin-box-fill" style={styles.icon} size={30} color="#0077B5" />
+                                    </TouchableOpacity>
+
                                 </View>
                             </View>
 
@@ -183,7 +258,7 @@ const ChildCompany = () => {
                     <View style={{
                         marginTop: 10,
                         padding: 20
-                     }}>
+                    }}>
                         <TouchableOpacity style={{
                             display: "flex",
                             flexDirection: "row",
@@ -211,10 +286,21 @@ const ChildCompany = () => {
                         </TouchableOpacity>
                     </View>
 
-                    <View style={styles.girdImageWrap}>
-                        {/* <ImageGird></ImageGird> */}
+
+                </View>
+
+
+                <View style={{
+                    paddingLeft: 25,
+                    paddingRight: 25
+                }}>
+                    <Text style={{...STYLE.textTitle, marginBottom: 10}}>Review</Text>
+                    <View style={{ marginBottom: 200, width: "100%", display: "flex", alignItems: "center" }}>
+                        <MyCarousel data={data}></MyCarousel>
                     </View>
                 </View>
+
+
             </ScrollView>
         </View>
 
@@ -238,7 +324,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 100,
+        gap: 150,
         padding: 20,
         justifyContent: "center"
     },
@@ -269,8 +355,6 @@ const styles = StyleSheet.create({
     main: {
         paddingLeft: 10,
         paddingRight: 10,
-        marginBottom: 200
-
     },
     companyBodyInfo: {
         paddingLeft: 20,
@@ -380,7 +464,7 @@ const styles = StyleSheet.create({
     iconContainer: {
         flexDirection: 'row',
         alignItems: 'center',
-        marginTop: 10,
+        marginTop: 16,
         gap: 16
     },
     icon: {
@@ -402,7 +486,22 @@ const styles = StyleSheet.create({
         borderRadius: 10, // Optional: add rounded corners
     },
     girdImageWrap: {
-        marginTop: 20
+        display: "flex",
+        flexDirection: "row",
+        gap: 40,
+        justifyContent: "center",
+        alignItems: "center",
+        flexWrap: "wrap"
+
+    },
+    imgChild: {
+        justifyContent: "center",
+        alignItems: "center",
+        display: "flex",
+    },
+    imgChild: {
+        width: "50%",
+        height: "30%"
     }
 
 })

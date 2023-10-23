@@ -1,6 +1,6 @@
 import React from "react";
 import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
- import { useFonts } from "expo-font";
+import { useFonts } from "expo-font";
 
 const NearbyJob = (props) => {
     const { dataNearby } = props
@@ -16,7 +16,13 @@ const NearbyJob = (props) => {
     // }
 
     return (
-        <TouchableOpacity style={styles.nearbyContainer}>
+        <View style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>  
+            <TouchableOpacity style={styles.nearbyContainer}>
             <Image style={styles.jobImage} source={require('../assets/favicon.png')}></Image>
             <View style={styles.nearByBody}>
                 <Text style={styles.nearByJobName}>{dataNearby.title_job}</Text>
@@ -24,6 +30,7 @@ const NearbyJob = (props) => {
                 <Text style={styles.nearByJobCategory}>{dataNearby.jobCate}</Text>
             </View>
         </TouchableOpacity>
+        </View>
     )
 }
 
@@ -32,23 +39,20 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         elevation: 5,
-
-        marginTop: 0,
-        marginBottom: 15,
-        width: "100%",
-
+        width: "90%",
         backgroundColor: "#fff",
-        padding: 15,
+        padding: 18,
         gap: 20,
         borderRadius: 16,
-
+        margin: 10,
         shadowColor: '#000',
         shadowOpacity: .08,
         shadowRadius: 5,
         shadowOffset: {
             height: 4
         },
-        alignItems: "center"
+        alignItems: "center",
+        height: 90
     },
     nearByJobName: {
         fontFamily: "Rubik",
@@ -56,7 +60,7 @@ const styles = StyleSheet.create({
 
         alignItems: "center",
         margin: 10
-        
+
     },
 
     nearByJobCategory: {

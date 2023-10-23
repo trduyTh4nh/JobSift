@@ -36,6 +36,13 @@ const CardJobDetail = (props) => {
         )
     }
 
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+        }
+        return text;
+      }
+
 
 
     return (
@@ -49,7 +56,7 @@ const CardJobDetail = (props) => {
 
                         <View style={styles.jobCardName}>
                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-                            <Text style={styles.jobCardAddress}>{dataPostDetail.dia_chi}</Text>
+                            <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
                             
                         </View>
 

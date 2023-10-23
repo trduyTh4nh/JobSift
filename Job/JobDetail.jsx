@@ -63,10 +63,11 @@ const JobDetail = () => {
 
     useEffect(() => {
         axios.get(`http://${API_URL}:3001/upfeedback/getrate/${postData.id_post}`, {
-            
+
         })
             .then((response) => {
                 setTotalStar(response.data.rate[0].start)
+                setQuantityUser(response.data.rate[0].user)
                 console.log(response.data.rate)
             })
             .catch((error) => {
@@ -86,7 +87,7 @@ const JobDetail = () => {
         let isMounted = true;
 
         axios.post(`http://${API_URL}:3001/ntd/${postData.id_ntd}`, {}, {
-            
+
         }).then((response) => {
             if (isMounted) {
                 setDoanhNghiep(response.data);
@@ -223,7 +224,7 @@ const JobDetail = () => {
                                 <View style={styles.headerJobInFo} >
                                     <View style={styles.wrapInfoJob}>
                                         <Text style={styles.nameJob}>{postData.tieu_de}</Text>
-                                        
+
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
                                         <TouchableOpacity style={styles.buttonApplyJob}>
@@ -231,7 +232,7 @@ const JobDetail = () => {
                                         </TouchableOpacity>
 
                                         <View style={styles.wrapDiamond}>
-                                            
+
                                             <Text
                                                 style={styles.numberOfDiamond}
                                             >💎 10</Text>
@@ -243,15 +244,15 @@ const JobDetail = () => {
                                     </View>
                                 </View>
                                 <View style={styles.wrapCompany}>
-                                            <Text style={styles.nameCompany}>
-                                                {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : "null"} • 
-                                            </Text>
-                                            <Text style={styles.datePost}>
-                                                Posted on {datePost.toLocaleDateString()}
-                                            </Text>
+                                    <Text style={styles.nameCompany}>
+                                        {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : "null"} •
+                                    </Text>
+                                    <Text style={styles.datePost}>
+                                        Posted on {datePost.toLocaleDateString()}
+                                    </Text>
                                 </View>
                                 <View style={styles.headerRate}>
-                                
+
                                     <View style={styles.rateStar}>
                                         <View style={styles.quantityStart}>
                                             <StarRating totalStars={totalStars} userRating={userRating} />
@@ -259,7 +260,7 @@ const JobDetail = () => {
                                         <View style={styles.textStart}>
                                             <View style={styles.JobRankNumber}>
                                                 <Text style={styles.wrapNumberStartUp}>{!isNaN(ratingMain) ? ratingMain : 0}
-                                                <Text style={styles.wrapNumberStart}>/5</Text></Text>
+                                                    <Text style={styles.wrapNumberStart}>/5</Text></Text>
                                             </View>
                                         </View>
                                     </View>
@@ -353,22 +354,26 @@ const JobDetail = () => {
 
 
 
-                    <Tab.Screen name="ChildCompany" component={ChildCompany} options={{
-                        title: "Company",
-                        tabBarLabel: ({ focused, color }) => (
-                            <Text style={{ color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik" }}>
-                                Company
-                            </Text>
-                        ),
+                    <Tab.Screen name="ChildCompany" component={ChildCompany}
+                        options={{
+                            title: "Company",
+                            tabBarLabel: ({ focused, color }) => (
+                                <Text style={{ color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik" }}>
+                                    Company
+                                </Text>
+                            ),
 
-                        tabBarIndicatorStyle: {
-                            width: 80,
-                            height: 5,
-                            left: ((Dimensions.get('window').width / 2 - 80) / 2),
-                            backgroundColor: '#000',
-                        },
-                    }}
-                        initialParams={{ dataDN: doanhNghiep }} />
+                            tabBarIndicatorStyle: {
+                                width: 80,
+                                height: 5,
+                                left: ((Dimensions.get('window').width / 2 - 80) / 2),
+                                backgroundColor: '#000',
+                            },
+                        }}
+                        initialParams={{
+                            postData: postData,
+                            dataDN: doanhNghiep,
+                        }} />
                 </Tab.Navigator>
             </View>
         </View>
@@ -391,7 +396,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        
+
     },
 
     wrapInfoJob: {
@@ -445,7 +450,7 @@ const styles = StyleSheet.create({
     },
     wrapDiamond: {
         display: "flex",
-        
+
         alignItems: "center",
         flexDirection: "row",
         gap: 8
@@ -498,7 +503,7 @@ const styles = StyleSheet.create({
     JobRankNumber: {
         display: "flex",
         flexDirection: "row",
-        
+
     },
     wrapNumberStartUp: {
         fontFamily: "Rubik",

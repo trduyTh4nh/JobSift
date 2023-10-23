@@ -5,12 +5,12 @@ import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import { useEffect } from "react";
-// import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { API_URL } from "../ipConfig"
 
 import STYLE from '../assets/css/universal'
 import Error from "../components/Error";
+import { useIsFocused } from "@react-navigation/native";
 
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
@@ -42,7 +42,7 @@ const ChildInFoJob = ({ route }) => {
             }
 
         }).catch((error) => {
-            console.error('Business'+error);
+            console.error('Business' + error);
         });
 
         return () => {
@@ -65,6 +65,7 @@ const ChildInFoJob = ({ route }) => {
         { tagID: 5, text: "Apple" },
     ]
     const [rating, setRating] = useState(0)
+    const [myStar, setMystar] = useState(0)
 
     const [comment, setComment] = useState('')
 
@@ -79,7 +80,7 @@ const ChildInFoJob = ({ route }) => {
     var min = new Date().getMinutes();
     var sec = new Date().getSeconds();
 
-
+    const focused = useIsFocused()
     const currentTime = year + '-' + month + '-' + date + ' ' + hours + ':' + min + ':' + sec
 
     const formDataFB = {
@@ -109,11 +110,11 @@ const ChildInFoJob = ({ route }) => {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
-              console.log(JSON.stringify(response.data))
+            //console.log(JSON.stringify(response.data))
             showToast()
             getFeed()
         }).catch((error) => {
-            console.error('Feedback'+error)
+            console.error('Feedback' + error)
         })
     }
 
@@ -143,7 +144,34 @@ const ChildInFoJob = ({ route }) => {
 
     }
 
-   
+
+
+    useEffect(() => {
+
+        const iduser = userDB.user.id_user
+        const idpost = postData.id_post
+
+        console.log(idpost)
+        console.log(iduser)
+
+        axios.post(`http://${API_URL}:3001/getcurrentstar/${iduser}/${idpost}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const currentstar = response.data.cur;
+                    setRating(currentstar.numberstar)
+                } else {
+                    console.error('Error:', response.data.error);
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+
+
+    }, [focused])
+
+
+
 
 
     const datePost = new Date(postData.ngay_hethan)
@@ -170,22 +198,23 @@ const ChildInFoJob = ({ route }) => {
                 return response.json();
             })
             .then(data => {
-                console.log(data.fbs)
+                //  console.log(data.fbs)
                 setFb(data.fbs)
             })
             .catch(error => {
-                console.log('Feedback'+error);
+                console.log('Feedback' + error);
             })
     }
 
     const renderComment = ({ item }) => {
+
         const date = new Date(item.time)
         return (
             <View style={styles.componentCmt}>
                 <View style={styles.headerCmt}>
                     <View style={styles.infoUserCmt}>
                         <Image source={require('../assets/favicon.png')} />
-                        <Text style={styles.userNameCmt}>{item.userName}</Text>
+                        <Text style={styles.userNameCmt}>{item.full_name}</Text>
                     </View>
                     <Text style={styles.timeCmt}>{date.toLocaleDateString()}</Text>
                 </View>
@@ -197,150 +226,150 @@ const ChildInFoJob = ({ route }) => {
         );
     };
 
-   
+
 
 
     return (
-            <ScrollView style={styles.scrollContainer}>
-                <View style={styles.container}>
-                        <View style={styles.JobSumary}>
-                            <View style={styles.title}>
-                                <Text style={styles.textTitle}>Job sumamry</Text>
-                            </View>
+        <ScrollView style={styles.scrollContainer}>
+            <View style={styles.container}>
+                <View style={styles.JobSumary}>
+                    <View style={styles.title}>
+                        <Text style={styles.textTitle}>Job sumamry</Text>
+                    </View>
 
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="briefcase-4-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Category</Text>
-                                    <Text style={styles.jobCateDetailContent}>{postData.job_category}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="map-pin-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Address</Text>
-                                    <Text style={styles.jobCateDetailContent}>{postData.dia_chi}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="money-dollar-circle-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Salary</Text>
-                                    <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="time-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Required - Experience</Text>
-                                    <Text style={styles.jobCateDetailContent}>{postData.kinh_nghiem_yeu_cau}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="user-2-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Position</Text>
-                                    <Text style={styles.jobCateDetailContent}>{postData.position}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.jobCate}>
-                                <Icon size={24} name="check-line"></Icon>
-                                <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Application Deadline</Text>
-                                    <Text style={styles.jobCateDetailContent}>{datePost.toLocaleDateString()}</Text>
-                                </View>
-                            </View>
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="briefcase-4-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Category</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.job_category}</Text>
                         </View>
+                    </View>
 
-                        <View style={styles.JobDescription}>
-                            <Text style={styles.JobDescriptionTitle}>Job description</Text>
-                            <Text style={styles.JobDescriptionConent}>{postData.note}
-                            </Text>
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="map-pin-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Address</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.dia_chi}</Text>
                         </View>
+                    </View>
 
-                        <View style={styles.JobReview}>
-                            <Text style={styles.JobReviewTitle}>Reviews</Text>
-                            <View style={styles.JobWrapRankStar}>
-                                <View style={styles.wrapRank}>
-                                    <View style={styles.wrapJobstart}>
-                                        {[1, 2, 3, 4, 5].map((star) => (
-                                            <TouchableOpacity
-                                                key={star}
-                                                onPress={() => starPress(star)}
-                                            >
-                                                <Icon
-                                                    name={star <= rating ? "star-fill" : "star-line"}
-                                                    color={star <= rating ? "#E2F367" : "#000"}
-                                                    size={40}
-                                                />
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
-                                    <View style={styles.JobRankNumber}>
-                                        <Text style={styles.wrapNumberStartUp}>{rating}
-                                        <Text style={styles.wrapNumberStart}>/5</Text></Text>
-                                    </View>
-                                </View>
-                            </View>
-
-
-                            <View style={styles.wrapComment}>
-                                <TextInput
-                                    style={styles.inputCmt}
-                                    placeholder="Leave your review"
-                                    placeholderTextColor={"#000"}
-
-                                    onChangeText={handleComment}
-                                    value={comment}></TextInput>
-
-                                <TouchableOpacity style={styles.buttonCmt} onPress={upLoadFB}>
-                                    <Icon name="check-line"></Icon>
-                                    <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Upload</Text>
-                                </TouchableOpacity>
-                            </View>
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="money-dollar-circle-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Salary</Text>
+                            <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
                         </View>
+                    </View>
 
-
-                        <View style={styles.wrapUserCmt}>
-
-                            <View style={styles.wraptitleCmt}>
-                                <Text style={styles.titleCmt}>Feedbacks</Text>
-                            </View>
-                            {
-                                fb.length > 0 ? 
-                                (<FlatList
-                                    data={fb}
-                                    renderItem={renderComment}
-                                    keyExtractor={(item) => item.idfb.toString()}
-                                />) : <Error message={'Be the first to post a feedback.'} title={'No feedbacks'} icon={'ri-chat-3-line'}/>
-
-                            } 
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="time-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Required - Experience</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.kinh_nghiem_yeu_cau}</Text>
                         </View>
+                    </View>
 
-
-                        <View style={styles.tagTitle}>
-                            <Text style={styles.textTagTitle}>Tags</Text>
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="user-2-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Position</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.position}</Text>
                         </View>
+                    </View>
 
-                        <View style={styles.wrapTags}>
-                            <FlatList
-                                
-                                ItemSeparatorComponent={() => (<View style={{width: 10}}></View>)}
-                                style={styles.styleForListTags}
-                                horizontal
-                                data={dataTag}
-                                renderItem={renderTag}
-                                keyExtractor={(item) => item.tagID.toString()}
-                                contentContainerStyle={styles.flatListContent}>
-                            </FlatList>
+                    <View style={styles.jobCate}>
+                        <Icon size={24} name="check-line"></Icon>
+                        <View style={styles.jobCateDeTail}>
+                            <Text style={styles.jobCateDeTailTitle}>Application Deadline</Text>
+                            <Text style={styles.jobCateDetailContent}>{datePost.toLocaleDateString()}</Text>
                         </View>
+                    </View>
                 </View>
-            </ScrollView>
+
+                <View style={styles.JobDescription}>
+                    <Text style={styles.JobDescriptionTitle}>Job description</Text>
+                    <Text style={styles.JobDescriptionConent}>{postData.note}
+                    </Text>
+                </View>
+
+                <View style={styles.JobReview}>
+                    <Text style={styles.JobReviewTitle}>Reviews</Text>
+                    <View style={styles.JobWrapRankStar}>
+                        <View style={styles.wrapRank}>
+                            <View style={styles.wrapJobstart}>
+                                {[1, 2, 3, 4, 5].map((star) => (
+                                    <TouchableOpacity
+                                        key={star}
+                                        onPress={() => starPress(star)}
+                                    >
+                                        <Icon
+                                            name={star <= rating ? "star-fill" : "star-line"}
+                                            color={star <= rating ? "#E2F367" : "#000"}
+                                            size={40}
+                                        />
+                                    </TouchableOpacity>
+                                ))}
+                            </View>
+                            <View style={styles.JobRankNumber}>
+                                <Text style={styles.wrapNumberStartUp}>{rating}
+                                    <Text style={styles.wrapNumberStart}>/5</Text></Text>
+                            </View>
+                        </View>
+                    </View>
+
+
+                    <View style={styles.wrapComment}>
+                        <TextInput
+                            style={styles.inputCmt}
+                            placeholder="...."
+                            placeholderTextColor={"#000"}
+
+                            onChangeText={handleComment}
+                            value={comment}></TextInput>
+
+                        <TouchableOpacity style={styles.buttonCmt} onPress={upLoadFB}>
+                            <Icon name="check-line"></Icon>
+                            <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Upload</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+
+
+                <View style={styles.wrapUserCmt}>
+
+                    <View style={styles.wraptitleCmt}>
+                        <Text style={styles.titleCmt}>Feedbacks</Text>
+                    </View>
+                    {
+                        fb.length > 0 ?
+                            (<FlatList
+                                data={fb}
+                                renderItem={renderComment}
+                                keyExtractor={(item) => item.idfb.toString()}
+                            />) : <Error message={'Be the first to post a feedback.'} title={'No feedbacks'} icon={'ri-chat-3-line'} />
+
+                    }
+                </View>
+
+
+                <View style={styles.tagTitle}>
+                    <Text style={styles.textTagTitle}>Tags</Text>
+                </View>
+
+                <View style={styles.wrapTags}>
+                    <FlatList
+
+                        ItemSeparatorComponent={() => (<View style={{ width: 10 }}></View>)}
+                        style={styles.styleForListTags}
+                        horizontal
+                        data={dataTag}
+                        renderItem={renderTag}
+                        keyExtractor={(item) => item.tagID.toString()}
+                        contentContainerStyle={styles.flatListContent}>
+                    </FlatList>
+                </View>
+            </View>
+        </ScrollView>
     )
 }
 
@@ -530,7 +559,7 @@ const styles = StyleSheet.create({
         borderColor: "#B0B0B0"
     },
     wrapTags: {
-        
+
         display: "flex",
         flexDirection: "row",
         marginBottom: 300,
@@ -550,8 +579,8 @@ const styles = StyleSheet.create({
         color: "black"
     },
     tagTitle: {
-       
-        
+
+
     },
     textTagTitle: {
         fontFamily: "Rubik",

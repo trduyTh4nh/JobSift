@@ -103,7 +103,9 @@ export class BottomPopup extends React.Component {
         const hidden = false
         onDataFromChild(hidden);
       }
+      
     }
+
 
     return (
       <Modal
@@ -111,6 +113,7 @@ export class BottomPopup extends React.Component {
         transparent={true}
         visible={show}
         onRequestClose={this.close}
+        
       >
         <View style={{ flex: 1, backgroundColor: "#000000AA", justifyContent: "flex-end" }}>
           {this.renderOutsideTouchable(onTouchOutside)}
