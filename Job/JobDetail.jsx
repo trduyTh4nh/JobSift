@@ -1,6 +1,6 @@
 import { useRoute } from "@react-navigation/native";
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, FlatList, Animated, Easing, ActivityIndicator } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, FlatList, Animated, Easing, ActivityIndicator, SafeAreaView, Pressable } from "react-native";
 import Icon from 'react-native-remix-icon';
 import { COLORS, FONT } from "../constants";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -13,7 +13,9 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 
 import { API_URL } from "../ipConfig"
-
+import Modal from 'react-native-modal'
+import STYLE from "../assets/css/universal";
+import * as DocumentPicker from 'expo-document-picker';
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 // const Tab = createBottomTabNavigator();
@@ -24,10 +26,9 @@ const JobDetail = () => {
     const route = useRoute();
     const [hide, setHidden] = useState(true)
     const fadeAnim = new Animated.Value(100);
-
+    const [showPDFCV, setShowPDFCV] = useState(false)
+    const [showUngTuyen, setShowUngTuyen] = useState(false)
     const [doanhNghiep, setDoanhNghiep] = useState({})
-
-
     const handleDataFromChild = (data) => {
         Animated.timing(fadeAnim, {
             toValue: 0,
@@ -38,7 +39,14 @@ const JobDetail = () => {
             setHidden(false);
         });
     }
-
+    const handleUploadFile = () => {
+        DocumentPicker.getDocumentAsync().then((e) => {
+            if(!e.canceled){
+                
+            }
+            console.log(e)
+        })
+    }
     useEffect(() => {
         if (hide) {
             Animated.timing(fadeAnim, {
@@ -49,18 +57,11 @@ const JobDetail = () => {
             }).start();
         }
     }, [hide]);
-
-
     const postData = route.params ? route.params.postData : null;
-
     const datePost = new Date(postData.ngay_post)
-
     const [totalStar, setTotalStar] = useState('')
     const [quantityUser, setQuantityUser] = useState('')
-
     const ratingMain = Math.round(totalStar / quantityUser)
-
-
     useEffect(() => {
         axios.get(`http://${API_URL}:3001/upfeedback/getrate/${postData.id_post}`, {
 
@@ -74,43 +75,26 @@ const JobDetail = () => {
                 console.log(error);
             });
     }, []);
-
-
-
-
-
-
-
     // console.log(postData)
-
     useEffect(() => {
         let isMounted = true;
-
         axios.post(`http://${API_URL}:3001/ntd/${postData.id_ntd}`, {}, {
 
         }).then((response) => {
             if (isMounted) {
                 setDoanhNghiep(response.data);
-
-
             }
         }).catch((error) => {
             console.error(error);
         });
-
         return () => {
             isMounted = false;
         };
     }, []);
-
-
-
-
     const [fontLoaded] = useFonts({
         'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
         'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
     })
-
     if (!fontLoaded) {
         return (
             <View>
@@ -118,7 +102,6 @@ const JobDetail = () => {
             </View>
         )
     }
-
     if (!postData) {
         return (
             <Text>Opps...</Text>
@@ -205,7 +188,13 @@ const JobDetail = () => {
 
     const totalRate = Math.ceil(userRating / (totalStars / 5));
 
-
+    const handlePDFCVChoose = () => {
+        setShowUngTuyen(false)
+        setTimeout(() => {
+            setShowPDFCV(true)
+        }, 400)
+       
+    }
 
     return (
         <View style={styles.wrapMain}>
@@ -227,7 +216,7 @@ const JobDetail = () => {
 
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
-                                        <TouchableOpacity style={styles.buttonApplyJob}>
+                                        <TouchableOpacity onPress={() => {setShowUngTuyen(true)}} style={styles.buttonApplyJob}>
                                             <Icon name="check-fill" size={24} ></Icon>
                                         </TouchableOpacity>
 
@@ -267,7 +256,6 @@ const JobDetail = () => {
                                     <View style={styles.rateReview}>
                                         <Text style={styles.rateReviewDetal}>{postData.views ? postData.views : "0"} views</Text>
                                     </View>
-
                                 </View>
 
 
@@ -302,6 +290,74 @@ const JobDetail = () => {
 
 
 
+            </View>
+            <View style={styles.wrapModal}>
+                <Modal
+                    style={{margin: 0}}
+                    isVisible={showPDFCV}
+                    onBackdropPress={() => {setShowPDFCV(false)}}
+                    onBackButtonPress={() => {setShowPDFCV(false)}}
+                    swipeDirection={'down'}
+                    onSwipeComplete={() => {setShowPDFCV(false)}}
+                >   
+                    <SafeAreaView style={styles.modal}>
+                        <View style={styles.modalChild}>
+                            <View>
+                                <Text style={STYLE.textTitle}>Upload CV</Text>
+                                <Text>Please upload your CV (accepted file types: .pdf)</Text>
+                            </View>
+                            <View>
+                                <TouchableOpacity onPress={handleUploadFile} style={{...styles.buttonStyle, paddingLeft: 24, paddingRight: 24,paddingTop: 20, paddingBottom: 20, backgroundColor: '#E9E9E9', borderRadius: 16}}>
+                                    <Text>Upload file</Text>
+                                </TouchableOpacity>
+                            </View>
+                                <TouchableOpacity style={styles.buttonStyle}>
+                                <Text>Apply</Text>
+                                <View style={styles.priceTag}>
+                                    <Text>💎 30</Text>
+                                    <Icon name="arrow-right-s-line"/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handlePDFCVChoose} style={{...styles.buttonStyle, backgroundColor: '#E9E9E9'}}>
+                                <Text>Cancel</Text>
+                                <View style={styles.priceTag}>
+                                    <Icon name="close-line"/>
+                                </View>
+                            </TouchableOpacity>
+                            
+                        </View>
+                    </SafeAreaView>
+                </Modal>
+            </View>
+            <View style={styles.wrapModal}>
+                <Modal
+                    style={{margin: 0}}
+                    isVisible={showUngTuyen}
+                    onBackdropPress={() => {setShowUngTuyen(false)}}
+                    onBackButtonPress={() => {setShowUngTuyen(false)}}
+                    swipeDirection={'down'}
+                    onSwipeComplete={() => {setShowUngTuyen(false)}}
+                >   
+                    <SafeAreaView style={styles.modal}>
+                        <View style={styles.modalChild}>
+                            <Text style={STYLE.textTitle}>Applying for <Text>{postData.tieu_de}</Text> @ {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}</Text>
+                            <TouchableOpacity style={styles.buttonStyle}>
+                                <Text>Apply with existing CV</Text>
+                                <View style={styles.priceTag}>
+                                    <Text>💎 10</Text>
+                                    <Icon name="arrow-right-s-line"/>
+                                </View>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
+                                <Text>Apply with PDF CV</Text>
+                                <View style={styles.priceTag}>
+                                    <Text>💎 30</Text>
+                                    <Icon name="arrow-right-s-line"/>
+                                </View>
+                            </TouchableOpacity>
+                        </View>
+                    </SafeAreaView>
+                </Modal>
             </View>
             <View style={styles.bodyJobDetail}>
                 <Tab.Navigator style={styles.tabInFoJob}
@@ -381,7 +437,39 @@ const JobDetail = () => {
 };
 
 const styles = StyleSheet.create({
-
+    buttonStyle: {
+        paddingLeft: 16,
+        paddingRight: 16,
+        paddingBottom: 8,
+        paddingTop: 8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center',
+        backgroundColor: '#E2F367',
+        borderRadius: 50
+    },
+    priceTag: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 10
+    },
+    wrapModal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modal: {
+        borderRadius: 16,
+        position: 'absolute',
+        bottom: 0,
+        justifyContent: 'flex-end',
+        width: '100%',
+        backgroundColor: '#fff'
+    },
+    modalChild: {
+        padding: 24,
+        paddingBottom: 0,
+        gap: 16
+    },
     wrapMain: {
         backgroundColor: "#fff"
     },
