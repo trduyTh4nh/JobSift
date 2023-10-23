@@ -17,6 +17,8 @@ PODS:
     - ExpoModulesCore
   - ExpoBlur (12.6.0):
     - ExpoModulesCore
+  - ExpoDocumentPicker (11.5.4):
+    - ExpoModulesCore
   - ExpoImagePicker (14.3.2):
     - ExpoModulesCore
   - ExpoKeepAwake (12.3.0):
@@ -540,6 +542,7 @@ DEPENDENCIES:
   - EXImageLoader (from `../node_modules/expo-image-loader/ios`)
   - Expo (from `../node_modules/expo`)
   - ExpoBlur (from `../node_modules/expo-blur/ios`)
+  - ExpoDocumentPicker (from `../node_modules/expo-document-picker/ios`)
   - ExpoImagePicker (from `../node_modules/expo-image-picker/ios`)
   - ExpoKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - ExpoModulesCore (from `../node_modules/expo-modules-core`)
@@ -648,6 +651,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo"
   ExpoBlur:
     :path: "../node_modules/expo-blur/ios"
+  ExpoDocumentPicker:
+    :path: "../node_modules/expo-document-picker/ios"
   ExpoImagePicker:
     :path: "../node_modules/expo-image-picker/ios"
   ExpoKeepAwake:
@@ -755,6 +760,7 @@ SPEC CHECKSUMS:
   EXImageLoader: 34b214f9387e98f3c73989f15d8d5b399c9ab3f7
   Expo: e7d2116b947e2e6fdeb09ee4f2754f819426d1b6
   ExpoBlur: 9e6da7c2bd4a0c5de7e57124694d0a380d7962f7
+  ExpoDocumentPicker: 5cb7389ff935b4addefdd466a606de51a512e922
   ExpoImagePicker: c58fdf28be551681a8edc550bcec76c397a8dfcd
   ExpoKeepAwake: be4cbd52d9b177cde0fd66daa1913afa3161fc1d
   ExpoModulesCore: 51cb2e7ab4c8da14be3f40b66d54c1781002e99d
