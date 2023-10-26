@@ -8,11 +8,11 @@ import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { API_URL } from "../ipConfig";
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
 
-import { API_URL } from "../constants/etc";
+
 
 
 
@@ -23,7 +23,7 @@ import { API_URL } from "../constants/etc";
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
-const IPlD = "192.168.1.62"
+const IPlD = API_URL
 
 const nearbyJobsData = [
     { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
