@@ -1,11 +1,15 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert } from "react-native";
 //import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
+import axios from "axios";
+import { API_URL } from "../constants/etc";
+import { useIsFocused } from "@react-navigation/native";
 const Profile = ({navigation}) =>{
+    const [count, setApply] = useState({apply: -1, cv: -1})
     const logOut = () => {
         Alert.alert('Logout', 'Do you want to logout, you will lose access to your account.',
         [
@@ -15,19 +19,50 @@ const Profile = ({navigation}) =>{
             }},
             {text: 'No'},
         ])
-        
     }
+    const focus = useIsFocused()
+    useEffect(() => {
+        if(focus){
+
+            axios.post(API_URL + '/application', {
+                "id_user": global.user.user.id_user
+            }).then(e => {
+                console.log(e.data)
+                const num = e.data.length
+                setApply({
+                    ...count,
+                    apply: num.toString().padStart(2,'0')
+                })
+            }).catch(e => {
+                console.error(e)
+            })
+        }
+    }, [focus])
+    useEffect(() => {
+        axios.post(API_URL + '/cvcount', {
+            "id_user": global.user.user.id_user
+        }).then(e => {
+            console.log(e.data)
+            const num = e.data[0].cv_count
+            setApply({
+                ...count,
+                cv: num.toString().padStart(2,'0')
+            })
+        }).catch(e => {
+            console.error(e)
+        })
+    }, [focus])
     return (
         <ScrollView style={{paddingBottom:200}}>
         <View style={styles.wrap}>
             <View style={styles.container}>
                 <View style={styles.vien}>
                     <View style={styles.Xuongdong1}>
-                        <Text style={styles.chutrongvien}> 45 </Text>
-                        <Text style={styles.chutrongvien2}> Applies jobs </Text>
+                        <Text style={styles.chutrongvien}> {count.apply} </Text>
+                        <Text style={styles.chutrongvien2}> Applied jobs </Text>
                     </View>
                     <View style={styles.Xuongdong1}>
-                        <Text style={styles.chutrongvien}> 05 </Text>
+                        <Text style={styles.chutrongvien}> {count.cv} </Text>
                         <Text style={styles.chutrongvien2}> CVs </Text>
                     </View>
                     <View style={styles.Xuongdong1}>
@@ -71,14 +106,6 @@ const Profile = ({navigation}) =>{
                     <View style={styles.dongngang1}> 
                         <Icon name="profile-line"></Icon>
                         <Text style={styles.chucuaslart}> CV </Text>
-                    </View>
-                    <Icon name="arrow-right-s-line" ></Icon>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.dongngang}>
-                    <View style={styles.dongngang1}> 
-                        <Icon name="profile-line"></Icon>
-                        <Text style={styles.chucuaslart}> Cover Letter </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
