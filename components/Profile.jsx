@@ -9,7 +9,10 @@ const Profile = ({navigation}) =>{
     const logOut = () => {
         Alert.alert('Logout', 'Do you want to logout, you will lose access to your account.',
         [
-            {text: 'Yes', onPress: () => {navigation.navigate('FormSignup')}},
+            {text: 'Yes', onPress: () => {
+                global.user = null
+                navigation.navigate('Home')
+            }},
             {text: 'No'},
         ])
         
