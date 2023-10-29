@@ -1,6 +1,9 @@
 # Đồ án CNPM NC viết bằng React Native (Javascript)
-![](https://geps.dev/progress/0)\
-Tiến độ: 0.5% (Đang chuẩn bị)
+
+https://fowardslash.vercel.app/#/projects/3F7iKkFqORJf4Shh8KMG
+
+![](https://geps.dev/progress/15)\
+Tiến độ: 15% (Đang chuẩn bị)
 # Nền tảng:
 Đa nền tảng (Android, iOS)
 # Back-end
@@ -22,6 +25,8 @@ Và đặc biệt cảm ơn
 - **Ths. Lê Thị Bảo Trân: Giảng viên**
 
 Vì đã hướng dẫn các em trong dự án này.
+
+
 
 # Last words
 ## Best wishes fron Quang.

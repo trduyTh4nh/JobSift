@@ -18,7 +18,7 @@ import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
 import { Form } from 'react-hook-form';
 
-import { useLayoutEffect } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { StatusBar } from 'react-native';
 import { Header } from '../components/Header';
 
@@ -90,9 +90,12 @@ const Tabs = () => {
 
 
 
-    const HomeStack = () => (
+    const HomeStack = () => {
+        const [initRoute, setRoute] = useState('LoginForm')
+        useEffect(() => setRoute('Home'), [global.user])
+        return (
 
-        <Stack.Navigator initialRouteName='LoginForm' theme={THEME} options={{
+        <Stack.Navigator initialRouteName='Home' theme={THEME} options={{
 
         }}>
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
@@ -135,7 +138,7 @@ const Tabs = () => {
             ></Stack.Screen>
 
         </Stack.Navigator>
-    );
+    )};
 
     const JobStack = ({ navigation }) => {
 

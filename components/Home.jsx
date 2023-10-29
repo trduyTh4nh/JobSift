@@ -8,12 +8,15 @@ import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
 import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { API_URL } from "../ipConfig";
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
+import { ActivityIndicator } from "react-native";
 
-import { API_URL } from "../ipConfig";
+
+
 import axios from "axios";
+
 
 
 
@@ -24,13 +27,14 @@ import axios from "axios";
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
-const IPlD = "192.168.1.62"
+const IPlD = API_URL
 
 
 
 
 
 const Home = ({ navigation }) => {
+    const focus = useIsFocused()
 
     const userDB = global.user
 
@@ -89,6 +93,42 @@ const Home = ({ navigation }) => {
     // Use useEffect to fetch data from the API
 
     useEffect(() => {
+        if(focus) {
+
+                if(!global.user){
+                    console.log('User is not logged in')
+                    setTimeout(() => {
+                        navigation.navigate('LoginForm')
+                    }, 500)
+                    navigation.getParent()?.setOptions({
+                        tabBarStyle: {display: 'none'}
+                    })
+                    return
+                }
+                navigation.getParent()?.setOptions({
+                    tabBarStyle: STYLE.tabBarStyle
+                })
+                const fetchData = async () => {
+                    try {
+        
+                        const response = await fetch(`http://${API_URL}:3001`);
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        const data = await response.json();
+                        setIsLoading(false);
+                        setPostData(data);
+                    } catch (error) {
+                        console.log('Error fetching data:', error);
+                        setIsLoading(false);
+                    }
+                };
+        
+                fetchData().catch((e) => {console.error(e)});
+        }
+    }, [focus]);
+
+  /*
         navigation.getParent()?.setOptions({
             tabBarStyle: STYLE.tabBarStyle
         })
@@ -111,6 +151,8 @@ const Home = ({ navigation }) => {
 
         fetchData().catch((e) => { console.error(e) });
     }, [navigation]);
+    */
+
 
 
     // const [postData, setPostData] = useState([]);
@@ -151,7 +193,14 @@ const Home = ({ navigation }) => {
     const renderItem = ({ item }) => (
         <CardJob dataPost={item} />
     );
-
+    if(!global.user){
+        return (
+            <SafeAreaView style={{height: '100%' ,justifyContent: 'center', alignItems: 'center'}}>
+                <Image style={{transform: [{scale: 0.5}]}} source={require('../assets/JobSift.png')}></Image>
+                <ActivityIndicator/>
+            </SafeAreaView>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>
