@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert } from "react-native";
 //import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
@@ -12,8 +12,10 @@ const Profile = ({navigation}) =>{
             {text: 'Yes', onPress: () => {navigation.navigate('FormSignup')}},
             {text: 'No'},
         ])
-        
     }
+  
+    console.log("User profile" + JSON.stringify(user))
+
     return (
         <ScrollView style={{paddingBottom:200}}>
         <View style={styles.wrap}>
@@ -80,7 +82,7 @@ const Profile = ({navigation}) =>{
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
 
-                <TouchableOpacity style={styles.dongngang}>
+                <TouchableOpacity style={styles.dongngang} onPress={() => {navigation.navigate('Favorite Page')}}>
                     <View style={styles.dongngang1}> 
                         <Icon name="star-line"></Icon>
                         <Text style={styles.chucuaslart}> Favourite Jobs </Text>

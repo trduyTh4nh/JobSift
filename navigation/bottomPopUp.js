@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedback, Dimensions, FlatList } from 'react-native';
 import { useFonts } from "expo-font"
 import Icon from 'react-native-remix-icon';
+import STYLE from '../assets/css/universal'
 
 const deviceHeight = Dimensions.get("window").height;
 
@@ -75,8 +76,22 @@ export class BottomPopup extends React.Component {
 
   renderItem = ({ item }) => {
     return (
-      <View style={styles.wrapMenu}>
-        <TouchableOpacity style={styles.buttonInMenu} onPress={() => hideHeaderJob(item)}>
+      <View style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}>
+        <TouchableOpacity style={{
+          backgroundColor: item.colorTag,
+          marginTop: 16,
+          padding: 20,
+          width: "90%",
+          borderRadius: 20,
+          borderWidth: 2,
+          display: "flex",
+          flexDirection: "row",
+          gap: 10
+        }} onPress={() => hideHeaderJob(item)}>
           <Icon name={item.iconName}></Icon>
           <Text style={styles.textInMenu}>{item.name}</Text>
         </TouchableOpacity>
@@ -103,7 +118,7 @@ export class BottomPopup extends React.Component {
         const hidden = false
         onDataFromChild(hidden);
       }
-      
+
     }
 
 
@@ -113,11 +128,9 @@ export class BottomPopup extends React.Component {
         transparent={true}
         visible={show}
         onRequestClose={this.close}
-        
       >
         <View style={{ flex: 1, backgroundColor: "#000000AA", justifyContent: "flex-end" }}>
           {this.renderOutsideTouchable(onTouchOutside)}
-
           <View style={{
             backgroundColor: "#fff",
             width: "100%",
@@ -126,7 +139,13 @@ export class BottomPopup extends React.Component {
             paddingHorizontal: 10,
             maxHeight: deviceHeight * 0.4,
           }}>
-
+            <View style={{ padding: 30, marginBottom: -70 }}>
+              <Text
+                style={{
+                  ...STYLE.textTitle
+                }}
+              >Options</Text>
+            </View>
             {this.renderTitle()}
             {this.renderContent()}
           </View>

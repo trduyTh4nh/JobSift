@@ -151,20 +151,19 @@ const ChildInFoJob = ({ route }) => {
         const iduser = userDB.user.id_user
         const idpost = postData.id_post
 
-        console.log(idpost)
-        console.log(iduser)
-
         axios.post(`http://${API_URL}:3001/getcurrentstar/${iduser}/${idpost}`)
             .then((response) => {
                 if (response.status === 200) {
                     const currentstar = response.data.cur;
-                    setRating(currentstar.numberstar)
+                   
+                        setRating(currentstar.numberstar)
+                   
                 } else {
-                    console.error('Error:', response.data.error);
+                    console.error('Error lỗi nè:', response.data.error);
                 }
             })
             .catch((error) => {
-                console.error('Error:', error);
+                console.log('Lỗi nè:', error);
             });
 
 
@@ -358,10 +357,9 @@ const ChildInFoJob = ({ route }) => {
 
                 <View style={styles.wrapTags}>
                     <FlatList
-
                         ItemSeparatorComponent={() => (<View style={{ width: 10 }}></View>)}
                         style={styles.styleForListTags}
-                        horizontal
+                        horizontal={true}
                         data={dataTag}
                         renderItem={renderTag}
                         keyExtractor={(item) => item.tagID.toString()}

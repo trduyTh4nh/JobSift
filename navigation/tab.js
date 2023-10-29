@@ -4,11 +4,7 @@ import FavoriteJob from '../components/FavoriteJob';
 import Job from '../components/Job';
 import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
-
 import { getHeaderTitle } from '@react-navigation/elements';
-
-
-
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -21,7 +17,6 @@ import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndica
 import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
 import { Form } from 'react-hook-form';
-import { useFonts } from "expo-font"
 
 import { useLayoutEffect } from 'react';
 import { StatusBar } from 'react-native';
@@ -32,6 +27,10 @@ import STYLE from '../assets/css/universal';
 import { HeaderProfile } from '../components/HeaderProfile';
 import EditProfile from '../components/EditProfile';
 import SalaryCalculator from '../components/SalaryCalculator';
+import FavoritePage from '../components/Favorite';
+import { useIsFocused } from '@react-navigation/native';
+import { Animated } from 'react-native';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +38,9 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
+
+    const isFocused = useIsFocused();
+
     const THEME = {
         ...DefaultTheme,
         colors: {
@@ -46,20 +48,46 @@ const Tabs = () => {
             background: '#fff'
         }
     }
-    const [fontLoaded] = useFonts({
-        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
-    })
-    if (!fontLoaded) {
-        return (
-            <View>
-                <ActivityIndicator></ActivityIndicator>
-            </View>
-        )
-    }
+    // const [fontLoaded] = useFonts({
+    //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
+    // })
+    // if (!fontLoaded) {
+    //     return (
+    //         <View>
+    //             <ActivityIndicator></ActivityIndicator>
+    //         </View>
+    //     )
+    // }
 
-    var sizeIcon = 26   
+    var sizeIcon = 26
     const navigation = useNavigation();
+    // const animationValue = useRef(new Animated.Value(1)).current;
+
+
+    // const handleTabPress = () => {
+    //     // Animate the tab when it's pressed
+    //     Animated.sequence([
+    //       Animated.timing(animationValue, {
+    //         toValue: 0.8,
+    //         duration: 100,
+    //         useNativeDriver: true,
+    //       }),
+    //       Animated.timing(animationValue, {
+    //         toValue: 1,
+    //         duration: 100,
+    //         useNativeDriver: true,
+    //       }),
+    //     ]).start();
+
+    //     // Navigate to the respective screen
+    //     navigation.navigate('FavoriteJobTab'); // Change the tab name as per your need
+    //   };
+
+    //   const animatedStyle = {
+    //     transform: [{ scale: animationValue }],
+    //   };
+
 
 
     const HomeStack = () => (
@@ -68,7 +96,7 @@ const Tabs = () => {
 
         }}>
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
-            <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }}/>
+            <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }} />
             <Stack.Screen name="Home" component={Home} options={{ gestureEnabled: false, headerShown: false, headerLeft: null }} />
             <Stack.Screen
                 name='JobDetail'
@@ -109,89 +137,122 @@ const Tabs = () => {
         </Stack.Navigator>
     );
 
-    const JobStack = ({navigation}) => {
-        
+    const JobStack = ({ navigation }) => {
+
         return (
-        <Stack.Navigator screenOptions={{
-            header: ({navigation, route, options, back}) => {
-                const title = getHeaderTitle(options, route.name)
-                return (
-                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
-                )
-            }
-        }}>
-            <Stack.Screen name="Favourite Job" component={Job} options={{  }} />
-        </Stack.Navigator>
-    )};
+            <Stack.Navigator screenOptions={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                    )
+                }
+            }}>
+                <Stack.Screen
+                    component={Job}
+                    name='Search'
+                    options={({ navigation, route }) => ({
+                        header: ({ options, route, back }) => {
+                            const title = getHeaderTitle(options, route.name);
+                            return (
+                                <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                            );
+                        },
+                        headerTitleStyle: {
+                            color: "red",
+                            fontFamily: "Rubik",
+                            
+                        },
+                    })}
+                />
+            </Stack.Navigator>
+        )
+    };
 
     const ChatStack = () => (
         <Stack.Navigator screenOptions={{
             headerTransparent: true,
             headerBlurEffect: 'regular'
         }} headerMode="screen">
-            <Stack.Screen name="Chat" component={Chat} options={{ header: ({navigation, route, options, back}) => {
-                const title = getHeaderTitle(options, route.name)
-                return (
-                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
-                )
-            } }} />
-            <Stack.Screen name="Chat Details" component={ChatDetails} 
-            options={{ header: ({navigation, route, options, back}) => {
-                const title = getHeaderTitle(options, route.name)
-                return (
-                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
-                )
-            } }}
+            <Stack.Screen name="Chat" component={Chat} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                    )
+                }
+            }} />
+            <Stack.Screen name="Chat Details" component={ChatDetails}
+                options={{
+                    header: ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    }
+                }}
             />
         </Stack.Navigator>
     );
 
 
-     const FavoriteJobStack = () => (
+    const FavoriteJobStack = () => (
         <Stack.Navigator screenOptions={{
-            header: ({navigation, route, options, back}) => {
+            header: ({ navigation, route, options, back }) => {
                 const title = getHeaderTitle(options, route.name)
                 return (
                     <Header title={title} LeftButton={back}></Header>
                 )
             }
         }}>
-            <Stack.Screen name="FavoriteJob" component={FavoriteJob} options={{  }} />
+            <Stack.Screen name="FavoriteJob" component={FavoriteJob} options={{}} />
 
         </Stack.Navigator>
     );
 
     const ProfileJobStack = () => (
         <Stack.Navigator screenOptions={{
-            header: ({navigation, route, options, back}) => {
+            header: ({ navigation, route, options, back }) => {
                 const title = getHeaderTitle(options, route.name)
                 return (
                     <HeaderProfile navigation={navigation} title={title} LeftButton={back}></HeaderProfile>
                 )
             }
         }}>
-            <Stack.Screen name="ProfileJob" component={Profile} options={{  }} />
-            <Stack.Screen name="Edit Profile Info" component={EditProfile} options={{ }} />
-            <Stack.Screen name="Salary Calculator" component={SalaryCalculator} options={{header: 
-                ({navigation, route, options, back}) => {
-                const title = getHeaderTitle(options, route.name)
-                return (
-                    <Header navigation={navigation} title={title} LeftButton={back}></Header>
-                )
-            }
-            }}/>
+            <Stack.Screen name="ProfileJob" component={Profile} options={{}} />
+            <Stack.Screen name="Edit Profile Info" component={EditProfile} options={{
+
+            }}
+            />
+            <Stack.Screen name='Favorite Page' component={FavoritePage} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={"Favorite Job"} LeftButton={back}></Header>
+                    )
+                }
+            }} ></Stack.Screen>
+            <Stack.Screen name="Salary Calculator" component={SalaryCalculator} options={{
+                header:
+                    ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    }
+            }} />
         </Stack.Navigator>
     );
 
 
     return (
 
-        
+
         <Tab.Navigator screenOptions={{
             tabBarShowLabel: false,
             tabBarStyle: STYLE.tabBarStyle,
-            
-            
+
+
         }}>
 
 
@@ -205,6 +266,7 @@ const Tabs = () => {
                             name={focused ? 'home-fill' : 'home-line'}
                             color={focused ? '#E2F367' : '#ffff'}
                             size={sizeIcon}
+                            style={{ opacity: isFocused ? 1 : 0.5 }}
                         />
                     ),
                     headerLeft: null
@@ -215,7 +277,7 @@ const Tabs = () => {
                     headerShown: false,
                     tabBarIcon: ({ focused }) => (
                         <Icon
-                            name={focused ? 'briefcase-4-fill' : 'briefcase-4-line'}
+                            name={focused ? 'search-fill' : 'search-line'}
                             color={focused ? '#E2F367' : '#ffff'}
                             size={sizeIcon}
                         />

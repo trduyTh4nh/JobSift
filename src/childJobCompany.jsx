@@ -1,7 +1,7 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, ToastAndroid, SafeAreaView, Alert } from "react-native";
 import { create } from "react-test-renderer";
-import { useFonts } from "expo-font";
+import { isLoading, useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
@@ -10,6 +10,11 @@ import { FlatList } from "react-native-gesture-handler";
 import { API_URL } from "../ipConfig"
 import Carousel from 'react-native-snap-carousel';
 import STYLE from '../assets/css/universal'
+import { useIsFocused } from "@react-navigation/native";
+import { ActivityIndicator } from "react-native-paper";
+import Modal from "react-native-modal";
+
+// import { ActivityIndicator } from "react-native";
 
 
 const imageGirdData = [
@@ -56,7 +61,7 @@ const MyCarousel = ({ data }) => {
     const _renderItem = ({ item, index }) => {
         return (
             <View>
-                <Image source={{ uri: item }} style={{ width: 300, height: 250, borderRadius: 16, elevation: 10 }} />
+                <Image source={{ uri: item }} style={{ width: 300, height: 250, borderRadius: 16 }} />
             </View>
         );
     };
@@ -74,7 +79,11 @@ const MyCarousel = ({ data }) => {
 
 const ChildCompany = ({ route }) => {
 
+    const showToast = (title) => {
+        ToastAndroid.show(title, ToastAndroid.SHORT)
+    }
 
+    const user = global.user.user
 
     const { postData, dataDN } = route.params;
 
@@ -83,10 +92,110 @@ const ChildCompany = ({ route }) => {
         id_post: postData.id_post
     }
 
-    console.log(postData.id_ntd + " " + postData.id_post)
+    const [iconButton, setIconButton] = useState(false)
 
     const [infoNTD, setInfoNTD] = useState({})
 
+    // const data = {
+    //     id_user: user.id_user,
+    //     id_dn: infoNTD.info.id_dn
+    // }
+
+
+    const changeInboxPage = () => {
+        console.log("chuyển sang trang tin nhắn")
+    }
+
+    const [isShow, setShow] = useState(false)
+
+
+    const handleUnFollow = () => {
+        createTwoButtonAlert()
+    }
+
+    const createTwoButtonAlert = () => {
+
+
+        const data = {
+            id_user: user.id_user,
+            id_dn: infoNTD.info ? infoNTD.info.id_dn : null
+        }
+
+        Alert.alert('Unfollow?', 'Are you sure?', [
+            {
+                text: 'Cancel',
+                onPress: () => console.log('Cancel Pressed'),
+                style: 'cancel',
+            },
+            {
+                text: 'OK', onPress: () => {
+                    axios.post(`http://${API_URL}:3001/unfollow`, data, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then((respone) => {
+                            setStatusChange(false)
+                            setStatus(true)
+                            showToast("Successfully!")
+                        })
+                        .catch((error) => {
+                            console.log(error)
+                        })
+                }
+            },
+        ]);
+    }
+
+    const handleFollow = () => {
+        const data = {
+            id_user: user.id_user,
+            id_dn: infoNTD.info ? infoNTD.info.id_dn : null
+        }
+        axios.post(`http://${API_URL}:3001/follow`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((response) => {
+                setIconButton(true)
+                setStatusChange(true)
+                showToast("Follow Successfully!")
+            })
+            .catch((error) => {
+                console.error(error)
+            })
+
+        console.log("Data: " + JSON.stringify(data))
+    }
+
+    const [statusChange, setStatusChange] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+
+    const [status, setStatus] = useState(false)
+
+    const focus = useIsFocused()
+
+    useEffect(() => {
+
+        const data = {
+            id_user: user.id_user,
+            id_dn: infoNTD.info ? infoNTD.info.id_dn : null,
+        }
+
+        axios.post(`http://${API_URL}:3001/checkfollow`, data, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((respone) => {
+
+            setIsLoading(true)
+            setStatusChange(respone.data.checked)
+            setIconButton(respone.data.checked)
+        }).catch((error) => {
+            console.error(error)
+        })
+    }, [focus, status])
 
 
     // bug ngay đây m chưa hiểu rõ useEffect
@@ -109,7 +218,8 @@ const ChildCompany = ({ route }) => {
             });
     }, []);
 
-    console.log("thông tin đã lấy: " + JSON.stringify(infoNTD));
+
+
 
     return (
 
@@ -118,29 +228,84 @@ const ChildCompany = ({ route }) => {
 
                 <View style={styles.main}>
                     <View style={styles.companyHeader}>
+
                         <View style={styles.companyHeaderText}>
-                            <Image style={{ width: 45, height: 45 }} source={require('../assets/logo_gg.png')}></Image>
+                            <Image style={{ width: 45, height: 45 }} source={{uri: infoNTD.info ? infoNTD.info.logo_dn: "https://assets.materialup.com/uploads/01d7570f-01ca-4e3a-8dc1-b8a16864f916/preview.jpg"}}></Image>
                             <View style={styles.companyTitle}>
                                 <Text style={styles.companyName}>{infoNTD.info ? infoNTD.info.name_dn : ''}</Text>
                                 <Text style={styles.companyDes}>Enterprise</Text>
                             </View>
+
                         </View>
+
                         <View style={styles.wrapButton}>
-                            <TouchableOpacity style={styles.buttonApplyJob}>
-                                <Icon name="heart-line" size={28} ></Icon>
+
+                            <TouchableOpacity style={styles.buttonApplyJob} onPress={statusChange === true ? changeInboxPage : handleFollow} >
+                                {isLoading || iconButton ? <Icon name={iconButton && statusChange ? "messenger-line" : "heart-line"} size={28}  ></Icon> : <ActivityIndicator></ActivityIndicator>}
+                            </TouchableOpacity>
+
+                            <TouchableOpacity onPress={() => { setShow(true) }}>
+                                <Icon name="more-fill"></Icon>
                             </TouchableOpacity>
                         </View>
+
+                        <Modal isVisible={isShow}
+                            swipeDirection={'down'}
+                            onSwipeComplete={() => { setShow(false) }}
+                            onBackdropPress={() => { setShow(false) }}
+                            style={{ margin: 0 }}>
+                            <SafeAreaView style={{
+                                backgroundColor: "#fff", position: "absolute", bottom: 0, width: "100%", height: "35%",
+                                borderTopLeftRadius: 20,
+                                borderTopRightRadius: 20,
+                                paddingTop: 20,
+                                paddingBottom: 10,
+                                paddingLeft: 25,
+                                paddingRight: 20
+                            }}>
+                                <View style={styles.wrapModalCpn}>
+                                    <View style={styles.wrapTextOption}>
+                                        <Text style={{
+                                            ...STYLE.textTitle
+                                        }}>Options</Text>
+                                    </View>
+
+                                    <TouchableOpacity style={styles.itemModel} onPress={handleUnFollow}>
+                                        <Icon name="dislike-line" size={26}></Icon>
+                                        <Text style={{
+                                            ...STYLE.textTitle,
+                                            fontSize: 15,
+                                            color: "#393939"
+                                        }}>Unfollow</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity style={styles.itemModel} onPress={() => setShow(false)}>
+                                        <Icon name="close-line" size={26}></Icon>
+                                        <Text style={{
+                                            ...STYLE.textTitle,
+                                            fontSize: 15,
+                                            color: "#393939"
+                                        }}>Cancel</Text>
+                                    </TouchableOpacity>
+
+
+                                </View>
+                            </SafeAreaView>
+                        </Modal>
+
+
                     </View>
 
                     <View style={styles.companyBody}>
                         <Image source={require('../assets/banner.png')} style={{
-                            marginTop: -20
+                            marginTop: -20,
+
                         }}></Image>
 
                         <View style={styles.companyBodyInfo}>
                             <Text style={styles.companyBodyInfoTitile}>Enterprise Description</Text>
                             <Text style={styles.companyBodyInfoContent}>
-                                {infoNTD.description}
+                                {infoNTD.info ? infoNTD.info.description : 'No description'}
                             </Text>
                         </View>
 
@@ -294,7 +459,7 @@ const ChildCompany = ({ route }) => {
                     paddingLeft: 25,
                     paddingRight: 25
                 }}>
-                    <Text style={{...STYLE.textTitle, marginBottom: 10}}>Review</Text>
+                    <Text style={{ ...STYLE.textTitle, marginBottom: 10 }}>Review</Text>
                     <View style={{ marginBottom: 200, width: "100%", display: "flex", alignItems: "center" }}>
                         <MyCarousel data={data}></MyCarousel>
                     </View>
@@ -324,8 +489,11 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 150,
-        padding: 20,
+        gap: 100,
+        paddingTop: 20,
+        paddingBottom: 20,
+        paddingLeft: 30,
+        paddingRight: 30,
         justifyContent: "center"
     },
     companyHeaderText: {
@@ -351,25 +519,27 @@ const styles = StyleSheet.create({
         fontFamily: "RukbikNormal",
     },
     companyBody: {
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     main: {
         paddingLeft: 10,
         paddingRight: 10,
     },
     companyBodyInfo: {
-        paddingLeft: 20,
-        paddingRight: 20,
-        width: "80%"
+        width: "90%",
     },
     companyBodyInfoTitile: {
         fontFamily: "Rubik",
-        fontSize: 16,
-        color: "#000"
+        fontSize: 18,
+        color: "#000",
     },
     companyBodyInfoContent: {
         fontFamily: "RukbikNormal",
-        fontSize: 14,
-        color: "#000"
+        fontSize: 15,
+        color: "#676767",
+        lineHeight: 20
     },
     JobSumary: {
         borderWidth: 2,
@@ -502,6 +672,24 @@ const styles = StyleSheet.create({
     imgChild: {
         width: "50%",
         height: "30%"
+    },
+    wrapModalCpn: {
+
+    },
+    itemModel: {
+        borderWidth: 2,
+        borderBlockColor: "#393939",
+        display: "flex",
+        flexDirection: "row",
+        padding: 15,
+        borderRadius: 16,
+        gap: 10,
+        marginTop: 20,
+        alignItems: "center"
+
+    },
+    wrapTextOption: {
+        marginBottom: 20
     }
 
 })

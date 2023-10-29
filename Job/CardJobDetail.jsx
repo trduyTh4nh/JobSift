@@ -50,7 +50,7 @@ const CardJobDetail = (props) => {
             <View style={styles.jobCard}>
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
-                        <Image source={require('../assets/logo_google.png')}
+                        <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
                             style={{ width: 45, height: 45 }}
                         ></Image>
 
@@ -107,7 +107,7 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         paddingLeft: 25,
         paddingBottom: 15,
-        elevation: 10,
+        elevation: 8,
         marginBottom: 20,
         marginLeft: 10
     }

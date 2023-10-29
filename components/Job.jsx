@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import STYLE from "../assets/css/universal";
 import NearbyJob from "../Job/NearbyJob";
 import { FlatList } from "react-native";
-import { ScrollView } from "react-native";
+import { ScrollView, TextInput } from "react-native";
 import Icon from "react-native-remix-icon";
 import { TouchableOpacity } from "react-native";
 import { API_URL } from "../constants/etc";
@@ -11,102 +11,96 @@ import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import axios from "axios";
 import { useFocusEffect, useIsFocused } from "@react-navigation/native";
 import Error from "./Error";
+import { useFonts } from "expo-font";
+import Modal from 'react-native-modal'
 
 
-const   Job = () => {
-    const [data, setData] = useState([])
-    const [errorStatus, setErrorStatus] = useState(false)
-    const [display, setDisplay] = useState()
-    const focus = useIsFocused()
-    useEffect(() => {
-        axios.post(API_URL + '/favourite', {id_user: global.user.user.id_user}, {
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        }
-        ).then((r) => {
-            console.log(r.data)
-            const data = r.data
-            var post = []
-            for(var d of data){
-                post.push({id_yt: d.id_post_yt,id: d.id_post, salary: [d.luong], title_job: d.tieu_de, jobCate: d.job_category})
-            }
-            setDisplay('')
-            setData(post)
-            
-        }).catch((e) => {
-            if(e == 'AxiosError: Request failed with status code 404'){
-                setData([])
-                setDisplay(() => (
-                    <Error icon={'ri-heart-2-line'} title={'No posts found'} message={'Unable to find posts, consider adding them to favourites'}/>
-                ))
-            } else if(e == 'AxiosError: Request failed with status code 401'){
-                console.warn('Error 401')
-                setData([])
-                setDisplay(() => (
-                    <Error icon={'ri-user-line'} title={'Not logged in'} message={'You are not logged in. Please login to use this feature'}/>
-                ))
-            } else {
-                setData([])
-                setDisplay(() => (
-                    <Error icon={'ri-error-warning-line'} title={'Aw snap.'} message={'Either it is down or you\'re not connected to the internet.'}/>
-                ))
-                setErrorStatus(500)
-            }
-            
-        })
-    }, [focus])
-    
-    
+
+const Job = () => {
+
+    const [showModal, setShowModal] = useState(true)
+
+    const [fontLoaded] = useFonts({
+        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
+        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RubikBlack': require("../assets/fonts/Rubik/static/Rubik-Black.ttf"),
+        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
+        'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
+
+    })
+    if (!fontLoaded) {
+        return (
+            <View>
+                <Text>Loading..........</Text>
+            </View>
+        )
+    }
+
     return (
-        <View style={{...style.dodgeBottom, height: '100%'}}>
-            <Text style={{padding: 16}}>{data.length} favourite jobs</Text>
-            <ScrollView style={style.body}>
-                {display}
-                <FlatList
-                    data={data}
-                    renderItem={renderFavJobs}
-                    style={STYLE.body}
-                    scrollEnabled={false}
-                    keyExtractor={(item) => (item.id_yt)}
-                    ItemSeparatorComponent={() => (<View style={{height: 0}}/>)}
+        <View style={{ width: "100%" }}>
+            <View style={styles.wrapSearch}>
+                <TextInput
+                    style={styles.inputSearch}
+                    placeholder="Find your new job"
+                    placeholderTextColor="#999"
+
                 />
-            </ScrollView>
-            <View style={style.bottom}>
-                <View style={style.grid}>
-                    <Text style={{...STYLE.textBold, ...STYLE.textNormal}}>Trending job categories</Text>
-                    <View style={style.cards}>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="money-dollar-circle-line"/>
-                            <Text style={{...style.text, fontSize: 16}}>Salesperson</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="computer-line"/>
-                            <Text style={{...style.text, fontSize: 16}}>IT</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={style.cards}>
-                    
-                    <TouchableOpacity style={style.card}>
-                            <Icon name="bar-chart-grouped-line"/>
-                            <Text style={{...style.text, fontSize: 16}}>Marketing</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="bank-line"/>
-                            <Text style={{...style.text, fontSize: 16}}>Banking</Text>
-                        </TouchableOpacity>
-                    </View>
+
+                <View style={styles.wrapSearchBtn}>
+                    <TouchableOpacity style={styles.searchBtn}>
+                        <Icon name="search-line" size={40} color="#fff"></Icon>
+                    </TouchableOpacity>
                 </View>
             </View>
+
+            <View style={styles.fillter}>
+                <TouchableOpacity style={{
+                    backgroundColor: "#e2f367",
+                    display: "flex",
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    paddingLeft: 15,
+                    paddingRight: 15,
+                    paddingTop: 8,
+                    paddingBottom: 8,
+                    borderRadius: 8,
+                    alignItems: "center"
+                }}>
+                    <Text style={{
+                        fontFamily: 'Rubik',
+                        fontSize: 14
+                    }}>Fillter</Text>
+                    <Icon name="equalizer-fill"></Icon>
+                </TouchableOpacity>
+            </View>
+
+            <View style={{
+                paddingLeft: 14,
+                paddingRight: 14,
+                marginTop: 10,
+
+            }}>
+                <Text
+                    style={{
+                        fontFamily: 'RukbikNormal',
+                        color: "#000"
+                    }}
+                >Showing 123 result of "Hacker"</Text>
+            </View>
+
+            {/* <Modal></Modal> */}
         </View>
     )
 }
-const renderFavJobs = ({item}) => {
-    return(
+
+const renderFavJobs = ({ item }) => {
+    return (
         <NearbyJob dataNearby={item} />
     )
 }
-const style = StyleSheet.create({
+const styles = StyleSheet.create({
     dodgeBottom: {
         paddingBottom: 100
     },
@@ -138,10 +132,60 @@ const style = StyleSheet.create({
         borderTopColor: '#B0B0B0',
         borderTopWidth: 2,
         padding: 16,
-        
     },
     grid: {
         gap: 16,
+    },
+    wrapSearch: {
+        display: 'flex',
+        flexDirection: 'row',
+        gap: 20,
+        alignItems: "center",
+        justifyContent: "center",
+        paddingLeft: 10,
+        paddingRight: 10
+
+    },
+    inputSearch: {
+        color: '#000',
+        width: "78%",
+        height: 50,
+        backgroundColor: 'rgba(230, 230, 230, 1)',
+        borderRadius: 10,
+        paddingLeft: 20,
+        paddingRight: 10,
+        fontSize: 16,
+        fontFamily: 'RukbikNormal',
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center"
+    },
+    searchBtn: {
+        width: 60,
+        height: 60,
+        backgroundColor: '#000000',
+        borderRadius: 16,
+        justifyContent: "center",
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: { width: 1, height: 5 },
+        shadowOpacity: 0.55,
+        shadowRadius: 4.84,
+        elevation: 4
+    },
+    wrapSearchBtn: {
+
+    },
+
+    searchBtnImage: {
+        width: "50%",
+        height: "50%",
+        tintColor: "#F3F4F8",
+    },
+    fillter: {
+        marginTop: 20,
+        paddingLeft: 14,
+        paddingRight: 14
     }
 })
 export default Job

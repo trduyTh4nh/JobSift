@@ -34,6 +34,24 @@ const LoginForm = ({ navigation }) => {
     })
   })
 
+  const [fontLoaded] = useFonts({
+        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
+        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RubikBlack': require("../assets/fonts/Rubik/static/Rubik-Black.ttf"),
+        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
+        'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
+        'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
+        
+    })
+    if(!fontLoaded){
+        return(
+            <View>
+                <Text>Loading..........</Text>
+            </View>
+        )
+    }
+
   const handleChangeEmail = (text) => {
     setEmail(text)
   }
@@ -254,7 +272,8 @@ const styles = StyleSheet.create({
   },
   desQuestion: {
     fontWeight: "500",
-    fontFamily: "Rubik"
+    fontFamily: "Rubik",
+    color: "#000"
   },
 
 
