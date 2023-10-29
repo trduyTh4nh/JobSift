@@ -15,6 +15,9 @@ import { ActivityIndicator } from "react-native";
 
 
 
+import axios from "axios";
+
+
 
 
 
@@ -26,28 +29,49 @@ const Stack = createNativeStackNavigator();
 const IPcuaQuang = "192.168.1.113"
 const IPlD = API_URL
 
-const nearbyJobsData = [
-    { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
-    { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
-    { id: '3', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '4', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '5', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '6', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '7', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '8', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '9', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-];
+
 
 
 
 const Home = ({ navigation }) => {
     const focus = useIsFocused()
+
     const userDB = global.user
 
+    const nearbyJobsData = [
+        { id: '1', salary: [200, 500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
+        { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
+        { id: '3', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '4', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '5', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '6', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '7', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '8', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '9', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    ];
+
+    const [popularJob, setPopuplarJob] = useState({})
+
+    const focus = useIsFocused()
+
+    useEffect(() => {
+        axios.post(`http://${API_URL}:3001/popularjob`, {}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((respone) => {
+            const dataPopularJob = respone.data.popularjob
+            setPopuplarJob(dataPopularJob) 
+        }).catch((error) => {
+            console.error(error)
+        })
+    }, [focus])
+
+ 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    
+
     // const [fontLoaded] = useFonts({
     //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
     //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
@@ -56,7 +80,7 @@ const Home = ({ navigation }) => {
     //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
     //     'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
     //     'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
-        
+
     // })
     // if(!fontLoaded){
     //     return(
@@ -67,7 +91,7 @@ const Home = ({ navigation }) => {
     // }
 
     // Use useEffect to fetch data from the API
-    
+
     useEffect(() => {
         if(focus) {
 
@@ -87,7 +111,7 @@ const Home = ({ navigation }) => {
                 const fetchData = async () => {
                     try {
         
-                        const response = await fetch(`http://${IPlD}:3001`);
+                        const response = await fetch(`http://${API_URL}:3001`);
                         if (!response.ok) {
                             throw new Error('Network response was not ok');
                         }
@@ -103,6 +127,32 @@ const Home = ({ navigation }) => {
                 fetchData().catch((e) => {console.error(e)});
         }
     }, [focus]);
+
+  /*
+        navigation.getParent()?.setOptions({
+            tabBarStyle: STYLE.tabBarStyle
+        })
+        const fetchData = async () => {
+            try {
+
+                const response = await fetch(`http://${API_URL}:3001/`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                // console.log("DATA JOB ALL: " + JSON.stringify(data))
+                setIsLoading(false);
+                setPostData(data);
+            } catch (error) {
+                console.log('Error fetching data:', error);
+                setIsLoading(false);
+            }
+        };
+
+        fetchData().catch((e) => { console.error(e) });
+    }, [navigation]);
+    */
+
 
 
     // const [postData, setPostData] = useState([]);
@@ -158,7 +208,7 @@ const Home = ({ navigation }) => {
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
                         <Text style={styles.sayhi}>Hi,
-                        <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
+                            <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
                         </Text>
                     </View>
                     <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
@@ -178,7 +228,7 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <ScrollView>
+            <ScrollView style={{marginBottom: 150}}>
                 <View>
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Popular jobs</Text>
@@ -204,14 +254,14 @@ const Home = ({ navigation }) => {
                     </View>
 
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Nearby jobs</Text>
+                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
                     </View>
 
                     <FlatList
                         style={styles.wrapJobNearBy}
-                        data={nearbyJobsData}
+                        data={popularJob}
                         renderItem={renderJobNearBy}
-                        keyExtractor={(item) => item.id.toString()}
+                        keyExtractor={(item) => item.id_post.toString()}
                         contentContainerStyle={{ columnGap: 20 }}
                         scrollEnabled={false}
                     ></FlatList>
@@ -359,7 +409,7 @@ const styles = StyleSheet.create({
 
     },
     wrapJobNearBy: {
-
+        marginBottom: 100 
     },
 
 

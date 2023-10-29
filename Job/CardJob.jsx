@@ -16,7 +16,10 @@ const Stack = createNativeStackNavigator();
 const CardJob = (props) => {
     const navigation = useNavigation();
     const { dataPost } = props;
-    
+
+
+
+
     return (
         <CardJobDetail dataPostDetail={dataPost}></CardJobDetail>
     )

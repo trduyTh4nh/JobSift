@@ -52,6 +52,9 @@ const Profile = ({navigation}) =>{
             console.error(e)
         })
     }, [focus])
+  
+  // console.log("User profile" + JSON.stringify(user))
+
     return (
         <ScrollView style={{paddingBottom:200}}>
         <View style={styles.wrap}>
@@ -111,6 +114,15 @@ const Profile = ({navigation}) =>{
                 </TouchableOpacity>
 
                 <TouchableOpacity style={styles.dongngang}>
+                    <View style={styles.dongngang1}> 
+
+                        <Icon name="profile-line"></Icon>
+                        <Text style={styles.chucuaslart}> Cover Letter </Text>
+                    </View>
+                    <Icon name="arrow-right-s-line" ></Icon>
+                </TouchableOpacity>
+
+                <TouchableOpacity style={styles.dongngang} onPress={() => {navigation.navigate('Favorite Page')}}>
                     <View style={styles.dongngang1}> 
                         <Icon name="star-line"></Icon>
                         <Text style={styles.chucuaslart}> Favourite Jobs </Text>

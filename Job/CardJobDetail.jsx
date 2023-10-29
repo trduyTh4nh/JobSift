@@ -36,6 +36,13 @@ const CardJobDetail = (props) => {
         )
     }
 
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+        }
+        return text;
+      }
+
 
 
     return (
@@ -43,13 +50,13 @@ const CardJobDetail = (props) => {
             <View style={styles.jobCard}>
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
-                        <Image source={require('../assets/logo_google.png')}
+                        <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
                             style={{ width: 45, height: 45 }}
                         ></Image>
 
                         <View style={styles.jobCardName}>
                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-                            <Text style={styles.jobCardAddress}>{dataPostDetail.dia_chi}</Text>
+                            <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
                             
                         </View>
 
@@ -100,7 +107,7 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         paddingLeft: 25,
         paddingBottom: 15,
-        elevation: 10,
+        elevation: 8,
         marginBottom: 20,
         marginLeft: 10
     }
