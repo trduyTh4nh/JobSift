@@ -27,14 +27,14 @@ import axios from "axios";
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
-const IPlD = API_URL
+
 
 
 
 
 
 const Home = ({ navigation }) => {
-    const focus = useIsFocused()
+    // const focus = useIsFocused()
 
     const userDB = global.user
 

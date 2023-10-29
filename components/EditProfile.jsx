@@ -24,7 +24,9 @@ const EditProfile = ({ navigation }) => {
     const [gender, setGender] = useState('Male');
     const [user, setUser] = useState(global.user.user);
 
-    const [image, setImage] = useState();
+    const [image, setImage] = useState('');
+
+
 
 
     const handleEditProfile = () => {
@@ -39,7 +41,7 @@ const EditProfile = ({ navigation }) => {
             .then((e) => {
                 //console.log(e);
                 global.user.user = user;
-                navigation.goBack();
+                
                 uploadImageToFireBase(image)
             })
             .catch((e) => {
@@ -48,25 +50,31 @@ const EditProfile = ({ navigation }) => {
             });
     };
 
-    console.log(user)
+
+
     useEffect(() => {
         setImage(user.profile_picture)
-    })
+    }, [])
+
 
     const handleEditImage = async () => {
-        let resultImage = await ImagePicker.launchImageLibraryAsync(
+        ImagePicker.launchImageLibraryAsync(
             {
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [1, 1],
                 quality: 1
             }
-        )
+        ).then(e => {
+            console.log("IMage" + JSON.stringify(e.assets[0].uri))
+            setImage(e.assets[0].uri)
+        }
+        ).catch(e => {
+            console.error("ERROR IMAGE: " + e)
+        })
 
-        setImage(resultImage.assets[0].uri)
 
-
-
+ 
 
     }
 
@@ -76,16 +84,19 @@ const EditProfile = ({ navigation }) => {
 
         try {
             await reference.putFile(imagePath);
-
+            
             console.log("Image uploaded successfully");
 
             // Get the download URL and set it in the user object
             const downloadURL = await getImageFromFirebase(fileName);
+            global.user.user = {...user,
+            profile_picture: downloadURL}
             const FormData = {
                 id_user: user.id_user,
                 image_picture: downloadURL
             }
             console.log("Form data: " + JSON.stringify(FormData))
+
             updateAvatarUser(FormData)
 
             // setUser((prevUser) => ({
@@ -104,12 +115,12 @@ const EditProfile = ({ navigation }) => {
     const updateAvatarUser = (formData) => {
         axios.post(`${API_URL}/updateAvatarUser`, formData, {
             headers: {
-                'Content-Type': 'multipart/form-data', // Use 'multipart/form-data' for file uploads
+                'Content-Type': 'application/json', // Use 'multipart/form-data' for file uploads
             },
         })
             .then((response) => {
                 console.log("Update Success:", response.data);
-                // You can handle the response here
+                navigation.goBack();
             })
             .catch((error) => {
                 console.error("Update Error:", error);

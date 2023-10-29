@@ -367,7 +367,6 @@ const JobDetail = () => {
                         setIsUploading(false)
                         handlePDFCVCancel()
                         getCV()
-                        
                     }).catch(e => {
                         console.log(e)
                     })
