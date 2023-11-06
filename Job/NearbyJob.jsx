@@ -1,19 +1,47 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Image, Text, TouchableOpacity, Alert } from "react-native";
 import { useFonts } from "expo-font";
 import { useNavigation } from "@react-navigation/native";
 import Icon from 'react-native-remix-icon';
-
-
+import axios from "axios";
+import { API_URL } from "../constants/etc";
 
 const NearbyJob = (props) => {
-    const { dataNearby } = props
+    const { dataNearby, onFavouritePress } = props
     const navigation = useNavigation();
 
     const goToJobDetailScreen = () => {
         navigation.navigate("JobDetail", { postData: dataNearby });
     };
-
+    const [isLoading, setLoading] = useState(true)
+    const [isFav, setFav] = useState(false)
+    useEffect(() => {
+        fetchFav()
+    }, [])
+    const fetchFav = () => {
+        axios.post(`${API_URL}/getpostfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": dataNearby.id_post
+        }).then(e => {
+            setFav(e.data)
+            setLoading(false)
+        }).catch(e => {
+            setLoading(true)
+        })
+    }
+    const fav = () => {
+        axios.post(`${API_URL}/addfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": dataNearby.id_post
+        }).then(e => {
+            setLoading(true)
+            if(onFavouritePress != undefined)
+                onFavouritePress()
+            fetchFav()
+        }).catch(e => {
+            Alert.alert('Error', 'There is an error during the upload process, please try again. Details: ' + e)
+        })
+    }
 
     // console.log("POPULAR JOBS In Nearby: " + JSON.stringify(dataNearby))
 
@@ -61,16 +89,20 @@ const NearbyJob = (props) => {
 
 
                         <View style={styles.wrapIcon}>
-                            <TouchableOpacity style={{
+                            <TouchableOpacity onPress={fav} style={{
                                 backgroundColor: '#E2F367',
                                 padding: 10,
                                 borderRadius: 12,
                                 elevation: 10,
                                 shadowColor: '#A6BD00',
-                                shadowOpacity: 1
+                                shadowOpacity: 0.3,
+                                shadowOffset: {
+                                    height: 4
+                                }
 
                             }}>
-                                <Icon name="heart-line"></Icon>
+
+                                <Icon name={isFav ? "heart-fill" : "heart-line"}></Icon>
                             </TouchableOpacity>
                         </View>
 
@@ -110,9 +142,6 @@ const NearbyJob = (props) => {
                             <Icon name="time-line"></Icon>
                             <Text style={styles.nearByJobCategory}>{`${dataNearby.job_category}`}</Text>
                         </View>
-
-
-
                     </View>
                 </View>
             </TouchableOpacity>

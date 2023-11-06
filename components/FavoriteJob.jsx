@@ -5,7 +5,7 @@ import { Text, View } from "react-native";
 const FavoriteJob = () =>{
     return (
         <View>
-            <Text>Notification</Text>
+            <Text>Thông báo</Text>
         </View>
     )
 }

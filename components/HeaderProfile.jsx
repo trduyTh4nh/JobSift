@@ -58,15 +58,17 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                             
                             <View style={styles.Xuongdong} >
                                 <Text style={styles.userName}>{global.user.user.full_name} </Text>
-                                <Text style={styles.sayhi}>Candiate </Text>
+                                <Text style={styles.sayhi}>Ứng viên </Text>
                             </View>
                         </View>
                         <View>
                             
                         </View>
-                            <View style={styles.wrapinFo}>
+                        <View style={styles.wrapinFo}>
                             <Text style={styles.welcomeMessage}>💎 231 </Text>
-                            <Text style={styles.welcomeMessage}> + </Text>
+                            <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
+                                <Icon name="add-line"/>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </SafeAreaView>
@@ -107,7 +109,6 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             // fontFamily: 'Raleway-Bold'
         },
-       
         text: {
             fontSize: 18,
             color: 'black',
@@ -127,6 +128,7 @@ const styles = StyleSheet.create({
 
     },
     userName: {
+        ...STYLE.textTitle,
         fontSize: 25,
         fontWeight:'900',
         color: '#000',
@@ -139,6 +141,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
     },
     welcomeMessage: {
+        ...STYLE.textTitle,
         // fontFamily: 'RukbikNormal',
         fontSize: 24,
         color: '#000',
@@ -157,8 +160,10 @@ const styles = StyleSheet.create({
     wrapinFo: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center'
     },
     sayhi: {
+        ...STYLE.textNormal,
         fontSize: 18,
         color: '#000',
         fontWeight:'400'

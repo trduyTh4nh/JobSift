@@ -6,15 +6,20 @@ import { SafeAreaView } from "react-native-safe-area-context"
 import Icon from "react-native-remix-icon"
 import ChatBubble from "./ChatBubble"
 import { getHeaderTitle, useHeaderHeight } from "@react-navigation/elements"
-
+import { socket } from "../constants/socket.io/socket"
 import { Header } from "../components/Header"
 import HeaderChat from "./HeaderChat"
+import { useIsFocused, useRoute } from "@react-navigation/native"
+import axios from "axios"
+import { API_URL } from "../constants/etc"
 const ChatDetails = ({navigation}) => {
     const sendButton = useRef(null)
     const [msg, setMsg] = useState('')
     const [data, setData] = useState([])
     const [id, setId] = useState(1)
     const [disable, setDisable] = useState(true)
+    const route = useRoute()
+    const chatHeader = route.params.chatHeader ? route.params.chatHeader : null
     const setMessage = (e) => {
         setMsg(e)
         if(e.length > 0){
@@ -24,10 +29,32 @@ const ChatDetails = ({navigation}) => {
         }
     }
     const sendMessage = () => {
-        setId(id+1)
-        setData([...data, {id: id, message: msg, from: 'quang', to: 'test', isSelf: true}])
+        
+        setData([...data, {chat_name: chatHeader.chat_name, content: msg, id_chat: chatHeader.id_chat, id_user: global.user.user.id_user, isSent: false}])
     }
+    const focus = useIsFocused()
     useEffect(() => {
+        socket.on('newMsg', (res) => {
+            if(res.body.id_chat == chatHeader.id_chat){
+                console.log(res)
+                axios.post(API_URL + '/getmsg', {
+                    "id_chat": chatHeader.id_chat
+                }).then(e => {
+                    console.log(e.data)
+                    setData(e.data)
+                })
+            }
+        })
+        socket.on('id', (res) => {console.log(res)})
+        if(chatHeader){
+            axios.post(API_URL + '/getmsg', {
+                "id_chat": chatHeader.id_chat
+            }).then(e => {
+                console.log(e.data)
+                setData(e.data)
+            })
+        }
+        console.log(chatHeader)
         navigation.getParent()?.setOptions(
             {
                 tabBarStyle: {
@@ -40,14 +67,14 @@ const ChatDetails = ({navigation}) => {
                 header: ({navigation, route, options, back}) => {
                     const title = getHeaderTitle(options, route.name)
                     return (
-                        <HeaderChat image={'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'} navigation={navigation} title={'Employer'} LeftButton={back}></HeaderChat>
+                        <HeaderChat image={chatHeader ? chatHeader.profile_picture : ''} navigation={navigation} title={chatHeader ? chatHeader.full_name : 'Null'} LeftButton={back}></HeaderChat>
                     )
             }}
         )
         return () => navigation.getParent()?.setOptions({
             tabBarStyle: STYLE.tabBarStyle
           });
-    }, [navigation])
+    }, [focus])
     const HEADER_HEIGHT = useHeaderHeight()
     const style = StyleSheet.create(
         {
@@ -122,25 +149,26 @@ const ChatDetails = ({navigation}) => {
         <View style={{height: '100%'}}>
             <ScrollView ref={ref => {this.ScrollView = ref}} onContentSizeChange={() => {this.ScrollView.scrollToEnd({animated: false})}} style={style.body}>
                 <View style={style.topOfChat}>
-                    <Text>This is the beginning of the chat between you and 'Employer'</Text>
+                    <Text style={{...STYLE.textNormal, fontSize: 15}}>Đây là khởi đầu của đoạn chat giữa bạn và {chatHeader ? chatHeader.full_name : ''}</Text>
                 </View>
                 
                 <FlatList
                     
                     scrollEnabled={false}
                     data={data}
-                    renderItem={renderItem}
+                    renderItem={({item}) => (<RenderItem item={item} key={item.id_msg}/>)}
                     ItemSeparatorComponent={<View style={{height: 10}}
                         
                     />}
+                    extraData={data}
                     
-                    keyExtractor={(item) => {item.id}}
+                    keyExtractor={(item) => {item.id_msg}}
                     style={style.fakeBottomBar}
                 />
             </ScrollView>
             <View style={style.bottomBarWrap}>
                 <View style={style.bottomBar}>
-                    <TextInput onChangeText={setMessage} style={style.textEdit} placeholderTextColor={'#000'} placeholder="Chat here"/>
+                    <TextInput style={{...STYLE.textNormal, ...style.textEdit, fontSize: 15}} onChangeText={setMessage} placeholderTextColor={'#000'} placeholder="Nhắn ở đây"/>
                     <TouchableOpacity disabled={disable} ref={sendButton} onPress={sendMessage} style={disable ? style.disabledButton : style.bottomSendButton}>
                         <Icon name="ri-send-plane-2-fill" size={24} color="black"/>
                     </TouchableOpacity>
@@ -149,9 +177,9 @@ const ChatDetails = ({navigation}) => {
         </View>
     )
 }
-const renderItem = ({item}) => {
+const RenderItem = ({item, key}) => {
     return (
-        <ChatBubble message={item.message} isSelf={item.isSelf}/>
+        <ChatBubble  chat={item.id_chat} from={item.id_user} message={item.content} isSelf={item.id_user == global.user.user.id_user} isSent={item.isSent === undefined ? true : false}/>
     )
 }
 

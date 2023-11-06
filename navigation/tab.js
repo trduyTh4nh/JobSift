@@ -30,6 +30,8 @@ import SalaryCalculator from '../components/SalaryCalculator';
 import FavoritePage from '../components/Favorite';
 import { useIsFocused } from '@react-navigation/native';
 import { Animated } from 'react-native';
+import BuyDiamond from '../components/BuyDiamond';
+import ApplicationStatus from '../components/ApplicationStatus';
 
 
 const Stack = createNativeStackNavigator();
@@ -38,9 +40,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
-
     const isFocused = useIsFocused();
-
     const THEME = {
         ...DefaultTheme,
         colors: {
@@ -101,6 +101,17 @@ const Tabs = () => {
             <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
             <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }} />
             <Stack.Screen name="Home" component={Home} options={{ gestureEnabled: false, headerShown: false, headerLeft: null }} />
+            <Stack.Screen name="Chat Details" component={ChatDetails}
+                options={{
+                    header: ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    },
+                    headerTransparent: true
+                }}
+            />
             <Stack.Screen
                 name='JobDetail'
                 component={JobDetail}
@@ -222,20 +233,39 @@ const Tabs = () => {
                 )
             }
         }}>
+        <Stack.Screen name="Chat Details" component={ChatDetails}
+                options={{
+                    header: ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    },
+                    headerTransparent: true
+                }}
+            />
             <Stack.Screen name="ProfileJob" component={Profile} options={{}} />
             <Stack.Screen name="Edit Profile Info" component={EditProfile} options={{
 
             }}
             />
+            <Stack.Screen name="Tình trạng ứng tuyển" component={ApplicationStatus} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                    )
+                }
+            }}/>
             <Stack.Screen name='Favorite Page' component={FavoritePage} options={{
                 header: ({ navigation, route, options, back }) => {
                     const title = getHeaderTitle(options, route.name)
                     return (
-                        <Header navigation={navigation} title={"Favorite Job"} LeftButton={back}></Header>
+                        <Header navigation={navigation} title={"Bài đăng yêu thích"} LeftButton={back}></Header>
                     )
                 }
             }} ></Stack.Screen>
-            <Stack.Screen name="Salary Calculator" component={SalaryCalculator} options={{
+            <Stack.Screen name="Công cụ tính lương" component={SalaryCalculator} options={{
                 header:
                     ({ navigation, route, options, back }) => {
                         const title = getHeaderTitle(options, route.name)
@@ -244,6 +274,15 @@ const Tabs = () => {
                         )
                     }
             }} />
+            <Stack.Screen name="Mua KC" component={BuyDiamond} options={{
+                header:
+                    ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    }
+            }}/>
         </Stack.Navigator>
     );
 

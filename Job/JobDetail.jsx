@@ -1,7 +1,7 @@
-import { useIsFocused, useRoute } from "@react-navigation/native";
+import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
 import React from "react";
 import { uploadFile } from "../firebase/storage";
-import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, FlatList, Animated, Easing, ActivityIndicator, SafeAreaView, Pressable } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, FlatList, Animated, Easing, ActivityIndicator, SafeAreaView, Pressable, Alert } from "react-native";
 import Icon from 'react-native-remix-icon';
 import { COLORS, FONT } from "../constants";
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -25,7 +25,7 @@ import { API_URL as URL } from "../constants/etc";
 const Tab = createMaterialTopTabNavigator();
 
 const JobDetail = () => {
-
+    const navigation = useNavigation()
     const route = useRoute();
     const [isUploading, setIsUploading] = useState(false)
     const [uploadProgress, setUploadProgress] = useState(0)
@@ -77,7 +77,28 @@ const JobDetail = () => {
     }, [hide]);
 
     const postData = route.params ? route.params.postData : null;
-
+    const [isFav, setFav] = useState(false)
+    const fetchFav = () => {
+        console.log('begin fetch fav')
+        axios.post(`http://${API_URL}:3001/getpostfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": postData.id_post
+        }).then(e => {
+            setFav(e.data)
+        }).catch(e => {
+            console.error('error fetch fav: ' + e)
+        })
+    }
+    const fav = () => {
+        axios.post(`http://${API_URL}:3001/addfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": postData.id_post
+        }).then(e => {
+            fetchFav()
+        }).catch(e => {
+            Alert.alert('Error', 'There is an error during the upload process, please try again. Details: ' + e)
+        })
+    }
 
     const datePost = new Date(postData.ngay_post)
     const [totalStar, setTotalStar] = useState('')
@@ -90,8 +111,12 @@ const JobDetail = () => {
 
 
     const [dataPostCurrent, setDataPostCurrent] = useState({})
-
     useEffect(() => {
+        console.log('e')
+        fetchFav()
+    }, [dataPostCurrent])
+    useEffect(() => {
+        
         const dataPostID = {
             id_post: postData.id_post
         }
@@ -112,6 +137,7 @@ const JobDetail = () => {
 
     const focus = useIsFocused()
     useEffect(() => {
+        
         const dataUpdateViews = {
             id_post: postData.id_post,
             numberView: postData.views + 1
@@ -212,7 +238,16 @@ const JobDetail = () => {
         }
     }, [cv])
     // console.log(postData)
-
+    const gotoChat = () => {
+        axios.post(`http://${API_URL}:3001/createchat`, {
+            "id_user": global.user.user.id_user,
+            "id_ntd": postData.id_ntd,
+            "tieu_de": postData.tieu_de
+          }).then(e => {
+            const data = e.data[0]
+            navigation.navigate('Chat Details', { chatHeader: data })
+          })
+    }
     useEffect(() => {
         let isMounted = true;
         axios.post(`http://${API_URL}:3001/ntd/${postData.id_ntd}`, {}, {
@@ -228,17 +263,7 @@ const JobDetail = () => {
             isMounted = false;
         };
     }, []);
-    const [fontLoaded] = useFonts({
-        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
-    })
-    if (!fontLoaded) {
-        return (
-            <View>
-                <ActivityIndicator></ActivityIndicator>
-            </View>
-        )
-    }
+    
     if (!postData) {
         return (
             <Text>Opps...</Text>
@@ -266,14 +291,14 @@ const JobDetail = () => {
     const popUpList = [
         {
             id: 1,
-            name: "Hide",
+            name: "Ẩn header",
             iconName: "eye-close-line",
             colorTag: "#fff",
             tColor: "#000"
         },
         {
             id: 2,
-            name: "Report",
+            name: "Tố cáo",
             iconName: "flag-2-line",
             colorTag: "#FF6969",
             tColor: "#000"
@@ -446,7 +471,7 @@ const JobDetail = () => {
                                         {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : "null"} •
                                     </Text>
                                     <Text style={styles.datePost}>
-                                        Posted on {datePost.toLocaleDateString()}
+                                        Đăng ngày {datePost.toLocaleDateString()}
                                     </Text>
                                 </View>
                                 <View style={styles.headerRate}>
@@ -463,7 +488,16 @@ const JobDetail = () => {
                                         </View>
                                     </View>
                                     <View style={styles.rateReview}>
-                                        <Text style={styles.rateReviewDetal}>{dataPostCurrent.views ? dataPostCurrent.views : "0"} views</Text>
+                                        <Text style={styles.rateReviewDetal}>{dataPostCurrent.views ? dataPostCurrent.views : "0"} lượt xem</Text>
+                                    </View>
+                                    <View style={{flexDirection: 'row', gap: 16, marginTop: 16}}>
+                                        <TouchableOpacity onPress={gotoChat} style={{...styles.buttonApplyJob, flex: 1, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16}}>
+                                            <Icon name="chat-3-line" size={24}></Icon>
+                                            <Text style={{...STYLE.textTitle, fontSize: 16}}>Chat với nhà tuyển dụng</Text>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={fav} style={{...styles.buttonApplyJob, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16}}>
+                                            <Icon name={isFav ? "heart-fill" : "heart-line"} size={24}></Icon>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
 
@@ -510,17 +544,17 @@ const JobDetail = () => {
                         {cv && !isLoading && apply ? (
                             <View style={styles.modalChild}>
                             <View>
-                                <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Congratulation!' : apply.status == 'Rejected' ? 'There\'s still another chance...' : 'Success!'}</Text>
+                                <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Xin chúc mừng!' : apply.status == 'Rejected' ? 'Vẫn còn hy vọng cho cơ hội tiếp theo...' : 'Ứng tuyển thành công!'}</Text>
                             </View>
-                            <Text style={{...STYLE.textBold, fontSize: 16}}>{apply.status == 'Accepted' ? 'Your application has been ACCEPTED. Please check your email or chat with the employer to discuss a date for an interview.' : apply.status == 'Rejected' ? 'Your application has been REJECTED. Don\'t give up on your hopes and dreams yet, you still have a second chance.' : `Your application has been sent to ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Sit back and relax, we will send the results to you as soon as possible.`}</Text>
+                            <Text style={{...STYLE.textBold, fontSize: 16}}>{apply.status == 'Accepted' ? 'Bạn đã ĐỖ ỨNG TUYỂN. Vui lòng liên hệ với nhà tuyển dụng để biết thêm về thời gian phỏng vấn và các vấn đề khác.' : apply.status == 'Rejected' ? 'Đơn ứng tuyển của bạn đã bị TRƯỢT ỨNG TUYỂN. Đừng từ bỏ hy vọng, vẫn còn cơ hội thứ hai.' : `Đơn ứng tuyển của bạn đã được gửi đến ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Hãy chill và chờ sự phản hồi của nhà tuyển dụng.`}</Text>
                             <View style={{...styles.applicationStatus, borderColor: getStatus().color}}>
                                 <Icon name={getStatus().icon}/>
                                 <View>
-                                    <Text style={{color: '#B0B0B0', fontSize: 12}}>Application Status</Text>
-                                    <Text style={{fontSize: 18}}>{apply.status}</Text>
+                                    <Text style={{color: '#B0B0B0', fontSize: 12}}>Tình trạng ứng tuyển</Text>
+                                    <Text style={{fontSize: 18}}>{apply.status == 'Accepted' ? 'Đỗ ứng tuyển' : apply.status == 'Rejected' ? 'Trượt ứng tuyển' : 'Đang chờ phản hồi'}</Text>
                                 </View>
                             </View>
-                                <Text style={{...STYLE.textBold, fontSize: 16}}>CV Details</Text>
+                                <Text style={{...STYLE.textBold, fontSize: 16}}>Chi tiết CV</Text>
                                 <View style={styles.CVDetails}>
                                     <Text style={{...STYLE.textBold, fontSize: 16}}>{cv.cv_title ? cv.cv_title : 'Untitiled CV'}</Text>
                                     {
@@ -559,16 +593,16 @@ const JobDetail = () => {
                                     (
                                         <View style={{gap: 16}}>
                                             <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
-                                            <Text>Feeling better?</Text>
+                                            <Text>Cảm thấy mình đã cải thiện?</Text>
                                             <TouchableOpacity style={styles.buttonStyle}>
-                                                <Text>Apply with existing CV</Text>
+                                                <Text>Ứng tuyển với CV đã có</Text>
                                                 <View style={styles.priceTag}>
                                                     <Text>💎 10</Text>
                                                     <Icon name="arrow-right-s-line"/>
                                                 </View>
                                             </TouchableOpacity>
                                             <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
-                                                <Text>Apply with PDF CV</Text>
+                                                <Text>Ứng tuyển với CV PDF</Text>
                                                 <View style={styles.priceTag}>
                                                     <Text>💎 30</Text>
                                                     <Icon name="arrow-right-s-line"/>
@@ -580,7 +614,7 @@ const JobDetail = () => {
                                 }
                                 
                                 <TouchableOpacity onPress={() => {setSuccess(false)}} style={styles.buttonStyle}>
-                                    <Text>Done</Text>
+                                    <Text>Xong</Text>
                                     <View style={styles.priceTag}>
                                         <Icon name="arrow-right-s-line"/>
                                     </View>
@@ -605,14 +639,14 @@ const JobDetail = () => {
                     <SafeAreaView style={styles.modal}>
                         <View style={styles.modalChild}>
                             <View>
-                                <Text style={STYLE.textTitle}>Upload CV</Text>
-                                <Text>Please upload your CV (accepted file types: .pdf)</Text>
+                                <Text style={STYLE.textTitle}>Đăng tải CV</Text>
+                                <Text>Vui lòng đăng tải CV của bạn (các loại file được chấp nhận: .pdf)</Text>
                             </View>
                             {isUploading ? (
                                 <View style={{gap: 16}}>
                                     <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
                                         <ActivityIndicator size={16} style={{width: 16}}/>
-                                        <Text>Uploading ({Math.round(uploadProgress * 100)}%)</Text>
+                                        <Text>Đăng đăng tải ({Math.round(uploadProgress * 100)}%)</Text>
                                     </View>
                                     <ProgressBar progress={uploadProgress} color="#000" style={{backgroundColor: '#E9E9E9', borderRadius: 16, flex: 1}}/>
                                 </View>
@@ -628,13 +662,13 @@ const JobDetail = () => {
                                             : ''
                                         }
                                     </View>)
-                                    : ( <Text>Upload file</Text>)}
+                                    : ( <Text>Đăng tải file</Text>)}
                                     <Icon name={file ? 'file-line' : 'add-line'}/>
                                 </TouchableOpacity>
                             </View>
                                 <TouchableOpacity onPress={handleUpload} style={styles.buttonStyle}>
 
-                                <Text>Apply</Text>
+                                <Text>Ứng tuyển</Text>
                                 <View style={styles.priceTag}>
                                     <Text>💎 30</Text>
                                     <Icon name="arrow-right-s-line" />
@@ -642,7 +676,7 @@ const JobDetail = () => {
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handlePDFCVCancel} style={{...styles.buttonStyle, backgroundColor: '#E9E9E9'}}>
 
-                                <Text>Cancel</Text>
+                                <Text>Huỷ</Text>
                                 <View style={styles.priceTag}>
                                     <Icon name="close-line" />
                                 </View>
@@ -663,16 +697,16 @@ const JobDetail = () => {
                 >
                     <SafeAreaView style={styles.modal}>
                         <View style={styles.modalChild}>
-                            <Text style={STYLE.textTitle}>Applying for <Text>{postData.tieu_de}</Text> @ {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}</Text>
+                            <Text style={STYLE.textTitle}>Đang ứng tuyển cho <Text>{postData.tieu_de}</Text> @ {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}</Text>
                             <TouchableOpacity style={styles.buttonStyle}>
-                                <Text>Apply with existing CV</Text>
+                                <Text>Ứng tuyển với CV đã có</Text>
                                 <View style={styles.priceTag}>
                                     <Text>💎 10</Text>
                                     <Icon name="arrow-right-s-line" />
                                 </View>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
-                                <Text>Apply with PDF CV</Text>
+                                <Text>Ứng tuyển với CV PDF</Text>
                                 <View style={styles.priceTag}>
                                     <Text>💎 30</Text>
                                     <Icon name="arrow-right-s-line" />
@@ -706,20 +740,20 @@ const JobDetail = () => {
                             dataDN: doanhNghiep,
                         }}
                         options={{
-                            title: "Job",
+                            title: "Công việc",
                             tabBarLabel: ({ focused, color }) => (
                                 <Text style={{
                                     color: focused ? 'black' : 'gray',
                                     fontSize: 16,
                                     fontFamily: "Rubik"
                                 }}>
-                                    Job
+                                    Công việc
                                 </Text>
                             ),
                             tabBarIndicatorStyle: {
-                                width: 30,
+                                width: 75,
                                 height: 5,
-                                left: ((Dimensions.get('window').width / 2 - 30) / 2),
+                                left: ((Dimensions.get('window').width / 2 - 75) / 2),
                                 backgroundColor: '#000',
                             },
                             tabBarIndicatorContainerStyle: {
@@ -738,7 +772,7 @@ const JobDetail = () => {
                             title: "Company",
                             tabBarLabel: ({ focused, color }) => (
                                 <Text style={{ color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik" }}>
-                                    Company
+                                    Doanh nghiệp
                                 </Text>
                             ),
 

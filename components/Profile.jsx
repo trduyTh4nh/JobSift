@@ -1,25 +1,29 @@
 import React, { useEffect, useState } from "react";
 import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert } from "react-native";
-//import { useFonts } from "expo-font";
+import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
+import STYLE from "../assets/css/universal";
 import axios from "axios";
 import { API_URL } from "../constants/etc";
 import { useIsFocused } from "@react-navigation/native";
 const Profile = ({navigation}) =>{
-    const [count, setApply] = useState({apply: -1, cv: -1})
+    const [applyCount, setApplyCount] = useState(-1)
+    const [cvCount, setCVCount] = useState(-1)
     const logOut = () => {
-        Alert.alert('Logout', 'Do you want to logout, you will lose access to your account.',
+        Alert.alert('Đăng xuất', 'Bạn có muốn đăng xuất? Bạn sẽ mất quyền truy cập vào tài khoản này.',
         [
-            {text: 'Yes', onPress: () => {
+            {text: 'Không'},
+            {text: 'Có', onPress: () => {
                 global.user = null
                 navigation.navigate('Home')
             }},
-            {text: 'No'},
+           
         ])
     }
+    
     const focus = useIsFocused()
     useEffect(() => {
         if(focus){
@@ -29,30 +33,22 @@ const Profile = ({navigation}) =>{
             }).then(e => {
                 console.log(e.data)
                 const num = e.data.length
-                setApply({
-                    ...count,
-                    apply: num.toString().padStart(2,'0')
-                })
+                setApplyCount(num.toString().padStart(2, '0'))
+            }).catch(e => {
+                console.error(e)
+            })
+            axios.post(API_URL + '/cvcount', {
+                "id_user": global.user.user.id_user
+            }).then(e => {
+                console.log(e.data)
+                const num = e.data[0].cv_count
+                setCVCount(num.toString().padStart(2, '0'))
             }).catch(e => {
                 console.error(e)
             })
         }
     }, [focus])
-    useEffect(() => {
-        axios.post(API_URL + '/cvcount', {
-            "id_user": global.user.user.id_user
-        }).then(e => {
-            console.log(e.data)
-            const num = e.data[0].cv_count
-            setApply({
-                ...count,
-                cv: num.toString().padStart(2,'0')
-            })
-        }).catch(e => {
-            console.error(e)
-        })
-    }, [focus])
-  
+    
   // console.log("User profile" + JSON.stringify(user))
 
     return (
@@ -61,27 +57,22 @@ const Profile = ({navigation}) =>{
             <View style={styles.container}>
                 <View style={styles.vien}>
                     <View style={styles.Xuongdong1}>
-                        <Text style={styles.chutrongvien}> {count.apply} </Text>
-                        <Text style={styles.chutrongvien2}> Applied jobs </Text>
+                        <Text style={styles.chutrongvien}> {applyCount} </Text>
+                        <Text style={styles.chutrongvien2}> Đã ứng tuyển </Text>
                     </View>
                     <View style={styles.Xuongdong1}>
-                        <Text style={styles.chutrongvien}> {count.cv} </Text>
-                        <Text style={styles.chutrongvien2}> CVs </Text>
+                        <Text style={styles.chutrongvien}> {cvCount} </Text>
+                        <Text style={styles.chutrongvien2}> CV </Text>
                     </View>
-                    <View style={styles.Xuongdong1}>
-                        <Text style={styles.chutrongvien}> 02 </Text>
-                        <Text style={styles.chutrongvien2}> Cover Letters </Text>
-                    </View>
-                    
                 </View>
 
                 <View style={styles.daugach}>
 
                 </View>
-                <TouchableOpacity onPress={() => {navigation.navigate('Salary Calculator')}} style={styles.dongngang}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Công cụ tính lương')}} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="calculator-line"></Icon>
-                        <Text style={styles.chucuaslart}> Salary Calculator </Text>
+                        <Text style={styles.chucuaslart}> Công cụ tính lương </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
@@ -90,7 +81,7 @@ const Profile = ({navigation}) =>{
                 <TouchableOpacity style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="money-dollar-circle-line"></Icon>
-                        <Text style={styles.chucuaslart}> Transaction history </Text>
+                        <Text style={styles.chucuaslart}> Lịch sử giao dịch </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
@@ -98,7 +89,7 @@ const Profile = ({navigation}) =>{
                 <TouchableOpacity onPress={() => {navigation.navigate('Edit Profile Info')}} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="pencil-line"></Icon>
-                        <Text style={styles.chucuaslart}> Edit account info </Text>
+                        <Text style={styles.chucuaslart}> Chỉnh sửa t.tin cá nhân </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
@@ -108,16 +99,7 @@ const Profile = ({navigation}) =>{
                 <TouchableOpacity style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="profile-line"></Icon>
-                        <Text style={styles.chucuaslart}> CV </Text>
-                    </View>
-                    <Icon name="arrow-right-s-line" ></Icon>
-                </TouchableOpacity>
-
-                <TouchableOpacity style={styles.dongngang}>
-                    <View style={styles.dongngang1}> 
-
-                        <Icon name="profile-line"></Icon>
-                        <Text style={styles.chucuaslart}> Cover Letter </Text>
+                        <Text style={styles.chucuaslart}> Quản lý CV </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
@@ -125,17 +107,15 @@ const Profile = ({navigation}) =>{
                 <TouchableOpacity style={styles.dongngang} onPress={() => {navigation.navigate('Favorite Page')}}>
                     <View style={styles.dongngang1}> 
                         <Icon name="star-line"></Icon>
-                        <Text style={styles.chucuaslart}> Favourite Jobs </Text>
+                        <Text style={styles.chucuaslart}> Bài đăng yêu thích </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
-
                 <View style={styles.daugach}></View>
-
-                <TouchableOpacity style={styles.dongngang}>
+                <TouchableOpacity onPress={() => {navigation.navigate('Tình trạng ứng tuyển')}} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="check-line"></Icon>
-                        <Text style={styles.chucuaslart}>Application Status </Text>
+                        <Text style={styles.chucuaslart}> Tình trạng ứng tuyển </Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
@@ -143,7 +123,7 @@ const Profile = ({navigation}) =>{
                 <TouchableOpacity onPress={logOut} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="logout-box-line"></Icon>
-                        <Text style={styles.chucuaslart}>Log out </Text>
+                        <Text style={styles.chucuaslart}> Đăng xuất</Text>
                     </View>
                     <Icon name="arrow-right-s-line" ></Icon>
             </TouchableOpacity>
@@ -312,11 +292,13 @@ const styles = StyleSheet.create({
         alignItems:"center",
     },
     chutrongvien:{
+        ...STYLE.textTitle,
         fontSize: 25,
         fontWeight:'900',
         color: '#000'
     },
     chutrongvien2:{
+        ...STYLE.textNormal,
         fontSize: 16,
         color: '#000',
         fontWeight:'400'
@@ -328,6 +310,7 @@ const styles = StyleSheet.create({
         
     },
     chucuaslart:{
+        ...STYLE.textNormal,
         fontSize: 16,
         fontWeight:'400',
         color: '#000'

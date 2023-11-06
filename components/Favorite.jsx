@@ -27,30 +27,25 @@ const FavoritePage = () => {
         }
         ).then((r) => {
             console.log(r.data)
-            const data = r.data
-            var post = []
-            for (var d of data) {
-                post.push({ id_yt: d.id_post_yt, id: d.id_post, salary: [d.luong], title_job: d.tieu_de, jobCate: d.job_category })
-            }
+            const post = r.data
             setDisplay('')
             setData(post)
-
         }).catch((e) => {
             if (e == 'AxiosError: Request failed with status code 404') {
                 setData([])
                 setDisplay(() => (
-                    <Error icon={'ri-heart-2-line'} title={'No posts found'} message={'Unable to find posts, consider adding them to favourites'} />
+                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-heart-2-line'} title={'Không có bài đăng nào'} message={'Bạn chưa yêu thích bài đăng nào. Hãy ấn nút trái tim ở một bài post để thêm vào danh sách yêu thích.'} />
                 ))
             } else if (e == 'AxiosError: Request failed with status code 401') {
                 console.warn('Error 401')
                 setData([])
                 setDisplay(() => (
-                    <Error icon={'ri-user-line'} title={'Not logged in'} message={'You are not logged in. Please login to use this feature'} />
+                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-user-line'} title={'Chưa đăng nhập'} message={'Đáng lẽ bạn phải đăng nhập chứ... Chắc do lỗi hệ thống...'} />
                 ))
             } else {
                 setData([])
                 setDisplay(() => (
-                    <Error icon={'ri-error-warning-line'} title={'Aw snap.'} message={'Either it is down or you\'re not connected to the internet.'} />
+                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-error-warning-line'} title={'Ngại nhỉ...'} message={'Có thể là do server bị lỗi hoặc bạn không có kết nối Internet. Nguyên nhân gây ra lỗi: ' + e} />
                 ))
                 setErrorStatus(500)
             }
@@ -61,7 +56,7 @@ const FavoritePage = () => {
 
     return (
         <View style={{ ...style.dodgeBottom, height: '100%' }}>
-            <Text style={{ padding: 16 }}>{data.length} favourite jobs</Text>
+            <Text style={{ padding: 16 }}>{data.length} bài đăng yêu thích</Text>
             <ScrollView style={style.body}>
                 {display}
                 <FlatList
@@ -73,32 +68,7 @@ const FavoritePage = () => {
                     ItemSeparatorComponent={() => (<View style={{ height: 0 }} />)}
                 />
             </ScrollView>
-            <View style={style.bottom}>
-                <View style={style.grid}>
-                    <Text style={{ ...STYLE.textBold, ...STYLE.textNormal }}>Trending job categories</Text>
-                    <View style={style.cards}>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="money-dollar-circle-line" />
-                            <Text style={{ ...style.text, fontSize: 16 }}>Salesperson</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="computer-line" />
-                            <Text style={{ ...style.text, fontSize: 16 }}>IT</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={style.cards}>
-
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="bar-chart-grouped-line" />
-                            <Text style={{ ...style.text, fontSize: 16 }}>Marketing</Text>
-                        </TouchableOpacity>
-                        <TouchableOpacity style={style.card}>
-                            <Icon name="bank-line" />
-                            <Text style={{ ...style.text, fontSize: 16 }}>Banking</Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View>
+            
         </View>
     )
 }

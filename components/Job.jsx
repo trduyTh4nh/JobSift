@@ -20,23 +20,8 @@ const Job = () => {
 
     const [showModal, setShowModal] = useState(true)
 
-    const [fontLoaded] = useFonts({
-        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
-        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RubikBlack': require("../assets/fonts/Rubik/static/Rubik-Black.ttf"),
-        'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
-        'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
-
-    })
-    if (!fontLoaded) {
-        return (
-            <View>
-                <Text>Loading..........</Text>
-            </View>
-        )
-    }
+   
+    
 
     return (
         <View style={{ width: "100%" }}>
