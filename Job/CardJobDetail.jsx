@@ -51,7 +51,7 @@ const CardJobDetail = (props) => {
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
-                            style={{ width: 45, height: 45 }}
+                            style={{ width: 45, height: 45, borderWidth: 2, borderColor: "#fff", borderRadius: 8, padding: 3 }}
                         ></Image>
 
                         <View style={styles.jobCardName}>

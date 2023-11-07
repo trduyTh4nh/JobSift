@@ -24,6 +24,7 @@ const IPlD = "192.168.116.1"
 import { API_URL as URL } from "../constants/etc";
 const Tab = createMaterialTopTabNavigator();
 
+
 const JobDetail = () => {
 
     const route = useRoute();
@@ -51,12 +52,12 @@ const JobDetail = () => {
     const handleUploadFile = () => {
         DocumentPicker.getDocumentAsync().then((e) => {
 
-            if(!e.canceled){
+            if (!e.canceled) {
                 const fileName = e.assets[0].name
                 const fileNameArr = fileName.split('.')
                 console.log(fileNameArr[fileNameArr.length - 1])
-                if(fileNameArr[fileNameArr.length - 1] != 'PDF' && fileNameArr[fileNameArr.length - 1] != 'pdf'){
-                    setFile({assets: [{name: 'Please upload a PDF file'}]})
+                if (fileNameArr[fileNameArr.length - 1] != 'PDF' && fileNameArr[fileNameArr.length - 1] != 'pdf') {
+                    setFile({ assets: [{ name: 'Please upload a PDF file' }] })
                 } else {
                     setFile(e)
                 }
@@ -131,8 +132,8 @@ const JobDetail = () => {
     }, [focus])
 
 
-    
-    
+
+
 
 
 
@@ -154,39 +155,39 @@ const JobDetail = () => {
             .catch((error) => {
                 console.log(error);
             });
-        
+
     }, []);
 
     useEffect(() => {
-        if(postData){
+        if (postData) {
             console.log(postData)
-            axios.post(URL+'/getcv', {
+            axios.post(URL + '/getcv', {
                 "id_post": postData.id_post,
                 "id_user": global.user.user.id_user
-              }).then(e => {
+            }).then(e => {
                 setCV(e.data[0])
                 console.log(e.data[0])
-              }).catch(e => {
-              })
+            }).catch(e => {
+            })
         }
     }, [postData])
     const getCV = () => {
-        axios.post(URL+'/getcv', {
+        axios.post(URL + '/getcv', {
             "id_post": postData.id_post,
             "id_user": global.user.user.id_user
-          }).then(e => {
+        }).then(e => {
             setTimeout(() => {
                 setSuccess(true)
             }, 500)
             setCV(e.data[0])
             console.log(e.data[0])
-          }).catch(e => {
-          })
+        }).catch(e => {
+        })
     }
     const [fileName, setFileName] = useState()
     const [apply, setApply] = useState()
     useEffect(() => {
-        if(cv){
+        if (cv) {
             setLoading(true)
             console.log(cv.file)
             fetch(cv.file).then(e => {
@@ -326,20 +327,20 @@ const JobDetail = () => {
             setShowPDFCV(true)
         }, 400)
 
-       
-        
+
+
     }
     const handlePDFCVCancel = () => {
         setShowPDFCV(false)
         setFile(null)
-        
+
     }
     const convertSize = (size) => {
-        if(size < 1024){
+        if (size < 1024) {
             return size + ' bytes'
-        } else if(size >= 1073741824) {
+        } else if (size >= 1073741824) {
             return Math.round(size / 1000000000 * 100) / 100 + ' GB'
-        } else if(size >= 1048576) {
+        } else if (size >= 1048576) {
             return Math.round(size / 1000000 * 100) / 100 + ' MB'
         } else {
             return Math.round(size / 1000 * 100) / 100 + ' KB'
@@ -354,7 +355,7 @@ const JobDetail = () => {
             const ref = storage().ref(e.metadata.fullPath)
             ref.getDownloadURL().then(e => {
                 console.log('uploaded with url: ' + e)
-                axios.post(URL+'/createcv', {
+                axios.post(URL + '/createcv', {
                     "file": e,
                     "id_ungvien": global.user.user.id_user
                 }).then(f => {
@@ -376,19 +377,19 @@ const JobDetail = () => {
             }).catch(err => {
                 console.error('failed to get download url but file is uploaded with error: ' + err)
             })
-            
+
         }).catch(e => {
             console.error(e)
         })
     }
     const getStatus = () => {
-        switch(apply.status){
+        switch (apply.status) {
             case 'Accepted':
                 return {
                     icon: 'check-line',
                     color: '#67C1F3'
                 }
-                
+
             case 'Rejected':
                 return {
                     icon: 'close-line',
@@ -399,7 +400,7 @@ const JobDetail = () => {
                     icon: 'loader-fill',
                     color: '#B0B0B0'
                 }
-                
+
         }
 
     }
@@ -424,7 +425,7 @@ const JobDetail = () => {
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
 
-                                        <TouchableOpacity onPress={() => {if(cv){setSuccess(true); return} setShowUngTuyen(true)}} style={styles.buttonApplyJob}>
+                                        <TouchableOpacity onPress={() => { if (cv) { setSuccess(true); return } setShowUngTuyen(true) }} style={styles.buttonApplyJob}>
 
                                             <Icon name="check-fill" size={24} ></Icon>
                                         </TouchableOpacity>
@@ -499,97 +500,97 @@ const JobDetail = () => {
             </View>
             <View style={styles.wrapModal}>
                 <Modal
-                    style={{margin: 0}}
+                    style={{ margin: 0 }}
                     isVisible={showSuccess}
-                    onBackdropPress={() => {setSuccess(false)}}
-                    onBackButtonPress={() => {setSuccess(false)}}
+                    onBackdropPress={() => { setSuccess(false) }}
+                    onBackButtonPress={() => { setSuccess(false) }}
                     swipeDirection={'down'}
-                    onSwipeComplete={() => {setSuccess(false)}}
-                >   
+                    onSwipeComplete={() => { setSuccess(false) }}
+                >
                     <SafeAreaView style={styles.modal}>
                         {cv && !isLoading && apply ? (
                             <View style={styles.modalChild}>
-                            <View>
-                                <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Congratulation!' : apply.status == 'Rejected' ? 'There\'s still another chance...' : 'Success!'}</Text>
-                            </View>
-                            <Text style={{...STYLE.textBold, fontSize: 16}}>{apply.status == 'Accepted' ? 'Your application has been ACCEPTED. Please check your email or chat with the employer to discuss a date for an interview.' : apply.status == 'Rejected' ? 'Your application has been REJECTED. Don\'t give up on your hopes and dreams yet, you still have a second chance.' : `Your application has been sent to ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Sit back and relax, we will send the results to you as soon as possible.`}</Text>
-                            <View style={{...styles.applicationStatus, borderColor: getStatus().color}}>
-                                <Icon name={getStatus().icon}/>
                                 <View>
-                                    <Text style={{color: '#B0B0B0', fontSize: 12}}>Application Status</Text>
-                                    <Text style={{fontSize: 18}}>{apply.status}</Text>
+                                    <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Congratulation!' : apply.status == 'Rejected' ? 'There\'s still another chance...' : 'Success!'}</Text>
                                 </View>
-                            </View>
-                                <Text style={{...STYLE.textBold, fontSize: 16}}>CV Details</Text>
+                                <Text style={{ ...STYLE.textBold, fontSize: 16 }}>{apply.status == 'Accepted' ? 'Your application has been ACCEPTED. Please check your email or chat with the employer to discuss a date for an interview.' : apply.status == 'Rejected' ? 'Your application has been REJECTED. Don\'t give up on your hopes and dreams yet, you still have a second chance.' : `Your application has been sent to ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Sit back and relax, we will send the results to you as soon as possible.`}</Text>
+                                <View style={{ ...styles.applicationStatus, borderColor: getStatus().color }}>
+                                    <Icon name={getStatus().icon} />
+                                    <View>
+                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Application Status</Text>
+                                        <Text style={{ fontSize: 18 }}>{apply.status}</Text>
+                                    </View>
+                                </View>
+                                <Text style={{ ...STYLE.textBold, fontSize: 16 }}>CV Details</Text>
                                 <View style={styles.CVDetails}>
-                                    <Text style={{...STYLE.textBold, fontSize: 16}}>{cv.cv_title ? cv.cv_title : 'Untitiled CV'}</Text>
+                                    <Text style={{ ...STYLE.textBold, fontSize: 16 }}>{cv.cv_title ? cv.cv_title : 'Untitiled CV'}</Text>
                                     {
                                         !fileName ? (
-                                            <View style={{gap: 10}}>
-                                        <View style={styles.CVDetailsSection}>
-                                            <Icon name="briefcase-4-line"/>
-                                            <View>
-                                                <Text style={{color: '#B0B0B0', fontSize: 12}}>Category</Text>
-                                                <Text style={{fontSize: 18}}>cate</Text>
+                                            <View style={{ gap: 10 }}>
+                                                <View style={styles.CVDetailsSection}>
+                                                    <Icon name="briefcase-4-line" />
+                                                    <View>
+                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
+                                                        <Text style={{ fontSize: 18 }}>cate</Text>
+                                                    </View>
+                                                </View>
+                                                <View style={styles.CVDetailsSection}>
+                                                    <Icon name="user-2-line" />
+                                                    <View>
+                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
+                                                        <Text style={{ fontSize: 18 }}>cate</Text>
+                                                    </View>
+                                                </View>
                                             </View>
-                                        </View>
-                                        <View style={styles.CVDetailsSection}>
-                                            <Icon name="user-2-line"/>
-                                            <View>
-                                                <Text style={{color: '#B0B0B0', fontSize: 12}}>Category</Text>
-                                                <Text style={{fontSize: 18}}>cate</Text>
-                                            </View>
-                                        </View>
-                                    </View>
                                         ) : (
                                             <View style={styles.CVDetailsSection}>
-                                                <Icon name="file-line"/>
+                                                <Icon name="file-line" />
                                                 <View>
-                                                    <Text style={{color: '#B0B0B0', fontSize: 12}}>File</Text>
-                                                    <Text style={{fontSize: 18}}>{fileName}</Text>
+                                                    <Text style={{ color: '#B0B0B0', fontSize: 12 }}>File</Text>
+                                                    <Text style={{ fontSize: 18 }}>{fileName}</Text>
                                                 </View>
                                             </View>
                                         )
                                     }
-                                    
-                                    
+
+
                                 </View>
                                 {
-                                    apply.status == 'Rejected' ? 
-                                    (
-                                        <View style={{gap: 16}}>
-                                            <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
-                                            <Text>Feeling better?</Text>
-                                            <TouchableOpacity style={styles.buttonStyle}>
-                                                <Text>Apply with existing CV</Text>
-                                                <View style={styles.priceTag}>
-                                                    <Text>💎 10</Text>
-                                                    <Icon name="arrow-right-s-line"/>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
-                                                <Text>Apply with PDF CV</Text>
-                                                <View style={styles.priceTag}>
-                                                    <Text>💎 30</Text>
-                                                    <Icon name="arrow-right-s-line"/>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
-                                        </View>
-                                    ) : ''
+                                    apply.status == 'Rejected' ?
+                                        (
+                                            <View style={{ gap: 16 }}>
+                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
+                                                <Text>Feeling better?</Text>
+                                                <TouchableOpacity style={styles.buttonStyle}>
+                                                    <Text>Apply with existing CV</Text>
+                                                    <View style={styles.priceTag}>
+                                                        <Text>💎 10</Text>
+                                                        <Icon name="arrow-right-s-line" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
+                                                    <Text>Apply with PDF CV</Text>
+                                                    <View style={styles.priceTag}>
+                                                        <Text>💎 30</Text>
+                                                        <Icon name="arrow-right-s-line" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
+                                            </View>
+                                        ) : ''
                                 }
-                                
-                                <TouchableOpacity onPress={() => {setSuccess(false)}} style={styles.buttonStyle}>
+
+                                <TouchableOpacity onPress={() => { setSuccess(false) }} style={styles.buttonStyle}>
                                     <Text>Done</Text>
                                     <View style={styles.priceTag}>
-                                        <Icon name="arrow-right-s-line"/>
+                                        <Icon name="arrow-right-s-line" />
                                     </View>
                                 </TouchableOpacity>
-                        </View>
+                            </View>
                         ) : (
-                            <ActivityIndicator size={128}/>
+                            <ActivityIndicator size={128} />
                         )}
-                        
+
                     </SafeAreaView>
                 </Modal>
             </View>
@@ -609,30 +610,30 @@ const JobDetail = () => {
                                 <Text>Please upload your CV (accepted file types: .pdf)</Text>
                             </View>
                             {isUploading ? (
-                                <View style={{gap: 16}}>
-                                    <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
-                                        <ActivityIndicator size={16} style={{width: 16}}/>
+                                <View style={{ gap: 16 }}>
+                                    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                                        <ActivityIndicator size={16} style={{ width: 16 }} />
                                         <Text>Uploading ({Math.round(uploadProgress * 100)}%)</Text>
                                     </View>
-                                    <ProgressBar progress={uploadProgress} color="#000" style={{backgroundColor: '#E9E9E9', borderRadius: 16, flex: 1}}/>
+                                    <ProgressBar progress={uploadProgress} color="#000" style={{ backgroundColor: '#E9E9E9', borderRadius: 16, flex: 1 }} />
                                 </View>
                             ) : ''}
                             <View>
 
-                                <TouchableOpacity disabled={isUploading} onPress={handleUploadFile} style={{...styles.buttonStyle, paddingLeft: 24, paddingRight: 24,paddingTop: 20, paddingBottom: 20, backgroundColor: '#E9E9E9', borderRadius: 16}}>
+                                <TouchableOpacity disabled={isUploading} onPress={handleUploadFile} style={{ ...styles.buttonStyle, paddingLeft: 24, paddingRight: 24, paddingTop: 20, paddingBottom: 20, backgroundColor: '#E9E9E9', borderRadius: 16 }}>
                                     {file ? (<View>
-                                        <Text style={{...STYLE.textBold, fontSize: 18}}>{file.assets[0].name}</Text>
+                                        <Text style={{ ...STYLE.textBold, fontSize: 18 }}>{file.assets[0].name}</Text>
                                         {
-                                            !isNaN(file.assets[0].size) ? 
-                                            (<Text>{convertSize(file.assets[0].size)}</Text>)
-                                            : ''
+                                            !isNaN(file.assets[0].size) ?
+                                                (<Text>{convertSize(file.assets[0].size)}</Text>)
+                                                : ''
                                         }
                                     </View>)
-                                    : ( <Text>Upload file</Text>)}
-                                    <Icon name={file ? 'file-line' : 'add-line'}/>
+                                        : (<Text>Upload file</Text>)}
+                                    <Icon name={file ? 'file-line' : 'add-line'} />
                                 </TouchableOpacity>
                             </View>
-                                <TouchableOpacity onPress={handleUpload} style={styles.buttonStyle}>
+                            <TouchableOpacity onPress={handleUpload} style={styles.buttonStyle}>
 
                                 <Text>Apply</Text>
                                 <View style={styles.priceTag}>
@@ -640,7 +641,7 @@ const JobDetail = () => {
                                     <Icon name="arrow-right-s-line" />
                                 </View>
                             </TouchableOpacity>
-                            <TouchableOpacity onPress={handlePDFCVCancel} style={{...styles.buttonStyle, backgroundColor: '#E9E9E9'}}>
+                            <TouchableOpacity onPress={handlePDFCVCancel} style={{ ...styles.buttonStyle, backgroundColor: '#E9E9E9' }}>
 
                                 <Text>Cancel</Text>
                                 <View style={styles.priceTag}>
@@ -683,6 +684,7 @@ const JobDetail = () => {
                 </Modal>
             </View>
             <View style={styles.bodyJobDetail}>
+
                 <Tab.Navigator style={styles.tabInFoJob}
                     screenOptions={{
                         activeTintColor: 'black',
