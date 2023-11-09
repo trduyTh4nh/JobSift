@@ -66,12 +66,12 @@ const Home = ({ navigation }) => {
             }
         }).then((respone) => {
             const dataPopularJob = respone.data.popularjob
-            setPopuplarJob(dataPopularJob) 
+            setPopuplarJob(dataPopularJob)
         }).catch((error) => {
             console.error(error)
         })
     }
- 
+
 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -93,52 +93,57 @@ const Home = ({ navigation }) => {
                     tabBarStyle: { display: 'none' }
                 })
 
-                
-                fetchData().catch((e) => {console.error(e)});
-            }
-        }, [focus]);
-        const fetchData = async (refresh) => {
-            if(refresh){
-                setPostData([])
-            }
-            try {
-                const response = await fetch(`http://${API_URL}:3001`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setIsLoading(false);
-                setPostData(data);
-            } catch (error) {
-                console.log('Error fetching data:', error);
-                setIsLoading(false);
-            }
-        };
 
-//                 return
-//             }
-//             navigation.getParent()?.setOptions({
-//                 tabBarStyle: STYLE.tabBarStyle
-//             })
-//             const fetchData = async () => {
-//                 try {
+                fetchData().catch((e) => { console.error(e) });
+            } else {
+                navigation.getParent()?.setOptions({
+                    tabBarStyle: STYLE.tabBarStyle
+                })
+            }
+        }
+    }, [focus]);
+    const fetchData = async (refresh) => {
+        if (refresh) {
+            setPostData([])
+        }
+        try {
+            const response = await fetch(`http://${API_URL}:3001`);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            const data = await response.json();
+            setIsLoading(false);
+            setPostData(data);
+        } catch (error) {
+            console.log('Error fetching data:', error);
+            setIsLoading(false);
+        }
+    };
 
-//                     const response = await fetch(`http://${API_URL}:3001`);
-//                     if (!response.ok) {
-//                         throw new Error('Network response was not ok');
-//                     }
-//                     const data = await response.json();
-//                     setIsLoading(false);
-//                     setPostData(data);
-//                 } catch (error) {
-//                     console.log('Error fetching data:', error);
-//                     setIsLoading(false);
-//                 }
-//             };
+    //                 return
+    //             }
+    //             navigation.getParent()?.setOptions({
+    //                 tabBarStyle: STYLE.tabBarStyle
+    //             })
+    //             const fetchData = async () => {
+    //                 try {
 
-//             fetchData().catch((e) => { console.error(e) });
-//         }
-//     }, [focus]);
+    //                     const response = await fetch(`http://${API_URL}:3001`);
+    //                     if (!response.ok) {
+    //                         throw new Error('Network response was not ok');
+    //                     }
+    //                     const data = await response.json();
+    //                     setIsLoading(false);
+    //                     setPostData(data);
+    //                 } catch (error) {
+    //                     console.log('Error fetching data:', error);
+    //                     setIsLoading(false);
+    //                 }
+    //             };
+
+    //             fetchData().catch((e) => { console.error(e) });
+    //         }
+    //     }, [focus]);
 
 
     /*
@@ -195,7 +200,7 @@ const Home = ({ navigation }) => {
     // }, []);
 
 
-    
+
 
 
 
@@ -228,27 +233,24 @@ const Home = ({ navigation }) => {
                     </View>
 
                     <Text style={styles.welcomeMessage}>Hãy bắt đầu hành trình tìm việc của bạn</Text>
-                    <TouchableOpacity onPress={() => { navigation.navigate('Search') }} style={styles.wrapSearch}>
-
+                    <TouchableOpacity onPress={() => { navigation.navigate('JobTab') }} style={styles.wrapSearch}>
                         <TextInput
                             editable={false}
                             style={styles.inputSearch}
                             placeholder="Tìm kiếm"
                             placeholderTextColor="#999"
                         />
-
                         <View style={styles.wrapSearchBtn}>
                             <TouchableOpacity style={styles.searchBtn}>
                                 <Icon name="search-line" size={40} color="#fff"></Icon>
                             </TouchableOpacity>
                         </View>
-
                     </TouchableOpacity>
                 </View>
             </View>
 
-            <ScrollView style={{marginBottom: 150}}>
-                <View style={{marginTop: 16, gap: 10}}>
+            <ScrollView style={{ marginBottom: 150 }}>
+                <View style={{ marginTop: 16, gap: 10 }}>
 
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
@@ -263,11 +265,11 @@ const Home = ({ navigation }) => {
                         {isLoading ? (
                             <Text>Loading...</Text>
                         ) : (
-                            <View style={{marginBottom: 10}}>
+                            <View style={{ marginBottom: 10 }}>
                                 <FlatList
-                                    style={{marginLeft: 16}}
+                                    style={{ marginLeft: 16 }}
                                     data={postData}
-                                    renderItem={({item}) => (<RenderItem item={item} onfavourite={() => {refreshJob()}}></RenderItem>)}
+                                    renderItem={({ item }) => (<RenderItem item={item} onfavourite={() => { refreshJob() }}></RenderItem>)}
                                     keyExtractor={(item) => item.id_post.toString()}
                                     horizontal={true}
                                     scrollEnabled={false}
@@ -284,7 +286,7 @@ const Home = ({ navigation }) => {
                     <FlatList
                         style={styles.wrapJobNearBy}
                         data={popularJob}
-                        renderItem={({item}) => (<RenderJobNearBy item={item} onfavourite={() => {}}></RenderJobNearBy>)}
+                        renderItem={({ item }) => (<RenderJobNearBy item={item} onfavourite={() => { }}></RenderJobNearBy>)}
                         keyExtractor={(item) => item.id_post.toString()}
                         contentContainerStyle={{ columnGap: 20 }}
                         scrollEnabled={false}
@@ -298,6 +300,7 @@ const Home = ({ navigation }) => {
 }
 
 const styles = StyleSheet.create({
+    
     body: {
 
     },
@@ -351,7 +354,7 @@ const styles = StyleSheet.create({
         paddingLeft: 0,
         paddingRight: 4,
     },
-    
+
     welcomeMessage: {
         fontFamily: 'RukbikNormal',
         fontSize: 24,
@@ -375,15 +378,14 @@ const styles = StyleSheet.create({
     },
     inputSearch: {
         color: '#ABABAB',
-        width: "78%",
         height: 50,
         backgroundColor: 'rgba(230, 230, 230, 1)',
         borderRadius: 10,
         paddingLeft: 20,
         paddingRight: 10,
         fontSize: 16,
-        fontFamily: 'RukbikNormal'
-
+        fontFamily: 'RukbikNormal',
+        flex: 1
     },
     searchBtn: {
         width: 60,

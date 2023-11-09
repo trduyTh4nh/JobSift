@@ -132,7 +132,7 @@ const Job = () => {
         })
             .then((response) => {
                 const dataFiltered = response.data.result;
-                console.log("DATA FILTERED: ", dataFiltered);
+              //  console.log("DATA FILTERED: ", dataFiltered);
                 setKq({})
                 setKq(dataFiltered);
                 setShowModal(false);
@@ -198,7 +198,7 @@ const Job = () => {
 
             <Modal
                 isVisible={showModal}
-                onSwipeComplete={() => { setShowModal(false) }}
+                // onSwipeComplete={() => { setShowModal(false) }}
                 onBackdropPress={() => { setShowModal(false) }}
                 swipeDirection={'down'}
                 style={{ margin: 0 }}

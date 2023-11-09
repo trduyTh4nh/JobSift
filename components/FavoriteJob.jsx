@@ -56,22 +56,13 @@ const FavoriteJob = () => {
 
 
                            
-                            ),bBarIndicatorStyle: {
-                                width: 30,
+                            ),
+                            tabBarIndicatorStyle: {
+                                width: 80,
                                 height: 5,
-                                left: ((Dimensions.get('window').width / 2 - 30) / 2),
+                                left: ((Dimensions.get('window').width / 2 - 80) / 2),
                                 backgroundColor: '#000',
                                 display: "none"
-                            },
-                            tabBarIndicatorContainerStyle: {
-                                flexDirection: 'row',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-
-                            },
-
-                            tabBarIconStyle: {
-
                             },
 
                         }}

@@ -424,7 +424,7 @@ const ChildCompany = ({ route }) => {
                         marginTop: 10,
                         padding: 20
                     }}>
-                        <TouchableOpacity style={{
+                        {/* <TouchableOpacity style={{
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -448,7 +448,7 @@ const ChildCompany = ({ route }) => {
 
                             <Icon name="arrow-right-s-line"></Icon>
 
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
 
@@ -569,7 +569,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     scrollContainer: {
-        height: "75%",
+        height: "100%",
     },
     JobSumary: {
         borderWidth: 2,

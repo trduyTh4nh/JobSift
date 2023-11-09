@@ -10,6 +10,7 @@ import { NavigationContainer, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JobDetail from '../Job/JobDetail';
 import HeaderThanh from '../components/HeaderThanh'
+import Report from '../src/Report';
 
 import { useNavigation, DefaultTheme } from '@react-navigation/native';
 import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndicator, SafeAreaView, Alert } from 'react-native';
@@ -102,7 +103,7 @@ const Tabs = () => {
                     Alert.alert('Error while getting diamond: ' + e)
                 })
             })
-            if(global.user){
+            if (global.user) {
                 axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
                     global.user.user.diamond_count = e.data.diamond_count
                     setDiamond(e.data.diamond_count)
@@ -137,6 +138,41 @@ const Tabs = () => {
                     options={{
                         headerTitle: () => (
                             <HeaderThanh name="JobDetail"></HeaderThanh>
+                        ),
+                        headerBackVisible: false,
+                        headerLeft: () => (
+                            <TouchableOpacity
+                                style={{}}
+                                onPress={() => navigation.goBack()}
+                            >
+                                <Icon name='arrow-left-s-line' size={24} color='#000' />
+                            </TouchableOpacity>
+                        ),
+                        headerRight: () => (
+                            <View style={styles.wrapHeaderLeft}>
+                                <Image
+                                    source={require('../assets/diamond_pro.png')}
+                                    style={{ width: 22, height: 22 }}
+                                />
+                                <Text style={styles.quantityDiamond}>{Number(diamond).toLocaleString()}</Text>
+                                <TouchableOpacity>
+                                    <Icon name='add-fill' style={{ fontWeight: "700" }} />
+                                </TouchableOpacity>
+                            </View>
+                        ),
+                        headerStyle: {
+                            height: 150,
+                            backgroundColor: '#fff',
+                            elevation: 0,
+                        },
+                    }}
+                ></Stack.Screen>
+                 <Stack.Screen
+                    name='Report'
+                    component={Report}
+                    options={{
+                        headerTitle: () => (
+                            <HeaderThanh name="Report"></HeaderThanh>
                         ),
                         headerBackVisible: false,
                         headerLeft: () => (
@@ -234,6 +270,7 @@ const Tabs = () => {
 
     const FavoriteJobStack = () => (
         <Stack.Navigator screenOptions={{
+            headerShown: false,
             header: ({ navigation, route, options, back }) => {
                 const title = getHeaderTitle(options, route.name)
                 return (

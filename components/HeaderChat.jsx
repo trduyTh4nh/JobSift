@@ -19,7 +19,7 @@ const HeaderChat = ({navigation, title, LeftButton, image, name}) => {
                     <View style={style.header}>
                         {button}
                         <View style={style.headerTitle}>
-                            <Image style={{borderRadius: 50}} width={46} height={46} source={{uri: image}}/>
+                            <Image style={{borderRadius: 50}} width={46} height={46} source={{uri: image ? image : 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'}}/>
                             <Text style={style.text}>{title}</Text>
                         </View>
                     </View>

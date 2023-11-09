@@ -6,19 +6,23 @@ import { BlurView } from "expo-blur";
 import STYLE from "../assets/css/universal";
 import * as ImagePicker from 'expo-image-picker'
 import { useEffect } from "react";
+import { useIsFocused } from "@react-navigation/native";
 export function HeaderProfile({navigation, title, LeftButton}) {
     const back = () => {
         navigation.goBack()
-    }
+    }   
+    const focus = useIsFocused()
 
-    const user = global.user.user
+    const [user, setUser] = useState(!global.user ? {profile_picture: 'https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg'} : global.user.user)
 
     const [imgAvatar, setImageAvatar] = useState('')
 
-
     useEffect(() => {
+        if(global.user){
+            setUser(global.user.user)
+        }
         setImageAvatar(user.profile_picture)
-    })
+    }, [focus])
 
     const [image, setImage] = useState()
     const button = LeftButton ? (<TouchableOpacity onPress={back}>
@@ -57,7 +61,7 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                                 
                             
                             <View style={styles.Xuongdong} >
-                                <Text style={styles.userName}>{global.user.user.full_name} </Text>
+                                <Text style={styles.userName}>{global.user ? global.user.user.full_name : ''} </Text>
                                 <Text style={styles.sayhi}>Ứng viên </Text>
                             </View>
                         </View>
@@ -65,7 +69,7 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                             
                         </View>
                         <View style={styles.wrapinFo}>
-                            <Text style={styles.welcomeMessage}>💎 {global.user.user.diamond_count} </Text>
+                            <Text style={{...styles.welcomeMessage, ...STYLE.textBold}}>💎 {global.user ? global.user.user.diamond_count.toLocaleString() : 0} </Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
                                 <Icon name="add-line"/>
                             </TouchableOpacity>
@@ -92,7 +96,7 @@ const styles = StyleSheet.create({
     wrap_info: {
         flexDirection: 'row',
         gap: 15,
-        maxWidth: '65%',
+        flex: 1,
         alignItems: 'center'
     },
     wrap: {
@@ -146,16 +150,13 @@ const styles = StyleSheet.create({
         fontSize: 24,
         color: '#000',
         alignContent:"center",  
-        fontWeight:'900'
-        
     },
     wrap_welcome: {
         display: 'flex',
         flexDirection: 'row',
         alignItems: "center",
         justifyContent: 'space-between',
-        gap: 10,
-        padding: 16
+        padding: 16,
     },
     wrapinFo: {
         display: 'flex',

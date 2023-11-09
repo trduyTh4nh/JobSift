@@ -3,6 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet, Modal, TouchableWithoutFeedba
 import { useFonts } from "expo-font"
 import Icon from 'react-native-remix-icon';
 import STYLE from '../assets/css/universal'
+import Report from '../src/Report';
 
 const deviceHeight = Dimensions.get("window").height;
 
@@ -110,13 +111,16 @@ export class BottomPopup extends React.Component {
 
   render() {
     const { show } = this.state;
-    const { onTouchOutside, title, onDataFromChild } = this.props;
+    const { onTouchOutside, title, onDataFromChild, onNavigateReport } = this.props;
 
     hideHeaderJob = (item) => {
       if (item.id == 1) {
         this.close()
         const hidden = false
         onDataFromChild(hidden);
+      }
+      if (item.id == 2) {
+        onNavigateReport()
       }
 
     }
