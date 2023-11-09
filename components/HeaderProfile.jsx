@@ -65,7 +65,7 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                             
                         </View>
                         <View style={styles.wrapinFo}>
-                            <Text style={styles.welcomeMessage}>💎 231 </Text>
+                            <Text style={styles.welcomeMessage}>💎 {global.user.user.diamond_count} </Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
                                 <Icon name="add-line"/>
                             </TouchableOpacity>

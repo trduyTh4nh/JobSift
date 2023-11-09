@@ -34,15 +34,15 @@ const EditProfile = ({ navigation }) => {
         setIsLoading(true);
 
         axios.post(API_URL + '/updateUser', user, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
             .then((e) => {
                 //console.log(e);
                 global.user.user = user;
                 console.log(image)
-                if(image != global.user.user.profile_picture){
+                if (image != global.user.user.profile_picture) {
                     uploadImageToFireBase(image)
                 }
                 navigation.goBack()
@@ -70,7 +70,7 @@ const EditProfile = ({ navigation }) => {
                 quality: 1
             }
         ).then(e => {
-            if(!e.canceled){
+            if (!e.canceled) {
                 console.log("IMage" + JSON.stringify(e.assets[0].uri))
                 setImage(e.assets[0].uri)
             }
@@ -80,7 +80,7 @@ const EditProfile = ({ navigation }) => {
         })
 
 
- 
+
 
     }
 
@@ -90,13 +90,15 @@ const EditProfile = ({ navigation }) => {
 
         try {
             await reference.putFile(imagePath);
-            
+
             console.log("Image uploaded successfully");
 
             // Get the download URL and set it in the user object
             const downloadURL = await getImageFromFirebase(fileName);
-            global.user.user = {...user,
-            profile_picture: downloadURL}
+            global.user.user = {
+                ...user,
+                profile_picture: downloadURL
+            }
             const FormData = {
                 id_user: user.id_user,
                 image_picture: downloadURL
@@ -148,10 +150,10 @@ const EditProfile = ({ navigation }) => {
     };
     return (
         <ScrollView style={{ paddingBottom: 200 }}>
-            <PickerModal isVisible={visible} hideModal={() => {setVisible(false)}} onItemSelected={(e) => {setUser({...user, gioitinh: e})}} items={['Nam', 'Nữ']} title={'Hãy chọn 1 giới tính'}/>
+            <PickerModal isVisible={visible} hideModal={() => { setVisible(false) }} onItemSelected={(e) => { setUser({ ...user, gioitinh: e }) }} items={['Nam', 'Nữ']} title={'Hãy chọn 1 giới tính'} />
             <View style={styles.wrap}>
                 <View style={styles.container}>
-                    <View style={{gap: 25,flexDirection: 'row', width: '100%', alignItems: 'center'}}>
+                    <View style={{ gap: 25, flexDirection: 'row', width: '100%', alignItems: 'center' }}>
                         <TouchableOpacity onPress={handleEditImage}>
                             <Image source={{ uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512' }}
                                 style={{
@@ -160,7 +162,7 @@ const EditProfile = ({ navigation }) => {
                                     borderRadius: 30,
                                 }} />
                         </TouchableOpacity>
-                        <View style={{flex: 1}}>
+                        <View style={{ flex: 1 }}>
                             <Text style={styles.chucuaslart}>Họ tên</Text>
                             <View style={styles.inputSearch}>
 
@@ -179,16 +181,13 @@ const EditProfile = ({ navigation }) => {
                                     }}
                                 >
                                 </TextInput>
-
                             </View>
                         </View>
                     </View>
-                    <View style={{gap: 10}}>
-                       
+                    <View style={{ gap: 10 }}>
                         <View>
                             <Text style={styles.chucuaslart}>Ngày sinh</Text>
                             <View style={styles.inputSearch}>
-
                                 <Text style={{ fontWeight: 'bold' }}>{dateBirth.toLocaleDateString()}</Text>
                                 <TouchableOpacity onPress={() => { setDatePickerOpen(true) }}>
                                     <Icon name="calendar-line"></Icon>
@@ -212,11 +211,10 @@ const EditProfile = ({ navigation }) => {
                                 />
                             </View>
                         </View>
-
                         <View>
                             <Text style={styles.chucuaslart}>Giới tính</Text>
-                            <TouchableOpacity onPress={() => {setVisible(true)}} style={styles.inputSearch}>
-                                <Text style={{fontWeight: 'bold', color: '#000'}}>{user.gioitinh}</Text>
+                            <TouchableOpacity onPress={() => { setVisible(true) }} style={styles.inputSearch}>
+                                <Text style={{ fontWeight: 'bold', color: '#000' }}>{user.gioitinh}</Text>
                                 <Icon name="arrow-down-s-line"></Icon>
                             </TouchableOpacity>
                         </View>
@@ -224,7 +222,6 @@ const EditProfile = ({ navigation }) => {
                         <View>
                             <Text style={styles.chucuaslart}>Số điện thoại</Text>
                             <View style={styles.inputSearch}>
-
                                 <TextInput
 
                                     defaultValue={user.phone}
@@ -235,14 +232,11 @@ const EditProfile = ({ navigation }) => {
                                     fontWeight="700"
                                 >
                                 </TextInput>
-
                             </View>
                         </View>
-
                         <View>
                             <Text style={styles.chucuaslart}>Email</Text>
                             <View style={styles.inputSearch}>
-
                                 <TextInput
                                     defaultValue={user.email}
                                     style={styles.input}
@@ -251,14 +245,12 @@ const EditProfile = ({ navigation }) => {
                                     fontWeight="700"
                                 >
                                 </TextInput>
-
                             </View>
                         </View>
 
                         <View>
                             <Text style={styles.chucuaslart}>Địa chỉ</Text>
                             <View style={styles.inputSearch}>
-
                                 <TextInput
                                     defaultValue={user.diachi}
                                     //placeholder="Quận 3"
@@ -266,7 +258,6 @@ const EditProfile = ({ navigation }) => {
                                     fontWeight="700"
                                 >
                                 </TextInput>
-
                             </View>
                         </View>
                     </View>
@@ -280,13 +271,9 @@ const EditProfile = ({ navigation }) => {
                                     </View>
                                 )
                             }
-
                         </TouchableOpacity>
                     </View>
                 </View>
-
-
-
             </View>
         </ScrollView>
     )
@@ -304,7 +291,7 @@ const styles = StyleSheet.create({
     },
     container: {
         container: {
-            
+
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',

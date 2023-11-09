@@ -1,5 +1,5 @@
 
-export const API_URL = "192.168.1.52"
+export const API_URL = "10.21.33.103"
 
 
 const IPHouseQuang = '192.168.1.12'
