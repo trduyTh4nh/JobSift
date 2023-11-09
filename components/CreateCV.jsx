@@ -1642,7 +1642,7 @@ const CreateCV = () => {
                                 size={28}
                             ></Icon>
                             <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}> Trình độ học vấn</Text>
+                                <Text style={styles.imgeWETitle}>Trình độ học vấn</Text>
                             </View>
                         </View>
 

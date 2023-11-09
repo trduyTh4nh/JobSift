@@ -36,6 +36,7 @@ import CreateCV from '../components/CreateCV';
 import ViewPropTypes from 'deprecated-react-native-prop-types';
 import PrivacyAndProlicy from '../components/PrivacyAndPolicy'
 import Transaction from '../components/Transaction';
+import CreateCVBasicInFo from '../components/CreateCVBasicInFo';
 
 const Stack = createNativeStackNavigator();
 
@@ -274,7 +275,35 @@ const Tabs = () => {
                 }
             }} >
 
+
+
             </Stack.Screen>
+
+            <Stack.Screen name='CVBasic' component={CreateCVBasicInFo} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <View>
+                            <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>
+                                <View style={styles.wrap_welcome}>
+                                    <View style={styles.Xuongdong} >
+                                        <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                                            <Icon name='arrow-left-s-line'></Icon>
+                                        </TouchableOpacity>
+                                        <Text style={styles.userName}>Create CV</Text>
+                                    </View>
+                                    <View>
+
+                                    </View>
+                                    <View style={styles.wrapinFo}>
+                                        <Text style={styles.welcomeMessage}>💎 231 </Text>
+                                    </View>
+                                </View>
+                            </SafeAreaView>
+                        </View>
+                    )
+                }
+            }} ></Stack.Screen>
 
             <Stack.Screen name="CreateCV" component={CreateCV} options={{
                 header: ({ navigation, route, options, back }) => {
@@ -301,6 +330,8 @@ const Tabs = () => {
                     )
                 }
             }} />
+
+
             <Stack.Screen name="PrivacyAndPrivacy" component={PrivacyAndProlicy} options={{
                 header: ({ navigation, route, options, back }) => {
                     const title = getHeaderTitle(options, route.name)

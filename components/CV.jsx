@@ -4,7 +4,6 @@ import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
 const CV = ({navigation}) => {
 
-
     const [fontLoaded] = useFonts({
         'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
         'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
@@ -22,7 +21,7 @@ const CV = ({navigation}) => {
         <View style={styles.cvManage}>
             <View style={styles.ModalView}>
                 <TouchableOpacity style={styles.wrapButtonCreate} onPress={() => {
-                    navigation.navigate("CreateCV")
+                    navigation.navigate("CVBasic")
                 }}>
                     <Text>Tạo CV</Text>
 
