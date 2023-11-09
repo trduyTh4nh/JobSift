@@ -9,6 +9,7 @@ import { useFonts } from "expo-font";
 
 import { API_URL } from "../ipConfig"
 
+
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 

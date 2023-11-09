@@ -9,6 +9,7 @@ import STYLE from "../assets/css/universal";
 import axios from "axios";
 import { API_URL } from "../constants/etc";
 import { useIsFocused } from "@react-navigation/native";
+
 const Profile = ({navigation}) =>{
     const [applyCount, setApplyCount] = useState(-1)
     const [cvCount, setCVCount] = useState(-1)
@@ -22,17 +23,19 @@ const Profile = ({navigation}) =>{
             }},
            
         ])
+
     }
     
     const focus = useIsFocused()
     useEffect(() => {
-        if(focus){
+        if (focus) {
 
             axios.post(API_URL + '/application', {
                 "id_user": global.user.user.id_user
             }).then(e => {
                 console.log(e.data)
                 const num = e.data.length
+
                 setApplyCount(num.toString().padStart(2, '0'))
             }).catch(e => {
                 console.error(e)
@@ -45,9 +48,11 @@ const Profile = ({navigation}) =>{
                 setCVCount(num.toString().padStart(2, '0'))
             }).catch(e => {
                 console.error(e)
+
             })
         }
     }, [focus])
+
     
   // console.log("User profile" + JSON.stringify(user))
 
@@ -66,7 +71,9 @@ const Profile = ({navigation}) =>{
                     </View>
                 </View>
 
-                <View style={styles.daugach}>
+
+                    <View style={styles.daugach}>
+
 
                 </View>
                 <TouchableOpacity onPress={() => {navigation.navigate('Công cụ tính lương')}} style={styles.dongngang}>
@@ -78,7 +85,7 @@ const Profile = ({navigation}) =>{
                 </TouchableOpacity>
                 <View style={styles.daugach}></View>
 
-                <TouchableOpacity style={styles.dongngang}>
+                <TouchableOpacity style={styles.dongngang} onPress={() => {navigation.navigate('Transaction')}}>
                     <View style={styles.dongngang1}> 
                         <Icon name="money-dollar-circle-line"></Icon>
                         <Text style={styles.chucuaslart}> Lịch sử giao dịch </Text>
@@ -94,15 +101,21 @@ const Profile = ({navigation}) =>{
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
 
-                <View style={styles.daugach}></View>
 
-                <TouchableOpacity style={styles.dongngang}>
-                    <View style={styles.dongngang1}> 
-                        <Icon name="profile-line"></Icon>
-                        <Text style={styles.chucuaslart}> Quản lý CV </Text>
-                    </View>
-                    <Icon name="arrow-right-s-line" ></Icon>
-                </TouchableOpacity>
+                    <TouchableOpacity onPress={() => { navigation.navigate('Edit Profile Info') }} style={styles.dongngang}>
+                        <View style={styles.dongngang1}>
+                            <Icon name="pencil-line"></Icon>
+                            <Text style={styles.chucuaslart}> Edit account info </Text>
+                        </View>
+                        <Icon name="arrow-right-s-line" ></Icon>
+                    </TouchableOpacity>
+                 <TouchableOpacity style={styles.dongngang} onPress={() => { navigation.navigate('CV') }}>
+                        <View style={styles.dongngang1}>
+                            <Icon name="profile-line"></Icon>
+                            <Text style={styles.chucuaslart}> CV </Text>
+                        </View>
+                        <Icon name="arrow-right-s-line" ></Icon>
+                    </TouchableOpacity>
 
                 <TouchableOpacity style={styles.dongngang} onPress={() => {navigation.navigate('Favorite Page')}}>
                     <View style={styles.dongngang1}> 
@@ -120,6 +133,13 @@ const Profile = ({navigation}) =>{
                     <Icon name="arrow-right-s-line" ></Icon>
                 </TouchableOpacity>
                 <View style={styles.daugach}></View>
+                    <TouchableOpacity onPress={() => { navigation.navigate('PrivacyAndPrivacy') }} style={styles.dongngang}>
+                        <View style={styles.dongngang1}>
+                            <Icon name="shield-line"></Icon>
+                            <Text style={styles.chucuaslart}>Quyền và luật</Text>
+                        </View>
+                        <Icon name="arrow-right-s-line" ></Icon>
+                    </TouchableOpacity>
                 <TouchableOpacity onPress={logOut} style={styles.dongngang}>
                     <View style={styles.dongngang1}> 
                         <Icon name="logout-box-line"></Icon>
@@ -128,9 +148,6 @@ const Profile = ({navigation}) =>{
                     <Icon name="arrow-right-s-line" ></Icon>
             </TouchableOpacity>
          </View>
-         
-    
-
         </View>
     </ScrollView>
     )
@@ -142,10 +159,10 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     wrap: {
-        paddingTop:0,
+        paddingTop: 0,
         paddingRight: 20,
         paddingLeft: 20,
-        backgroundColor:'#FFFFFF',
+        backgroundColor: '#FFFFFF',
         paddingBottom: 100,
     },
     container: {
@@ -155,7 +172,7 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             // fontFamily: 'Raleway-Bold'
         },
-       
+
         text: {
             fontSize: 18,
             color: 'black',
@@ -176,22 +193,22 @@ const styles = StyleSheet.create({
     },
     userName: {
         fontSize: 25,
-        fontWeight:'900',
+        fontWeight: '900',
         color: '#000'
         // fontFamily: 'Rubik',
 
     },
-    Xuongdong:{
-        display:'flex',
-        flexDirection:'column',
+    Xuongdong: {
+        display: 'flex',
+        flexDirection: 'column',
     },
     welcomeMessage: {
         // fontFamily: 'RukbikNormal',
         fontSize: 24,
         color: '#000',
-        alignContent:"center",  
-        fontWeight:'900'
-        
+        alignContent: "center",
+        fontWeight: '900'
+
     },
     wrap_welcome: {
         display: 'flex',
@@ -207,7 +224,7 @@ const styles = StyleSheet.create({
     sayhi: {
         fontSize: 18,
         color: '#000',
-        fontWeight:'400'
+        fontWeight: '400'
 
         // fontFamily: 'RukbikNormal',
     },
@@ -273,61 +290,61 @@ const styles = StyleSheet.create({
     nearByJobContainer: {
         marginTop: 10
     },
-    vien:{
-        display:"flex",
-        flexDirection:"row",
-        gap:45,
+    vien: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 45,
         alignItems: "center",
-        borderColor:"#B0B0B0",
+        borderColor: "#B0B0B0",
         borderWidth: 3,
         borderRadius: 20,
-       
+
         padding: 10,
         justifyContent: 'space-evenly'
-        
+
     },
-    Xuongdong1:{
-        display:'flex',
-        flexDirection:'column',
-        alignItems:"center",
+    Xuongdong1: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: "center",
     },
     chutrongvien:{
         ...STYLE.textTitle,
         fontSize: 25,
-        fontWeight:'900',
+        fontWeight: '900',
         color: '#000'
     },
     chutrongvien2:{
         ...STYLE.textNormal,
         fontSize: 16,
         color: '#000',
-        fontWeight:'400'
+        fontWeight: '400'
     },
-    daugach:{
-        marginTop:24,
-        borderColor:"#B0B0B0",
-        borderWidth:1.5,
-        
+    daugach: {
+        marginTop: 24,
+        borderColor: "#B0B0B0",
+        borderWidth: 1.5,
+
     },
     chucuaslart:{
         ...STYLE.textNormal,
         fontSize: 16,
-        fontWeight:'400',
+        fontWeight: '400',
         color: '#000'
     },
-    dongngang:{
-        display:'flex',
-        flexDirection:'row',
+    dongngang: {
+        display: 'flex',
+        flexDirection: 'row',
         alignItems: "center",
         justifyContent: 'space-between',
-        marginTop:24,
-        
+        marginTop: 24,
+
     },
-    dongngang1:{
-        display:'flex',
-        flexDirection:'row',
+    dongngang1: {
+        display: 'flex',
+        flexDirection: 'row',
         alignItems: "center",
-        
+
     }
 }
 

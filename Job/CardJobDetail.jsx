@@ -74,6 +74,7 @@ const CardJobDetail = (props) => {
             <View style={styles.jobCard}>
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
+
                         <View style={{...styles.jobCardHeader, justifyContent: 'flex-start', alignItems: 'center'}}>    
                             <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
                                 style={{ width: 45, height: 45 }}
@@ -84,6 +85,16 @@ const CardJobDetail = (props) => {
                                 <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
                                 
                             </View>
+
+//                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
+//                             style={{ width: 45, height: 45, borderWidth: 2, borderColor: "#fff", borderRadius: 8, padding: 3 }}
+//                         ></Image>
+
+//                         <View style={styles.jobCardName}>
+//                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
+//                             <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
+                            
+
                         </View>
 
                         <TouchableOpacity onPress={fav}>

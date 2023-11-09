@@ -197,14 +197,14 @@ const ChildInFoJob = ({ route }) => {
                 return response.json();
             })
             .then(data => {
-                //  console.log(data.fbs)
+             console.log("FEED BACK: " + JSON.stringify(data.fbs))
                 setFb(data.fbs)
             })
             .catch(error => {
                 console.log('Feedback' + error);
             })
     }
-
+ 
     const renderComment = ({ item }) => {
 
         const date = new Date(item.time)
@@ -212,7 +212,11 @@ const ChildInFoJob = ({ route }) => {
             <View style={styles.componentCmt}>
                 <View style={styles.headerCmt}>
                     <View style={styles.infoUserCmt}>
-                        <Image source={require('../assets/favicon.png')} />
+                        <Image source={{uri: item.profile_picture ? item.profile_picture: 'https://cdn-icons-png.flaticon.com/512/21/21104.png' }}  style={{
+                            width: 50,
+                            height: 50,
+                            borderRadius:100
+                        }}/>
                         <Text style={styles.userNameCmt}>{item.full_name}</Text>
                     </View>
                     <Text style={styles.timeCmt}>{date.toLocaleDateString()}</Text>
@@ -228,7 +232,7 @@ const ChildInFoJob = ({ route }) => {
 
 
 
-    return (
+    return (    
         <ScrollView style={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.JobSumary}>
@@ -489,8 +493,7 @@ const styles = StyleSheet.create({
         gap: 5,
         borderRadius: 16,
         elevation: 3,
-        padding: 10,
-        width: 100,
+        padding: 10
     },
     inputCmt: {
         backgroundColor: "#F1F1F1",
@@ -514,7 +517,7 @@ const styles = StyleSheet.create({
     componentCmt: {
         borderColor: "#B0B0B0",
         borderWidth: 2,
-        padding: 22,
+        padding: 10,
         borderRadius: 18,
         marginTop: 18
     },

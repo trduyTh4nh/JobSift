@@ -13,30 +13,21 @@ import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
 import { ActivityIndicator } from "react-native";
 
-
+import { useFonts } from "expo-font";
 
 import axios from "axios";
-
-
-
-
-
-
-
 
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
 
 
-
-
-
-
 const Home = ({ navigation }) => {
     // const focus = useIsFocused()
 
     const userDB = global.user
+
+
 
     const nearbyJobsData = [
         { id: '1', salary: [200, 500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
@@ -61,11 +52,12 @@ const Home = ({ navigation }) => {
             }
         }).then((respone) => {
             const dataPopularJob = respone.data.popularjob
-            setPopuplarJob(dataPopularJob) 
+            setPopuplarJob(dataPopularJob)
         }).catch((error) => {
             console.error(error)
         })
     }, [focus])
+
     const refreshJob = () => {
         setPopuplarJob([])
         axios.post(`http://${API_URL}:3001/popularjob`, {}, {
@@ -80,46 +72,27 @@ const Home = ({ navigation }) => {
         })
     }
  
+
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
 
-    // const [fontLoaded] = useFonts({
-    //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
-    //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     'RubikBlack': require("../assets/fonts/Rubik/static/Rubik-Black.ttf"),
-    //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-    //     'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
-    //     'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
 
-    // })
-    // if(!fontLoaded){
-    //     return(
-    //         <View>
-    //             <Text>Loading..........</Text>
-    //         </View>
-    //     )
-    // }
 
     // Use useEffect to fetch data from the API
 
     useEffect(() => {
-        if(focus) {
+        if (focus) {
 
-                if(!global.user){
-                    console.log('User is not logged in')
-                    setTimeout(() => {
-                        navigation.navigate('LoginForm')
-                    }, 500)
-                    navigation.getParent()?.setOptions({
-                        tabBarStyle: {display: 'none'}
-                    })
-                    return
-                }
+            if (!global.user) {
+                console.log('User is not logged in')
+                setTimeout(() => {
+                    navigation.navigate('LoginForm')
+                }, 500)
                 navigation.getParent()?.setOptions({
-                    tabBarStyle: STYLE.tabBarStyle
+                    tabBarStyle: { display: 'none' }
                 })
+
                 
                 fetchData().catch((e) => {console.error(e)});
             }
@@ -142,30 +115,56 @@ const Home = ({ navigation }) => {
             }
         };
 
-  /*
-        navigation.getParent()?.setOptions({
-            tabBarStyle: STYLE.tabBarStyle
-        })
-        const fetchData = async () => {
-            try {
+//                 return
+//             }
+//             navigation.getParent()?.setOptions({
+//                 tabBarStyle: STYLE.tabBarStyle
+//             })
+//             const fetchData = async () => {
+//                 try {
 
-                const response = await fetch(`http://${API_URL}:3001/`);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                // console.log("DATA JOB ALL: " + JSON.stringify(data))
-                setIsLoading(false);
-                setPostData(data);
-            } catch (error) {
-                console.log('Error fetching data:', error);
-                setIsLoading(false);
-            }
-        };
+//                     const response = await fetch(`http://${API_URL}:3001`);
+//                     if (!response.ok) {
+//                         throw new Error('Network response was not ok');
+//                     }
+//                     const data = await response.json();
+//                     setIsLoading(false);
+//                     setPostData(data);
+//                 } catch (error) {
+//                     console.log('Error fetching data:', error);
+//                     setIsLoading(false);
+//                 }
+//             };
 
-        fetchData().catch((e) => { console.error(e) });
-    }, [navigation]);
-    */
+//             fetchData().catch((e) => { console.error(e) });
+//         }
+//     }, [focus]);
+
+
+    /*
+          navigation.getParent()?.setOptions({
+              tabBarStyle: STYLE.tabBarStyle
+          })
+          const fetchData = async () => {
+              try {
+  
+                  const response = await fetch(`http://${API_URL}:3001/`);
+                  if (!response.ok) {
+                      throw new Error('Network response was not ok');
+                  }
+                  const data = await response.json();
+                  // console.log("DATA JOB ALL: " + JSON.stringify(data))
+                  setIsLoading(false);
+                  setPostData(data);
+              } catch (error) {
+                  console.log('Error fetching data:', error);
+                  setIsLoading(false);
+              }
+          };
+  
+          fetchData().catch((e) => { console.error(e) });
+      }, [navigation]);
+      */
 
 
 
@@ -196,6 +195,8 @@ const Home = ({ navigation }) => {
     // }, []);
 
 
+    
+
 
 
 
@@ -207,11 +208,11 @@ const Home = ({ navigation }) => {
     const RenderItem = ({ item, onfavourite }) => (
         <CardJob onFavourite={onfavourite} dataPost={item} />
     );
-    if(!global.user){
+    if (!global.user) {
         return (
-            <SafeAreaView style={{height: '100%' ,justifyContent: 'center', alignItems: 'center'}}>
-                <Image style={{transform: [{scale: 0.5}]}} source={require('../assets/JobSift.png')}></Image>
-                <ActivityIndicator/>
+            <SafeAreaView style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
+                <Image style={{ transform: [{ scale: 0.5 }] }} source={require('../assets/JobSift.png')}></Image>
+                <ActivityIndicator />
             </SafeAreaView>
         )
     }
@@ -225,9 +226,12 @@ const Home = ({ navigation }) => {
                             <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
                         </Text>
                     </View>
+
                     <Text style={styles.welcomeMessage}>Hãy bắt đầu hành trình tìm việc của bạn</Text>
-                    <View style={styles.wrapSearch}>
+                    <TouchableOpacity onPress={() => { navigation.navigate('Search') }} style={styles.wrapSearch}>
+
                         <TextInput
+                            editable={false}
                             style={styles.inputSearch}
                             placeholder="Tìm kiếm"
                             placeholderTextColor="#999"
@@ -239,11 +243,13 @@ const Home = ({ navigation }) => {
                             </TouchableOpacity>
                         </View>
 
-                    </View>
+                    </TouchableOpacity>
                 </View>
             </View>
+
             <ScrollView style={{marginBottom: 150}}>
                 <View style={{marginTop: 16, gap: 10}}>
+
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
@@ -423,7 +429,7 @@ const styles = StyleSheet.create({
 
     },
     wrapJobNearBy: {
-        marginBottom: 100 
+        marginBottom: 100
     },
 
 

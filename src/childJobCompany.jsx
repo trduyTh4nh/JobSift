@@ -688,9 +688,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
 
     },
-    wrapTextOption: {
-        marginBottom: 20
-    }
+
 
 })
 

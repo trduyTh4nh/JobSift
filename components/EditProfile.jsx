@@ -7,7 +7,6 @@ import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
 import DatePicker from "react-native-date-picker"
-import RNPickerSelect from 'react-native-picker-select'
 import axios from "axios";
 import { API_URL } from "../constants/etc";
 import * as ImagePicker from 'expo-image-picker'
@@ -78,7 +77,6 @@ const EditProfile = ({ navigation }) => {
         ).catch(e => {
             console.error("ERROR IMAGE: " + e)
         })
-
 
 
 
@@ -362,7 +360,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: "center",
         justifyContent: 'space-between',
-        marginTop: 5,
+        marginTop: 5, 
 
 
 
