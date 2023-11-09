@@ -5,11 +5,12 @@ import { create } from "react-test-renderer";
 import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import { useEffect } from "react";
-// import { useRoute } from "@react-navigation/native";
 import axios from "axios";
 import { API_URL } from "../ipConfig"
 
 import STYLE from '../assets/css/universal'
+import Error from "../components/Error";
+import { useIsFocused } from "@react-navigation/native";
 
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
@@ -41,7 +42,7 @@ const ChildInFoJob = ({ route }) => {
             }
 
         }).catch((error) => {
-            console.error(error);
+            console.error('Business' + error);
         });
 
         return () => {
@@ -64,6 +65,7 @@ const ChildInFoJob = ({ route }) => {
         { tagID: 5, text: "Apple" },
     ]
     const [rating, setRating] = useState(0)
+    const [myStar, setMystar] = useState(0)
 
     const [comment, setComment] = useState('')
 
@@ -78,7 +80,7 @@ const ChildInFoJob = ({ route }) => {
     var min = new Date().getMinutes();
     var sec = new Date().getSeconds();
 
-
+    const focused = useIsFocused()
     const currentTime = year + '-' + month + '-' + date + ' ' + hours + ':' + min + ':' + sec
 
     const formDataFB = {
@@ -108,11 +110,11 @@ const ChildInFoJob = ({ route }) => {
                 'Content-Type': 'application/json'
             }
         }).then((response) => {
-              console.log(JSON.stringify(response.data))
+            //console.log(JSON.stringify(response.data))
             showToast()
             getFeed()
         }).catch((error) => {
-            console.error(error)
+            console.error('Feedback' + error)
         })
     }
 
@@ -142,7 +144,33 @@ const ChildInFoJob = ({ route }) => {
 
     }
 
-   
+
+
+    useEffect(() => {
+
+        const iduser = userDB.user.id_user
+        const idpost = postData.id_post
+
+        axios.post(`http://${API_URL}:3001/getcurrentstar/${iduser}/${idpost}`)
+            .then((response) => {
+                if (response.status === 200) {
+                    const currentstar = response.data.cur;
+                   
+                        setRating(currentstar.numberstar)
+                   
+                } else {
+                    console.error('Error lỗi nè:', response.data.error);
+                }
+            })
+            .catch((error) => {
+                console.log('Lỗi nè:', error);
+            });
+
+
+    }, [focused])
+
+
+
 
 
     const datePost = new Date(postData.ngay_hethan)
@@ -169,22 +197,23 @@ const ChildInFoJob = ({ route }) => {
                 return response.json();
             })
             .then(data => {
-                console.log(data.fbs)
+                //  console.log(data.fbs)
                 setFb(data.fbs)
             })
             .catch(error => {
-                console.error(error);
+                console.log('Feedback' + error);
             })
     }
 
     const renderComment = ({ item }) => {
+
         const date = new Date(item.time)
         return (
             <View style={styles.componentCmt}>
                 <View style={styles.headerCmt}>
                     <View style={styles.infoUserCmt}>
                         <Image source={require('../assets/favicon.png')} />
-                        <Text style={styles.userNameCmt}>{item.userName}</Text>
+                        <Text style={styles.userNameCmt}>{item.full_name}</Text>
                     </View>
                     <Text style={styles.timeCmt}>{date.toLocaleDateString()}</Text>
                 </View>
@@ -196,21 +225,21 @@ const ChildInFoJob = ({ route }) => {
         );
     };
 
-   
+
 
 
     return (
-        <View style={styles.container}>
-            <ScrollView style={styles.scrollContainer}>
+        <ScrollView style={styles.scrollContainer}>
+            <View style={styles.container}>
                 <View style={styles.JobSumary}>
                     <View style={styles.title}>
-                        <Text style={styles.textTitle}>Job sumamry</Text>
+                        <Text style={styles.textTitle}>Thông tin chung</Text>
                     </View>
 
                     <View style={styles.jobCate}>
                         <Icon size={24} name="briefcase-4-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Category</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Loại công việc</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.job_category}</Text>
                         </View>
                     </View>
@@ -218,7 +247,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="map-pin-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Address</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Địa chỉ làm việc</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.dia_chi}</Text>
                         </View>
                     </View>
@@ -226,7 +255,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="money-dollar-circle-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Salary</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Mức lương</Text>
                             <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
                         </View>
                     </View>
@@ -234,7 +263,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="time-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Required - Experience</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Kinh nghiệm yêu cầu</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.kinh_nghiem_yeu_cau}</Text>
                         </View>
                     </View>
@@ -242,7 +271,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="user-2-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Position</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Vị trí</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.position}</Text>
                         </View>
                     </View>
@@ -250,20 +279,20 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="check-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Application Deadline</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Hạn chót ứng tuyển</Text>
                             <Text style={styles.jobCateDetailContent}>{datePost.toLocaleDateString()}</Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={styles.JobDescription}>
-                    <Text style={styles.JobDescriptionTitle}>Job description</Text>
+                    <Text style={styles.JobDescriptionTitle}>Miêu tả công việc</Text>
                     <Text style={styles.JobDescriptionConent}>{postData.note}
                     </Text>
                 </View>
 
                 <View style={styles.JobReview}>
-                    <Text style={styles.JobReviewTitle}>Reviews</Text>
+                    <Text style={styles.JobReviewTitle}>Đánh giá</Text>
                     <View style={styles.JobWrapRankStar}>
                         <View style={styles.wrapRank}>
                             <View style={styles.wrapJobstart}>
@@ -281,8 +310,8 @@ const ChildInFoJob = ({ route }) => {
                                 ))}
                             </View>
                             <View style={styles.JobRankNumber}>
-                                <Text style={styles.wrapNumberStartUp}>{rating}</Text>
-                                <Text style={styles.wrapNumberStart}>/5</Text>
+                                <Text style={styles.wrapNumberStartUp}>{rating}
+                                    <Text style={styles.wrapNumberStart}>/5</Text></Text>
                             </View>
                         </View>
                     </View>
@@ -291,15 +320,15 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.wrapComment}>
                         <TextInput
                             style={styles.inputCmt}
-                            placeholder="Leave your review"
-                            placeholderTextColor={"#fff"}
+                            placeholder="Nhập phản hồi"
+                            placeholderTextColor={"#000"}
 
                             onChangeText={handleComment}
                             value={comment}></TextInput>
 
                         <TouchableOpacity style={styles.buttonCmt} onPress={upLoadFB}>
                             <Icon name="check-line"></Icon>
-                            <Text style={{ fontFamily: "Rubik", color: "#000" }}>Upload</Text>
+                            <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Đăng tải</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -308,33 +337,37 @@ const ChildInFoJob = ({ route }) => {
                 <View style={styles.wrapUserCmt}>
 
                     <View style={styles.wraptitleCmt}>
-                        <Text style={styles.titleCmt}>Feedbacks</Text>
+                        <Text style={styles.titleCmt}>Phản hồi</Text>
                     </View>
-
-                    <FlatList
-                        data={fb}
-                        renderItem={renderComment}
-                        keyExtractor={(item) => item.idfb.toString()}
-                    />
+                    {
+                        fb.length > 0 ?
+                            (<FlatList
+                                data={fb}
+                                scrollEnabled={false}
+                                renderItem={renderComment}
+                                keyExtractor={(item) => item.idfb.toString()}
+                            />) : <Error message={'Hãy là người đầu tiên đăng phản hồi.'} title={'Chưa có phản hồi nào'} icon={'ri-chat-3-line'} />
+                    }
                 </View>
 
 
                 <View style={styles.tagTitle}>
-                    <Text style={styles.textTagTitle}>Tags</Text>
+                    <Text style={styles.textTagTitle}>Tag</Text>
                 </View>
 
                 <View style={styles.wrapTags}>
                     <FlatList
+                        ItemSeparatorComponent={() => (<View style={{ width: 10 }}></View>)}
                         style={styles.styleForListTags}
-                        horizontal
+                        horizontal={true}
                         data={dataTag}
                         renderItem={renderTag}
                         keyExtractor={(item) => item.tagID.toString()}
                         contentContainerStyle={styles.flatListContent}>
                     </FlatList>
                 </View>
-            </ScrollView>
-        </View>
+            </View>
+        </ScrollView>
     )
 }
 
@@ -351,10 +384,9 @@ const styles = StyleSheet.create({
         color: "#fff"
     },
     container: {
-        paddingTop: 10,
-        paddingRight: 30,
-        paddingLeft: 30,
-        paddingBottom: 10,
+        gap: 16,
+        padding: 32,
+        paddingBottom: 150,
         display: "flex",
         alignContent: "center",
         backgroundColor: "#fff"
@@ -366,8 +398,7 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#B0B0B0",
         display: "flex",
-        marginTop: 28,
-        padding: 28,
+        padding: 24,
         borderRadius: 18
     },
     textTitle: {
@@ -395,8 +426,8 @@ const styles = StyleSheet.create({
 
     },
     JobDescription: {
-        marginTop: 10,
-        padding: 10
+        marginTop: 0,
+        padding: 0
     },
     JobDescriptionTitle: {
         fontFamily: "Rubik",
@@ -409,7 +440,8 @@ const styles = StyleSheet.create({
         width: 280,
     },
     JobReview: {
-        padding: 10
+        padding: 0,
+        gap: 16,
     },
     JobReviewTitle: {
         fontFamily: "Rubik",
@@ -419,12 +451,12 @@ const styles = StyleSheet.create({
     wrapRank: {
         display: "flex",
         flexDirection: "row",
-        gap: 18,
+        gap: 10,
         alignItems: "center",
-        marginTop: 16
+        marginTop: 0
     },
     wrapNumberStart: {
-        fontFamily: "Rubik",
+        fontFamily: "RubikNormal",
         fontSize: 18
 
     },
@@ -447,27 +479,23 @@ const styles = StyleSheet.create({
     JobWrapRankStar: {
         display: "flex",
         flexDirection: "row",
-        gap: 20,
+        gap: 16,
         alignItems: "center"
     },
     buttonCmt: {
         backgroundColor: "#E2F367",
-        width: "40%",
-        display: "flex",
         flexDirection: "row",
-        gap: 10,
+        alignItems: 'center',
+        gap: 5,
         borderRadius: 16,
         elevation: 3,
-        paddingTop: 14,
-        paddingLeft: 10,
+        padding: 10,
         width: 100,
-        paddingRight: 20
-
     },
     inputCmt: {
-        backgroundColor: "#DADADA",
-        width: "70%",
-        paddingLeft: 20,
+        backgroundColor: "#F1F1F1",
+        flex: 1,
+        padding: 20,
         fontFamily: "RubikNormal",
         borderRadius: 16,
         elevation: 2,
@@ -476,12 +504,12 @@ const styles = StyleSheet.create({
     wrapComment: {
         display: "flex",
         flexDirection: "row",
-        marginTop: 16,
+        marginTop: 0,
         gap: 10
     },
     wrapUserCmt: {
-        marginTop: 20
-
+        marginTop: 0,
+        gap: 16,
     },
     componentCmt: {
         borderColor: "#B0B0B0",
@@ -523,14 +551,13 @@ const styles = StyleSheet.create({
         gap: 5,
         flexDirection: "row",
         alignItems: "center",
-        margin: 5,
         borderWidth: 2,
         padding: 12,
         borderRadius: 16,
         borderColor: "#B0B0B0"
     },
     wrapTags: {
-        marginTop: 20,
+
         display: "flex",
         flexDirection: "row",
         marginBottom: 300,
@@ -550,8 +577,8 @@ const styles = StyleSheet.create({
         color: "black"
     },
     tagTitle: {
-        marginTop: 20,
-        marginLeft: 8,
+
+
     },
     textTagTitle: {
         fontFamily: "Rubik",
@@ -562,7 +589,7 @@ const styles = StyleSheet.create({
         ...STYLE.textTitle
     },
     wraptitleCmt: {
-        margin: 10
+        margin: 0
     }
 
 

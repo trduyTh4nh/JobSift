@@ -34,6 +34,18 @@ const LoginForm = ({ navigation }) => {
     })
   })
 
+  const [fontLoaded] = useFonts({
+    'Rubik': require("../assets/fonts/SF-Pro-Rounded-Heavy.otf"),
+    'RukbikNormal': require("../assets/fonts/SF-Pro.ttf")
+})
+    if(!fontLoaded){
+        return(
+            <View>
+                <Text>Loading..........</Text>
+            </View>
+        )
+    }
+
   const handleChangeEmail = (text) => {
     setEmail(text)
   }
@@ -98,9 +110,22 @@ const LoginForm = ({ navigation }) => {
         <View style={styles.wrapEmail}>
           {/* <Text style={styles.lableInput}>Email</Text> */}
           <PaperTextInput
+          theme={{
+            roundness: 16,
+            colors: {
+                    placeholder: 'black',
+                    primary: '#000',
+                    accent: '#E2F367',
+                    text: '#000',
+                    surface: '#fff',
+                    background: '#fff'
+                }
+            }}
             label={"Email"}
             style={styles.inputBox}
-
+            placeholderTextColor={'#000'}
+            outlineColor="#000"
+            activeOutlineColor="black"
             value={email}
             onChangeText={handleChangeEmail}
           />
@@ -109,9 +134,21 @@ const LoginForm = ({ navigation }) => {
         <View style={styles.wrapPassword}>
           {/* <Text style={styles.lableInput}>Password</Text> */}
           <PaperTextInput
+            theme={{
+              roundness: 16,
+            colors: {
+                    placeholder: 'black',
+                    primary: '#000',
+                    accent: '#E2F367',
+                    text: '#000',
+                    surface: '#fff',
+                    background: '#fff'
+                }
+            }}
             label={"Password"}
             style={styles.inputBox}
             value={password}
+            
             onChangeText={handleChangePassword}
           />
         </View>
@@ -254,7 +291,8 @@ const styles = StyleSheet.create({
   },
   desQuestion: {
     fontWeight: "500",
-    fontFamily: "Rubik"
+    fontFamily: "Rubik",
+    color: "#000"
   },
 
 

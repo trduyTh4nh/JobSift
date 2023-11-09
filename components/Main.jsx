@@ -14,7 +14,8 @@ const Main = () => {
         ...DefaultTheme,
         colors: {
             ...DefaultTheme.colors,
-            background: '#FBFBFB'
+            background: '#FBFBFB',
+            text: '#000'
         },
     }
     return (

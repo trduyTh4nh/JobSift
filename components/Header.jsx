@@ -5,21 +5,25 @@ import Icon from 'react-native-remix-icon'
 
 import STYLE from "../assets/css/universal";
 
-export function Header({navigation, title, LeftButton}) {
+export function Header({ navigation, title, LeftButton }) {
+
+
+
+
     const back = () => {
         navigation.goBack()
     }
-    
+
     const button = LeftButton ? (<TouchableOpacity onPress={back}>
-        <Icon name="arrow-left-s-line" size={24}></Icon> 
+        <Icon name="arrow-left-s-line" size={24}></Icon>
     </TouchableOpacity>) : undefined
 
-    
-   
+
+
 
     return (
-        <View style={title === 'Salary Calculator' ? {...STYLE.headerWrap, shadowOpacity: 0} : STYLE.headerWrap}>
-            <SafeAreaView style={{backgroundColor: "rgba(255,255,255,1)"}}>
+        <View style={title === 'Công cụ tính lương' ? { ...STYLE.headerWrap } : STYLE.headerWrap}>
+            <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>
                 <View style={style.header}>
                     {button}
                     <Text style={style.text}>{title}</Text>
@@ -36,9 +40,10 @@ const style = StyleSheet.create({
         alignItems: 'center',
         gap: 16,
     },
- 
+
     text: {
         fontSize: 25,
+        color: 'black',
         fontWeight: 'bold',
         fontFamily: 'Rubik'
     }

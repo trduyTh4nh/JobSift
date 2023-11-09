@@ -90,10 +90,10 @@ const GrossToNet = ({navigation}) => {
             <ScrollView style={{...STYLE.body, paddingTop: 16, gap: 16}}>
                 <View style={{gap: 16}}>
                     <View>
-                        <Text>Salary</Text>
+                        <Text>Lương hàng tháng</Text>
                         <View>
                             <View style={error.type == 'normal' ? {...style.inputSearch} : {...style.inputSearch, backgroundColor: '#FFC2C2'}}>
-                                <TextInput onChangeText={(e) => handleSalaryEnter(e)} placeholder="Enter amount" placeholderTextColor={'rgba(0,0,0,0.2)'} keyboardType="numeric" style={style.input}/>
+                                <TextInput onChangeText={(e) => handleSalaryEnter(e)} placeholder="Hãy nhập giá trị" placeholderTextColor={'rgba(0,0,0,0.2)'} keyboardType="numeric" style={style.input}/>
                                 <TouchableOpacity>
                                     <Icon name="ri-question-line"/>
                                 </TouchableOpacity>
@@ -107,7 +107,7 @@ const GrossToNet = ({navigation}) => {
                         }
                         </View>
                     <View>
-                        <Text>Dependent people</Text>
+                        <Text>Người phụ thuộc</Text>
                         <View>
                             <View style={{...style.inputSearch, width: '45%'}}>
                                 <TouchableOpacity onPress={handleDown}>
@@ -124,16 +124,16 @@ const GrossToNet = ({navigation}) => {
                         </View>
                     </View>
                     <View>
-                        <Text>Additional Information</Text>
+                        <Text>Thông tin thêm</Text>
                         <View style={{...style.inputSearch, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', height: 'auto', padding: 10, gap: 5}}>
-                            <Text style={{...STYLE.textBold, fontSize: 20}}>Insurance: 10.5%</Text>       
-                            <Text>Social insurance: 8%</Text>
-                            <Text>Health insurance: 1.5%</Text>
-                            <Text>Unemployment insurance: 1%</Text>
+                            <Text style={{...STYLE.textBold, fontSize: 20}}>Bảo hiểm: 10.5%</Text>       
+                            <Text>Bảo hiểm xã hội: 8%</Text>
+                            <Text>Bảo hiểm y tế: 1.5%</Text>
+                            <Text>Bảo hiểm thất nghiệp: 1%</Text>
                         </View>
                     </View>
                     <View style={{...style.inputSearch, flexDirection: 'column', alignItems: 'flex-start', justifyContent: 'center', height: 'auto', padding: 10, gap: 5}}>
-                            <Text style={{...STYLE.textBold, fontSize: 20}}>Taxed salary: {taxedSalaryDisplay} VND</Text>       
+                            <Text style={{...STYLE.textBold, fontSize: 20}}>Tiền lương tính thuế: {taxedSalaryDisplay} VND</Text>       
                     </View>
                 </View>
             </ScrollView>
@@ -142,10 +142,10 @@ const GrossToNet = ({navigation}) => {
                 <View style={style.bar}>
                     <View style={style.rowWrap}>
                         <Text style={style.textCalc}><Text style={{color: '#fff'}}>{result}</Text> VND</Text>
-                        <Text style={style.textWhite}>Net salary</Text>
+                        <Text style={style.textWhite}>Lương net</Text>
                     </View>
                     <TouchableOpacity>
-                        <Text style={{...style.textCalc}}>See details</Text>
+                        <Text style={{...style.textCalc}}>Xem chi tiết</Text>
                     </TouchableOpacity>
                 </View>
             </View>

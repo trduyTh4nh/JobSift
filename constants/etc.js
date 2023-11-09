@@ -1,1 +1,3 @@
-export const API_URL = 'http://10.20.37.203:3001'
+import {API_URL as URL} from "../ipConfig"
+
+export const API_URL = "http://" + URL + ':3001'

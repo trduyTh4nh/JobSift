@@ -39,6 +39,7 @@ const STYLE = StyleSheet.create({
     },
 
     headerWrap: {
+        backgroundColor: '#fff',
         shadowColor: "#000",
         shadowOffset: {
             width: 0,
@@ -46,7 +47,7 @@ const STYLE = StyleSheet.create({
         },
         shadowOpacity: 0.2,
         shadowRadius: 10,
-        elevation: 3,
+        elevation: 4,
     },
     textBold: {
         fontFamily: 'Rubik'

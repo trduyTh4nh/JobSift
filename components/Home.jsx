@@ -6,13 +6,17 @@ import CardJob from "../Job/CardJob";
 import NearbyJob from "../Job/NearbyJob";
 import JobDetail from "../Job/JobDetail";
 import reactNativeConfig from "../react-native.config";
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useIsFocused } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { API_URL } from "../ipConfig";
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
+import { ActivityIndicator } from "react-native";
 
-import { API_URL } from "../constants/etc";
+
+
+import axios from "axios";
+
 
 
 
@@ -23,30 +27,63 @@ import { API_URL } from "../constants/etc";
 const Stack = createNativeStackNavigator();
 
 const IPcuaQuang = "192.168.1.113"
-const IPlD = "192.168.116.1"
 
-const nearbyJobsData = [
-    { id: '1', salary: [200,500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
-    { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
-    { id: '3', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '4', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '5', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '6', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '7', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '8', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-    { id: '9', salary: [200],title_job: 'Mobile Dev', jobCate: 'Full-time' },
-];
+
+
 
 
 
 const Home = ({ navigation }) => {
-    
+    // const focus = useIsFocused()
+
     const userDB = global.user
 
+    const nearbyJobsData = [
+        { id: '1', salary: [200, 500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
+        { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
+        { id: '3', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '4', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '5', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '6', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '7', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '8', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+        { id: '9', salary: [200], title_job: 'Mobile Dev', jobCate: 'Full-time' },
+    ];
+
+    const [popularJob, setPopuplarJob] = useState({})
+
+    const focus = useIsFocused()
+
+    useEffect(() => {
+        axios.post(`http://${API_URL}:3001/popularjob`, {}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((respone) => {
+            const dataPopularJob = respone.data.popularjob
+            setPopuplarJob(dataPopularJob) 
+        }).catch((error) => {
+            console.error(error)
+        })
+    }, [focus])
+    const refreshJob = () => {
+        setPopuplarJob([])
+        axios.post(`http://${API_URL}:3001/popularjob`, {}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((respone) => {
+            const dataPopularJob = respone.data.popularjob
+            setPopuplarJob(dataPopularJob) 
+        }).catch((error) => {
+            console.error(error)
+        })
+    }
+ 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    
+
     // const [fontLoaded] = useFonts({
     //     'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
     //     'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf"),
@@ -55,7 +92,7 @@ const Home = ({ navigation }) => {
     //     'RubikBold': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
     //     'RubikLight': require("../assets/fonts/Rubik/static/Rubik-Light.ttf"),
     //     'RubikMedium': require("../assets/fonts/Rubik/static/Rubik-Medium.ttf"),
-        
+
     // })
     // if(!fontLoaded){
     //     return(
@@ -66,15 +103,33 @@ const Home = ({ navigation }) => {
     // }
 
     // Use useEffect to fetch data from the API
-    
-    useEffect(() => {
-        navigation.getParent()?.setOptions({
-            tabBarStyle: STYLE.tabBarStyle
-        })
-        const fetchData = async () => {
-            try {
 
-                const response = await fetch(`http://${IPlD}:3001`);
+    useEffect(() => {
+        if(focus) {
+
+                if(!global.user){
+                    console.log('User is not logged in')
+                    setTimeout(() => {
+                        navigation.navigate('LoginForm')
+                    }, 500)
+                    navigation.getParent()?.setOptions({
+                        tabBarStyle: {display: 'none'}
+                    })
+                    return
+                }
+                navigation.getParent()?.setOptions({
+                    tabBarStyle: STYLE.tabBarStyle
+                })
+                
+                fetchData().catch((e) => {console.error(e)});
+            }
+        }, [focus]);
+        const fetchData = async (refresh) => {
+            if(refresh){
+                setPostData([])
+            }
+            try {
+                const response = await fetch(`http://${API_URL}:3001`);
                 if (!response.ok) {
                     throw new Error('Network response was not ok');
                 }
@@ -83,12 +138,35 @@ const Home = ({ navigation }) => {
                 setPostData(data);
             } catch (error) {
                 console.log('Error fetching data:', error);
-                setIsLoading(false);appappapapsdaskd
+                setIsLoading(false);
             }
         };
 
-        fetchData();
+  /*
+        navigation.getParent()?.setOptions({
+            tabBarStyle: STYLE.tabBarStyle
+        })
+        const fetchData = async () => {
+            try {
+
+                const response = await fetch(`http://${API_URL}:3001/`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                // console.log("DATA JOB ALL: " + JSON.stringify(data))
+                setIsLoading(false);
+                setPostData(data);
+            } catch (error) {
+                console.log('Error fetching data:', error);
+                setIsLoading(false);
+            }
+        };
+
+        fetchData().catch((e) => { console.error(e) });
     }, [navigation]);
+    */
+
 
 
     // const [postData, setPostData] = useState([]);
@@ -121,32 +199,37 @@ const Home = ({ navigation }) => {
 
 
 
-    const renderJobNearBy = ({ item }) => (
-        <NearbyJob dataNearby={item} />
+    const RenderJobNearBy = ({ item, onfavourite }) => (
+        <NearbyJob dataNearby={item} onFavouritePress={onfavourite} />
     );
 
 
-    const renderItem = ({ item }) => (
-        <CardJob dataPost={item} />
-
+    const RenderItem = ({ item, onfavourite }) => (
+        <CardJob onFavourite={onfavourite} dataPost={item} />
     );
-
+    if(!global.user){
+        return (
+            <SafeAreaView style={{height: '100%' ,justifyContent: 'center', alignItems: 'center'}}>
+                <Image style={{transform: [{scale: 0.5}]}} source={require('../assets/JobSift.png')}></Image>
+                <ActivityIndicator/>
+            </SafeAreaView>
+        )
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.wrap}>
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
-                        <Text style={styles.sayhi}>Hi, </Text>
-
-                        <Text style={styles.userName}>{userDB.user.full_name} 👋</Text>
-
+                        <Text style={styles.sayhi}>Xin chào,
+                            <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
+                        </Text>
                     </View>
-                    <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
+                    <Text style={styles.welcomeMessage}>Hãy bắt đầu hành trình tìm việc của bạn</Text>
                     <View style={styles.wrapSearch}>
                         <TextInput
                             style={styles.inputSearch}
-                            placeholder="Find your new job"
+                            placeholder="Tìm kiếm"
                             placeholderTextColor="#999"
                         />
 
@@ -159,10 +242,10 @@ const Home = ({ navigation }) => {
                     </View>
                 </View>
             </View>
-            <ScrollView>
-                <View>
+            <ScrollView style={{marginBottom: 150}}>
+                <View style={{marginTop: 16, gap: 10}}>
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
+                        <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
                         <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
                     </View>
@@ -170,29 +253,33 @@ const Home = ({ navigation }) => {
 
 
 
-                    <View style={styles.container_JobList}>
+                    <ScrollView horizontal style={styles.container_JobList}>
                         {isLoading ? (
                             <Text>Loading...</Text>
                         ) : (
-                            <FlatList
-                                data={postData}
-                                renderItem={renderItem}
-                                keyExtractor={(item) => item.id_post.toString()}
-                                horizontal={true}
-                                contentContainerStyle={{ columnGap: 20 }}
-                            />
+                            <View style={{marginBottom: 10}}>
+                                <FlatList
+                                    style={{marginLeft: 16}}
+                                    data={postData}
+                                    renderItem={({item}) => (<RenderItem item={item} onfavourite={() => {refreshJob()}}></RenderItem>)}
+                                    keyExtractor={(item) => item.id_post.toString()}
+                                    horizontal={true}
+                                    scrollEnabled={false}
+                                    contentContainerStyle={{ columnGap: 20 }}
+                                />
+                            </View>
                         )}
-                    </View>
+                    </ScrollView>
 
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Nearby jobs</Text>
+                        <Text style={styles.titleHomeJob}>Công việc phổ biến</Text>
                     </View>
 
                     <FlatList
                         style={styles.wrapJobNearBy}
-                        data={nearbyJobsData}
-                        renderItem={renderJobNearBy}
-                        keyExtractor={(item) => item.id.toString()}
+                        data={popularJob}
+                        renderItem={({item}) => (<RenderJobNearBy item={item} onfavourite={() => {}}></RenderJobNearBy>)}
+                        keyExtractor={(item) => item.id_post.toString()}
                         contentContainerStyle={{ columnGap: 20 }}
                         scrollEnabled={false}
                     ></FlatList>
@@ -214,12 +301,12 @@ const styles = StyleSheet.create({
     },
     wrap: {
         paddingTop: 20,
-        paddingLeft: 10,
-        paddingRight: 10
+        paddingLeft: 16,
+        paddingRight: 16
     },
     container: {
-        paddingRight: 10,
-        paddingLeft: 10
+        paddingRight: 16,
+        paddingLeft: 16
         ,
         container: {
             flex: 1,
@@ -257,11 +344,8 @@ const styles = StyleSheet.create({
     wrapNearByJob: {
         paddingLeft: 0,
         paddingRight: 4,
-
     },
-    container_JobList: {
-
-    },
+    
     welcomeMessage: {
         fontFamily: 'RukbikNormal',
         fontSize: 24,
@@ -324,12 +408,11 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     wrapTitle: {
-        marginTop: 25,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingRight: 10,
-        paddingLeft: 10
+        paddingRight: 16,
+        paddingLeft: 16
     },
     titleHomeShowMore: {
         fontFamily: "Rubik",
@@ -340,7 +423,7 @@ const styles = StyleSheet.create({
 
     },
     wrapJobNearBy: {
-
+        marginBottom: 100 
     },
 
 

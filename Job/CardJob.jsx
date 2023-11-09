@@ -15,10 +15,13 @@ const Stack = createNativeStackNavigator();
 
 const CardJob = (props) => {
     const navigation = useNavigation();
-    const { dataPost } = props;
-    
+    const { dataPost, onFavourite } = props;
+
+
+
+
     return (
-        <CardJobDetail dataPostDetail={dataPost}></CardJobDetail>
+        <CardJobDetail onFavourite={onFavourite} dataPostDetail={dataPost}></CardJobDetail>
     )
 }
 

@@ -1,9 +1,49 @@
-import React from "react";
-import { View, StyleSheet, Image, Text, TouchableOpacity } from "react-native";
- import { useFonts } from "expo-font";
+import React, { useEffect, useState } from "react";
+import { View, StyleSheet, Image, Text, TouchableOpacity, Alert } from "react-native";
+import { useFonts } from "expo-font";
+import { useNavigation } from "@react-navigation/native";
+import Icon from 'react-native-remix-icon';
+import axios from "axios";
+import { API_URL } from "../constants/etc";
 
 const NearbyJob = (props) => {
-    const { dataNearby } = props
+    const { dataNearby, onFavouritePress } = props
+    const navigation = useNavigation();
+
+    const goToJobDetailScreen = () => {
+        navigation.navigate("JobDetail", { postData: dataNearby });
+    };
+    const [isLoading, setLoading] = useState(true)
+    const [isFav, setFav] = useState(false)
+    useEffect(() => {
+        fetchFav()
+    }, [])
+    const fetchFav = () => {
+        axios.post(`${API_URL}/getpostfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": dataNearby.id_post
+        }).then(e => {
+            setFav(e.data)
+            setLoading(false)
+        }).catch(e => {
+            setLoading(true)
+        })
+    }
+    const fav = () => {
+        axios.post(`${API_URL}/addfavourite`, {
+            "id_user": global.user.user.id_user,
+            "id_job": dataNearby.id_post
+        }).then(e => {
+            setLoading(true)
+            if(onFavouritePress != undefined)
+                onFavouritePress()
+            fetchFav()
+        }).catch(e => {
+            Alert.alert('Error', 'There is an error during the upload process, please try again. Details: ' + e)
+        })
+    }
+
+    // console.log("POPULAR JOBS In Nearby: " + JSON.stringify(dataNearby))
 
     // const [fontsLoaded] = useFonts({
     //     Rubik: require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
@@ -16,14 +56,96 @@ const NearbyJob = (props) => {
     // }
 
     return (
-        <TouchableOpacity style={styles.nearbyContainer}>
-            <Image style={styles.jobImage} source={require('../assets/favicon.png')}></Image>
-            <View style={styles.nearByBody}>
-                <Text style={styles.nearByJobName}>{dataNearby.title_job}</Text>
-                <Text style={styles.nearByJobCategory}>${dataNearby.salary.length == 1 ? dataNearby.salary[0] : dataNearby.salary[0] + ' - $' + dataNearby.salary[1]}</Text>
-                <Text style={styles.nearByJobCategory}>{dataNearby.jobCate}</Text>
-            </View>
-        </TouchableOpacity>
+        <View style={{
+            width: "100%",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
+        }}>
+            <TouchableOpacity style={styles.nearbyContainer} onPress={goToJobDetailScreen}>
+
+                <View style={styles.nearByBody}>
+
+                    <View style={styles.wrapHeaderNearby}>
+
+                        <View style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            alignItems: "center"
+
+                        }} >
+
+                            <Image
+                                style={styles.jobImage}
+                                source={{
+                                    uri: dataNearby ? dataNearby.logo_dn : 'https://cdn-icons-png.flaticon.com/512/306/306424.png'
+                                }}
+                                width={40}
+                                height={40}
+                            />
+
+                            <Text style={styles.nearByJobName}>{dataNearby.tieu_de}</Text>
+                        </View>
+
+
+                        <View style={styles.wrapIcon}>
+                            <TouchableOpacity onPress={fav} style={{
+                                backgroundColor: '#E2F367',
+                                padding: 10,
+                                borderRadius: 12,
+                                elevation: 10,
+                                shadowColor: '#A6BD00',
+                                shadowOpacity: 0.3,
+                                shadowOffset: {
+                                    height: 4
+                                }
+
+                            }}>
+
+                                <Icon name={isFav ? "heart-fill" : "heart-line"}></Icon>
+                            </TouchableOpacity>
+                        </View>
+
+                    </View>
+
+                    <View
+                        style={{
+                            width: "100%",
+                        }}
+                    >
+                        <View style={{
+                            borderWidth: 1.2,
+                            borderRadius: 16,
+                            borderColor: "B0B0B0"
+                        }}></View>
+                    </View>
+
+
+                    <View style={{
+                        display: "flex",
+                        flexDirection: "column",
+                        gap: 16
+                    }}>
+
+
+                        <View style={styles.itemInNearBy}>
+                            <Icon name="briefcase-line"></Icon>
+                            <Text style={styles.nearByJobCategory}>{dataNearby.nganh_nghe}</Text>
+                        </View>
+
+                        <View style={styles.itemInNearBy}>
+                            <Icon name="money-cny-circle-line"></Icon>
+                            <Text style={styles.nearByJobCategory}>${`${dataNearby.luong} - $${dataNearby.luong + 2000}`}</Text>
+                        </View>
+
+                        <View style={styles.itemInNearBy}>
+                            <Icon name="time-line"></Icon>
+                            <Text style={styles.nearByJobCategory}>{`${dataNearby.job_category}`}</Text>
+                        </View>
+                    </View>
+                </View>
+            </TouchableOpacity>
+        </View>
     )
 }
 
@@ -31,16 +153,13 @@ const styles = StyleSheet.create({
     nearbyContainer: {
         display: "flex",
         flexDirection: "row",
-        elevation: 5,
-
-        marginTop: 0,
-        marginBottom: 15,
-        width: "100%",
-
+        elevation: 2,
+        width: "95%",
         backgroundColor: "#fff",
-        padding: 15,
+        padding: 18,
         gap: 20,
         borderRadius: 16,
+        margin: 10,
 
         shadowColor: '#000',
         shadowOpacity: .08,
@@ -48,21 +167,43 @@ const styles = StyleSheet.create({
         shadowOffset: {
             height: 4
         },
-        alignItems: "center"
+        alignItems: "center",
     },
     nearByJobName: {
         fontFamily: "Rubik",
-        fontWeight: "700",
-
         alignItems: "center",
-        margin: 10
-        
+        margin: 10,
+        color: '#323232',
+        fontSize: 16
+
     },
 
     nearByJobCategory: {
         fontFamily: "RukbikNormal",
-        color: "rgba(171,171,171,1)",
+        color: "#000",
+        fontSize: 16
     },
+    wrapHeaderNearby: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "space-between",
+        alignItems: 'center',
+    },
+    wrapIcon: {
+
+    },
+    nearByBody: {
+        width: "100%",
+        display: "flex",
+        flexDirection: "column",
+        gap: 12
+    },
+    itemInNearBy: {
+        display: "flex",
+        flexDirection: "row",
+        gap: 5
+    }
+
 
 })
 

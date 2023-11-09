@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useCallback } from "react";
-import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, ActivityIndicatorComponent, ActivityIndicator, Alert } from "react-native";
 import Icon from 'react-native-remix-icon';
 import JobDetail from "./JobDetail";
 import { NavigationContainer } from '@react-navigation/native';
@@ -8,33 +8,64 @@ import { useFonts } from "expo-font";
 
 import { useRoute } from "@react-navigation/native";
 import { useNavigation } from "@react-navigation/native";
+import axios from "axios";
 
-
+import { API_URL } from "../constants/etc";
 const Stack = createNativeStackNavigator();
 
 
 
 const CardJobDetail = (props) => {
     const navigation = useNavigation();
-
-    const { dataPostDetail } = props;
-
-
+    const { dataPostDetail, onFavourite } = props;
+    const [isLoading, setLoading] = useState(true)
+    const [isFav, setFav] = useState(false)
+    useEffect(() => {
+        fetchFav()
+    }, [])
+    const fetchFav = () => {
+        if(dataPostDetail){
+            axios.post(`${API_URL}/getpostfavourite`, {
+                "id_user": global.user.user.id_user,
+                "id_job": dataPostDetail.id_post
+            }).then(e => {
+                setFav(e.data)
+                setLoading(false)
+            }).catch(e => {
+                setLoading(true)
+            })
+        }
+    }
+    const fav = () => {
+        if(dataPostDetail){
+            onFavourite()
+            axios.post(`${API_URL}/addfavourite`, {
+                "id_user": global.user.user.id_user,
+                "id_job": dataPostDetail.id_post
+            }).then(e => {
+                setLoading(true)
+                fetchFav()
+            }).catch(e => {
+                Alert.alert('Error', 'There is an error during the upload process, please try again. Details: ' + e)
+            })
+        }
+    }
     const goToJobDetailScreen = () => {
         navigation.navigate("JobDetail", { postData: dataPostDetail });
     };
 
     const [fontLoaded] = useFonts({
-        'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
-        'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
+        'Rubik': require("../assets/fonts/SF-Pro-Rounded-Heavy.otf"),
+        'RukbikNormal': require("../assets/fonts/SF-Pro.ttf")
     })
-    if (!fontLoaded) {
-        return (
-            <View>
-                <Text>Loading..........</Text>
-            </View>
-        )
-    }
+    
+
+    function truncateText(text, maxLength) {
+        if (text.length > maxLength) {
+          return text.substring(0, maxLength) + '...';
+        }
+        return text;
+      }
 
 
 
@@ -43,18 +74,24 @@ const CardJobDetail = (props) => {
             <View style={styles.jobCard}>
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
-                        <Image source={require('../assets/logo_google.png')}
-                            style={{ width: 45, height: 45 }}
-                        ></Image>
+                        <View style={{...styles.jobCardHeader, justifyContent: 'flex-start', alignItems: 'center'}}>    
+                            <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
+                                style={{ width: 45, height: 45 }}
+                            ></Image>
 
-                        <View style={styles.jobCardName}>
-                            <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-                            <Text style={styles.jobCardAddress}>{dataPostDetail.dia_chi}</Text>
-                            
+                            <View style={styles.jobCardName}>
+                                <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
+                                <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
+                                
+                            </View>
                         </View>
 
-                        <TouchableOpacity>
-                            <Icon name="heart-line" color="#fff" style={styles.iconFavorite} size={30}></Icon>
+                        <TouchableOpacity onPress={fav}>
+                        {
+                            isLoading ? (<ActivityIndicator/>) : (
+                                <Icon name={isFav ? 'heart-fill' : 'heart-line'} color="#fff" style={styles.iconFavorite} size={30}></Icon>
+                            )
+                        }
                         </TouchableOpacity>
                     </View>
 
@@ -100,15 +137,16 @@ const styles = StyleSheet.create({
         paddingRight: 25,
         paddingLeft: 25,
         paddingBottom: 15,
-        elevation: 10,
-        marginBottom: 20,
-        marginLeft: 10
+        elevation: 8,
+        marginBottom: 0,
+        marginLeft: 0
     }
     ,
     jobCardHeader: {
-        alignItems: "center",
+        alignItems: "flex-start",
         display: "flex",
         flexDirection: "row",
+        paddingRight: 10,
         gap: 10
     },
     jobCate: {
@@ -116,15 +154,14 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         alignItems: "center",
         marginTop: 10
-
     },
     jobCardNameCompany: {
         color: "#ffff",
-        margin: 5,
         fontFamily: "Rubik"
     },
     wrapJobCard: {
-        marginTop: 30,
+        marginTop: 0,
+        
     },
     jobCardAddress: {
         color: "#fff",
@@ -134,15 +171,15 @@ const styles = StyleSheet.create({
     },
     jobCardName: {
         justifyContent: "center",
-        fontFamily: "RukbikNormal"
-
+        fontFamily: "RukbikNormal",
+        gap: 5
     },
     nameJob: {
         color: "#fff",
         fontFamily: "RukbikNormal"
     },
     jobCardBody: {
-        margin: 10
+        marginTop: 10
     },
     jobCateName: {
         color: "#fff",
@@ -155,8 +192,7 @@ const styles = StyleSheet.create({
 
     },
     iconFavorite: {
-        marginTop: -30,
-        size: 30
+        
     }
 })
 

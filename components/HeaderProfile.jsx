@@ -5,10 +5,21 @@ import Icon from 'react-native-remix-icon'
 import { BlurView } from "expo-blur";
 import STYLE from "../assets/css/universal";
 import * as ImagePicker from 'expo-image-picker'
+import { useEffect } from "react";
 export function HeaderProfile({navigation, title, LeftButton}) {
     const back = () => {
         navigation.goBack()
     }
+
+    const user = global.user.user
+
+    const [imgAvatar, setImageAvatar] = useState('')
+
+
+    useEffect(() => {
+        setImageAvatar(user.profile_picture)
+    })
+
     const [image, setImage] = useState()
     const button = LeftButton ? (<TouchableOpacity onPress={back}>
         <Icon name="arrow-left-s-line" size={24}></Icon> 
@@ -35,7 +46,7 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                            
                             {
                                 title === 'Edit Profile Info' ? '' : (
-                                    <Image source={{uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}} 
+                                    <Image source={{uri: imgAvatar ? imgAvatar : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}} 
                                     style={{
                                         width:60,
                                         height:60,
@@ -47,15 +58,17 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                             
                             <View style={styles.Xuongdong} >
                                 <Text style={styles.userName}>{global.user.user.full_name} </Text>
-                                <Text style={styles.sayhi}>Candiate </Text>
+                                <Text style={styles.sayhi}>Ứng viên </Text>
                             </View>
                         </View>
                         <View>
                             
                         </View>
-                            <View style={styles.wrapinFo}>
-                            <Text style={styles.welcomeMessage}>💎 231 </Text>
-                            <Text style={styles.welcomeMessage}> + </Text>
+                        <View style={styles.wrapinFo}>
+                            <Text style={styles.welcomeMessage}>💎 {global.user.user.diamond_count} </Text>
+                            <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
+                                <Icon name="add-line"/>
+                            </TouchableOpacity>
                         </View>
                     </View>
                 </SafeAreaView>
@@ -96,7 +109,6 @@ const styles = StyleSheet.create({
             alignItems: 'center',
             // fontFamily: 'Raleway-Bold'
         },
-       
         text: {
             fontSize: 18,
             color: 'black',
@@ -116,6 +128,7 @@ const styles = StyleSheet.create({
 
     },
     userName: {
+        ...STYLE.textTitle,
         fontSize: 25,
         fontWeight:'900',
         color: '#000',
@@ -128,6 +141,7 @@ const styles = StyleSheet.create({
         flexDirection:'column',
     },
     welcomeMessage: {
+        ...STYLE.textTitle,
         // fontFamily: 'RukbikNormal',
         fontSize: 24,
         color: '#000',
@@ -146,8 +160,10 @@ const styles = StyleSheet.create({
     wrapinFo: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center'
     },
     sayhi: {
+        ...STYLE.textNormal,
         fontSize: 18,
         color: '#000',
         fontWeight:'400'
