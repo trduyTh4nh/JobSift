@@ -8,6 +8,7 @@ import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } 
 import { useFonts } from "expo-font";
 
 import { API_URL } from "../ipConfig"
+import STYLE from "../assets/css/universal";
 
 
 const IPcuaQuang = "192.168.1.113"
@@ -111,6 +112,7 @@ const LoginForm = ({ navigation }) => {
         <View style={styles.wrapEmail}>
           {/* <Text style={styles.lableInput}>Email</Text> */}
           <PaperTextInput
+
           theme={{
             roundness: 16,
             colors: {
@@ -135,6 +137,7 @@ const LoginForm = ({ navigation }) => {
         <View style={styles.wrapPassword}>
           {/* <Text style={styles.lableInput}>Password</Text> */}
           <PaperTextInput
+          secureTextEntry
             theme={{
               roundness: 16,
             colors: {
@@ -219,7 +222,6 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 18,
     marginBottom: 18
   },
   imageLogin: {
@@ -277,7 +279,6 @@ const styles = StyleSheet.create({
   },
 
   descBottom: {
-    marginTop: 18,
     display: "flex",
     flexDirection: "row",
     justifyContent: "center",
@@ -295,7 +296,5 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik",
     color: "#000"
   },
-
-
 });
 export default LoginForm 

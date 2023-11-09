@@ -86,24 +86,24 @@ const CardJobDetail = (props) => {
                                 
                             </View>
 
-//                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
+{/* //                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
 //                             style={{ width: 45, height: 45, borderWidth: 2, borderColor: "#fff", borderRadius: 8, padding: 3 }}
 //                         ></Image>
 
 //                         <View style={styles.jobCardName}>
 //                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-//                             <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
+//                             <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text> */}
                             
 
                         </View>
 
-                        <TouchableOpacity onPress={fav}>
+                        {/* <TouchableOpacity onPress={fav}>
                         {
                             isLoading ? (<ActivityIndicator/>) : (
                                 <Icon name={isFav ? 'heart-fill' : 'heart-line'} color="#fff" style={styles.iconFavorite} size={30}></Icon>
                             )
                         }
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
                     <View style={styles.jobCardBody}>
@@ -149,8 +149,8 @@ const styles = StyleSheet.create({
         paddingLeft: 25,
         paddingBottom: 15,
         elevation: 8,
-        marginBottom: 0,
-        marginLeft: 0
+        marginBottom: 12,
+        marginLeft: 10
     }
     ,
     jobCardHeader: {

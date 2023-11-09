@@ -355,7 +355,7 @@ const ChildInFoJob = ({ route }) => {
                 </View>
 
 
-                <View style={styles.tagTitle}>
+                {/* <View style={styles.tagTitle}>
                     <Text style={styles.textTagTitle}>Tag</Text>
                 </View>
 
@@ -369,7 +369,7 @@ const ChildInFoJob = ({ route }) => {
                         keyExtractor={(item) => item.tagID.toString()}
                         contentContainerStyle={styles.flatListContent}>
                     </FlatList>
-                </View>
+                </View> */}
             </View>
         </ScrollView>
     )
@@ -393,10 +393,11 @@ const styles = StyleSheet.create({
         paddingBottom: 150,
         display: "flex",
         alignContent: "center",
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+ 
     },
     scrollContainer: {
-        height: "75%",
+      height: "100%",
     },
     JobSumary: {
         borderWidth: 2,

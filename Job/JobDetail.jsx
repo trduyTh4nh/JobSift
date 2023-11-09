@@ -19,6 +19,7 @@ import Modal from 'react-native-modal'
 import STYLE from "../assets/css/universal";
 import * as DocumentPicker from 'expo-document-picker';
 import { ProgressBar } from "react-native-paper";
+
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 // const Tab = createBottomTabNavigator();
@@ -274,10 +275,6 @@ const JobDetail = () => {
 
 
 
-
-
-
-
     let popupRef = React.createRef()
 
     const onShowPopUp = () => {
@@ -304,7 +301,6 @@ const JobDetail = () => {
             iconName: "flag-2-line",
             colorTag: "#FF6969",
             tColor: "#000"
-
 
         },
 
@@ -369,6 +365,10 @@ const JobDetail = () => {
         setShowPDFCV(false)
         setFile(null)
 
+    }
+
+    const handNavigate = () => {
+        navigation.navigate('Report')
     }
     const convertSize = (size) => {
         if (size < 1024) {
@@ -513,7 +513,7 @@ const JobDetail = () => {
                                     </View>
                                     
                                 </View>
-                                <View style={{flexDirection: 'row', gap: 16, marginTop: 16}}>
+                                <View style={{flexDirection: 'row', gap: 16, marginTop: 5}}>
                                     <TouchableOpacity onPress={gotoChat} style={{...styles.buttonApplyJob, flex: 1, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16}}>
                                         <Icon name="chat-3-line" size={24}></Icon>
                                         <Text style={{...STYLE.textTitle, fontSize: 16}}>Chat với nhà tuyển dụng</Text>
@@ -528,7 +528,9 @@ const JobDetail = () => {
                                     ref={(target) => (popupRef = target)}
                                     onTouchOutside={closePopUp}
                                     data={popUpList}
-                                    onDataFromChild={handleDataFromChild}>
+                                    onDataFromChild={handleDataFromChild}
+                                    onNavigateReport={handNavigate}
+                                    >
                                 </BottomPopup>
 
                             </View>
@@ -961,7 +963,7 @@ const styles = StyleSheet.create({
         gap: 8
     },
     headerJobInFoWrap: {
-        gap: 5
+        gap: 0
     },
     headerRate: {
     }
@@ -969,7 +971,7 @@ const styles = StyleSheet.create({
     quantityStart: {
         display: "flex",
         flexDirection: "row",
-        gap: 5,
+        gap: 0,
         alignItems: "center"
     },
     rateStar: {
@@ -985,13 +987,13 @@ const styles = StyleSheet.create({
         fontFamily: "Rubik"
     },
     rateReviewDetal: {
-        marginTop: 8,
+        marginTop: 0,
         color: "#000",
         fontFamily: "RukbikNormal"
 
     },
     bodyJobDetail: {
-        height: 750
+        height: 400
     },
     tabInFoJob: {
         fontFamily: "Rubik"
