@@ -55,8 +55,8 @@ const FavoriteJob = () => {
                                 </View>
 
 
-                            ),
-                            tabBarIndicatorStyle: {
+                           
+                            ),bBarIndicatorStyle: {
                                 width: 30,
                                 height: 5,
                                 left: ((Dimensions.get('window').width / 2 - 30) / 2),
@@ -123,6 +123,7 @@ const FavoriteJob = () => {
                     />
                 </Tab.Navigator>
             </View>
+
         </View>
     )
 }

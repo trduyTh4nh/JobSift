@@ -6,13 +6,13 @@ import Profile from '../components/Profile';
 import Icon from 'react-native-remix-icon';
 import { getHeaderTitle } from '@react-navigation/elements';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, useRoute } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import JobDetail from '../Job/JobDetail';
 import HeaderThanh from '../components/HeaderThanh'
 
 import { useNavigation, DefaultTheme } from '@react-navigation/native';
-import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndicator, SafeAreaView } from 'react-native';
+import { StyleSheet, TouchableOpacity, View, Text, Image, Button, ActivityIndicator, SafeAreaView, Alert } from 'react-native';
 
 import LoginForm from '../src/LoginForm';
 import FormSignup from '../src/FormSignup';
@@ -30,6 +30,11 @@ import SalaryCalculator from '../components/SalaryCalculator';
 import FavoritePage from '../components/Favorite';
 import { useIsFocused } from '@react-navigation/native';
 import { Animated } from 'react-native';
+import BuyDiamond from '../components/BuyDiamond';
+import ApplicationStatus from '../components/ApplicationStatus';
+import axios from 'axios';
+import { API_URL } from '../constants/etc';
+import { socket } from '../constants/socket.io/socket';
 import CV from '../components/CV';
 import { HeaderCVs } from '../components/HeaderCVs';
 import CreateCV from '../components/CreateCV';
@@ -44,9 +49,7 @@ const Stack = createNativeStackNavigator();
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
-
     const isFocused = useIsFocused();
-
     const THEME = {
         ...DefaultTheme,
         colors: {
@@ -87,8 +90,28 @@ const Tabs = () => {
 
 
     const HomeStack = () => {
+        const route = useRoute()
         const [initRoute, setRoute] = useState('LoginForm')
-        useEffect(() => setRoute('Home'), [global.user])
+        const [diamond, setDiamond] = useState(!global.user ? 0 : global.user.user.diamond_count)
+        useEffect(() => {
+            socket.on('kcValChange', e => {
+                axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                    global.user.user.diamond_count = e.data.diamond_count
+                    setDiamond(e.data.diamond_count)
+                }).catch(e => {
+                    Alert.alert('Error while getting diamond: ' + e)
+                })
+            })
+            if(global.user){
+                axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                    global.user.user.diamond_count = e.data.diamond_count
+                    setDiamond(e.data.diamond_count)
+                }).catch(e => {
+                    Alert.alert('Error while getting diamond: ' + e)
+                })
+            }
+            setRoute('Home')
+        }, [route])
         return (
 
             <Stack.Navigator initialRouteName='Home' theme={THEME} options={{
@@ -97,6 +120,17 @@ const Tabs = () => {
                 <Stack.Screen name='LoginForm' component={LoginForm} options={{ headerShown: false, headerLeft: null }}></Stack.Screen>
                 <Stack.Screen name='FormSignup' component={FormSignup} options={{ headerShown: false, headerLeft: null }} />
                 <Stack.Screen name="Home" component={Home} options={{ gestureEnabled: false, headerShown: false, headerLeft: null }} />
+                <Stack.Screen name="Chat Details" component={ChatDetails}
+                    options={{
+                        header: ({ navigation, route, options, back }) => {
+                            const title = getHeaderTitle(options, route.name)
+                            return (
+                                <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                            )
+                        },
+                        headerTransparent: true
+                    }}
+                />
                 <Stack.Screen
                     name='JobDetail'
                     component={JobDetail}
@@ -119,7 +153,7 @@ const Tabs = () => {
                                     source={require('../assets/diamond_pro.png')}
                                     style={{ width: 22, height: 22 }}
                                 />
-                                <Text style={styles.quantityDiamond}>499</Text>
+                                <Text style={styles.quantityDiamond}>{Number(diamond).toLocaleString()}</Text>
                                 <TouchableOpacity>
                                     <Icon name='add-fill' style={{ fontWeight: "700" }} />
                                 </TouchableOpacity>
@@ -228,19 +262,47 @@ const Tabs = () => {
             }
         }}>
             <Stack.Screen name="ProfileJob" component={Profile} options={{}} />
+            <Stack.Screen name="Chat Details" component={ChatDetails}
+                options={{
+                    header: ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    },
+                    headerTransparent: true
+                }}
+            />
             <Stack.Screen name="Edit Profile Info" component={EditProfile} options={{
 
             }}
             />
+            <Stack.Screen name="Tình trạng ứng tuyển" component={ApplicationStatus} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                    )
+                }
+            }} />
             <Stack.Screen name='Favorite Page' component={FavoritePage} options={{
                 header: ({ navigation, route, options, back }) => {
                     const title = getHeaderTitle(options, route.name)
                     return (
-                        <Header navigation={navigation} title={"Favorite Job"} LeftButton={back}></Header>
+                        <Header navigation={navigation} title={"Bài đăng yêu thích"} LeftButton={back}></Header>
                     )
                 }
             }} ></Stack.Screen>
-            <Stack.Screen name="Salary Calculator" component={SalaryCalculator} options={{
+            <Stack.Screen name="Công cụ tính lương" component={SalaryCalculator} options={{
+                header:
+                    ({ navigation, route, options, back }) => {
+                        const title = getHeaderTitle(options, route.name)
+                        return (
+                            <Header navigation={navigation} title={title} LeftButton={back}></Header>
+                        )
+                    }
+            }} />
+            <Stack.Screen name="Mua KC" component={BuyDiamond} options={{
                 header:
                     ({ navigation, route, options, back }) => {
                         const title = getHeaderTitle(options, route.name)

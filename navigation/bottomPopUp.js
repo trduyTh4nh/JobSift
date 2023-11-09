@@ -144,7 +144,7 @@ export class BottomPopup extends React.Component {
                 style={{
                   ...STYLE.textTitle
                 }}
-              >Options</Text>
+              >Tuỳ chọn</Text>
             </View>
             {this.renderTitle()}
             {this.renderContent()}

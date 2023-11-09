@@ -58,6 +58,20 @@ const Home = ({ navigation }) => {
         })
     }, [focus])
 
+    const refreshJob = () => {
+        setPopuplarJob([])
+        axios.post(`http://${API_URL}:3001/popularjob`, {}, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        }).then((respone) => {
+            const dataPopularJob = respone.data.popularjob
+            setPopuplarJob(dataPopularJob) 
+        }).catch((error) => {
+            console.error(error)
+        })
+    }
+ 
 
     const [postData, setPostData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -78,30 +92,54 @@ const Home = ({ navigation }) => {
                 navigation.getParent()?.setOptions({
                     tabBarStyle: { display: 'none' }
                 })
-                return
+
+                
+                fetchData().catch((e) => {console.error(e)});
             }
-            navigation.getParent()?.setOptions({
-                tabBarStyle: STYLE.tabBarStyle
-            })
-            const fetchData = async () => {
-                try {
-
-                    const response = await fetch(`http://${API_URL}:3001`);
-                    if (!response.ok) {
-                        throw new Error('Network response was not ok');
-                    }
-                    const data = await response.json();
-                    setIsLoading(false);
-                    setPostData(data);
-                } catch (error) {
-                    console.log('Error fetching data:', error);
-                    setIsLoading(false);
+        }, [focus]);
+        const fetchData = async (refresh) => {
+            if(refresh){
+                setPostData([])
+            }
+            try {
+                const response = await fetch(`http://${API_URL}:3001`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
                 }
-            };
+                const data = await response.json();
+                setIsLoading(false);
+                setPostData(data);
+            } catch (error) {
+                console.log('Error fetching data:', error);
+                setIsLoading(false);
+            }
+        };
 
-            fetchData().catch((e) => { console.error(e) });
-        }
-    }, [focus]);
+//                 return
+//             }
+//             navigation.getParent()?.setOptions({
+//                 tabBarStyle: STYLE.tabBarStyle
+//             })
+//             const fetchData = async () => {
+//                 try {
+
+//                     const response = await fetch(`http://${API_URL}:3001`);
+//                     if (!response.ok) {
+//                         throw new Error('Network response was not ok');
+//                     }
+//                     const data = await response.json();
+//                     setIsLoading(false);
+//                     setPostData(data);
+//                 } catch (error) {
+//                     console.log('Error fetching data:', error);
+//                     setIsLoading(false);
+//                 }
+//             };
+
+//             fetchData().catch((e) => { console.error(e) });
+//         }
+//     }, [focus]);
+
 
     /*
           navigation.getParent()?.setOptions({
@@ -162,13 +200,13 @@ const Home = ({ navigation }) => {
 
 
 
-    const renderJobNearBy = ({ item }) => (
-        <NearbyJob dataNearby={item} />
+    const RenderJobNearBy = ({ item, onfavourite }) => (
+        <NearbyJob dataNearby={item} onFavouritePress={onfavourite} />
     );
 
 
-    const renderItem = ({ item }) => (
-        <CardJob dataPost={item} />
+    const RenderItem = ({ item, onfavourite }) => (
+        <CardJob onFavourite={onfavourite} dataPost={item} />
     );
     if (!global.user) {
         return (
@@ -184,16 +222,18 @@ const Home = ({ navigation }) => {
             <View style={styles.wrap}>
                 <View style={styles.header}>
                     <View style={styles.wrap_welcome}>
-                        <Text style={styles.sayhi}>Hi,
+                        <Text style={styles.sayhi}>Xin chào,
                             <Text style={styles.userName}> {userDB.user.full_name} 👋</Text>
                         </Text>
                     </View>
-                    <Text style={styles.welcomeMessage}>Start Your New Journey</Text>
+
+                    <Text style={styles.welcomeMessage}>Hãy bắt đầu hành trình tìm việc của bạn</Text>
                     <TouchableOpacity onPress={() => { navigation.navigate('Search') }} style={styles.wrapSearch}>
+
                         <TextInput
                             editable={false}
                             style={styles.inputSearch}
-                            placeholder="Find your new job"
+                            placeholder="Tìm kiếm"
                             placeholderTextColor="#999"
                         />
 
@@ -206,10 +246,12 @@ const Home = ({ navigation }) => {
                     </TouchableOpacity>
                 </View>
             </View>
-            <ScrollView style={{ marginBottom: 150 }}>
-                <View>
+
+            <ScrollView style={{marginBottom: 150}}>
+                <View style={{marginTop: 16, gap: 10}}>
+
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
+                        <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
                         <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
                     </View>
@@ -217,28 +259,32 @@ const Home = ({ navigation }) => {
 
 
 
-                    <View style={styles.container_JobList}>
+                    <ScrollView horizontal style={styles.container_JobList}>
                         {isLoading ? (
                             <Text>Loading...</Text>
                         ) : (
-                            <FlatList
-                                data={postData}
-                                renderItem={renderItem}
-                                keyExtractor={(item) => item.id_post.toString()}
-                                horizontal={true}
-                                contentContainerStyle={{ columnGap: 20 }}
-                            />
+                            <View style={{marginBottom: 10}}>
+                                <FlatList
+                                    style={{marginLeft: 16}}
+                                    data={postData}
+                                    renderItem={({item}) => (<RenderItem item={item} onfavourite={() => {refreshJob()}}></RenderItem>)}
+                                    keyExtractor={(item) => item.id_post.toString()}
+                                    horizontal={true}
+                                    scrollEnabled={false}
+                                    contentContainerStyle={{ columnGap: 20 }}
+                                />
+                            </View>
                         )}
-                    </View>
+                    </ScrollView>
 
                     <View style={styles.wrapTitle}>
-                        <Text style={styles.titleHomeJob}>Popular jobs</Text>
+                        <Text style={styles.titleHomeJob}>Công việc phổ biến</Text>
                     </View>
 
                     <FlatList
                         style={styles.wrapJobNearBy}
                         data={popularJob}
-                        renderItem={renderJobNearBy}
+                        renderItem={({item}) => (<RenderJobNearBy item={item} onfavourite={() => {}}></RenderJobNearBy>)}
                         keyExtractor={(item) => item.id_post.toString()}
                         contentContainerStyle={{ columnGap: 20 }}
                         scrollEnabled={false}
@@ -261,12 +307,12 @@ const styles = StyleSheet.create({
     },
     wrap: {
         paddingTop: 20,
-        paddingLeft: 10,
-        paddingRight: 10
+        paddingLeft: 16,
+        paddingRight: 16
     },
     container: {
-        paddingRight: 10,
-        paddingLeft: 10
+        paddingRight: 16,
+        paddingLeft: 16
         ,
         container: {
             flex: 1,
@@ -304,11 +350,8 @@ const styles = StyleSheet.create({
     wrapNearByJob: {
         paddingLeft: 0,
         paddingRight: 4,
-
     },
-    container_JobList: {
-
-    },
+    
     welcomeMessage: {
         fontFamily: 'RukbikNormal',
         fontSize: 24,
@@ -371,12 +414,11 @@ const styles = StyleSheet.create({
         marginBottom: 5
     },
     wrapTitle: {
-        marginTop: 25,
         display: "flex",
         flexDirection: "row",
         justifyContent: "space-between",
-        paddingRight: 10,
-        paddingLeft: 10
+        paddingRight: 16,
+        paddingLeft: 16
     },
     titleHomeShowMore: {
         fontFamily: "Rubik",

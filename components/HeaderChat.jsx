@@ -19,7 +19,7 @@ const HeaderChat = ({navigation, title, LeftButton, image, name}) => {
                     <View style={style.header}>
                         {button}
                         <View style={style.headerTitle}>
-                            <Image style={{borderRadius: 50}} width={46} height={46} source={{uri: 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512'}}/>
+                            <Image style={{borderRadius: 50}} width={46} height={46} source={{uri: image}}/>
                             <Text style={style.text}>{title}</Text>
                         </View>
                     </View>
@@ -41,6 +41,7 @@ const style = StyleSheet.create({
         gap: 16,
     },
     text: {
+        ...STYLE.textTitle,
         fontSize: 25,
         fontWeight: 'bold'
     }

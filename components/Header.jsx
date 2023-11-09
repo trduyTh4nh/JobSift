@@ -22,7 +22,7 @@ export function Header({ navigation, title, LeftButton }) {
 
 
     return (
-        <View style={title === 'Salary Calculator' ? { ...STYLE.headerWrap, shadowOpacity: 0 } : STYLE.headerWrap}>
+        <View style={title === 'Công cụ tính lương' ? { ...STYLE.headerWrap } : STYLE.headerWrap}>
             <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>
                 <View style={style.header}>
                     {button}
@@ -43,6 +43,7 @@ const style = StyleSheet.create({
 
     text: {
         fontSize: 25,
+        color: 'black',
         fontWeight: 'bold',
         fontFamily: 'Rubik'
     }

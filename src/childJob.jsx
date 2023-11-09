@@ -237,13 +237,13 @@ const ChildInFoJob = ({ route }) => {
             <View style={styles.container}>
                 <View style={styles.JobSumary}>
                     <View style={styles.title}>
-                        <Text style={styles.textTitle}>Job sumamry</Text>
+                        <Text style={styles.textTitle}>Thông tin chung</Text>
                     </View>
 
                     <View style={styles.jobCate}>
                         <Icon size={24} name="briefcase-4-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Category</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Loại công việc</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.job_category}</Text>
                         </View>
                     </View>
@@ -251,7 +251,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="map-pin-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Address</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Địa chỉ làm việc</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.dia_chi}</Text>
                         </View>
                     </View>
@@ -259,7 +259,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="money-dollar-circle-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Salary</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Mức lương</Text>
                             <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
                         </View>
                     </View>
@@ -267,7 +267,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="time-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Required - Experience</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Kinh nghiệm yêu cầu</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.kinh_nghiem_yeu_cau}</Text>
                         </View>
                     </View>
@@ -275,7 +275,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="user-2-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Position</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Vị trí</Text>
                             <Text style={styles.jobCateDetailContent}>{postData.position}</Text>
                         </View>
                     </View>
@@ -283,20 +283,20 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.jobCate}>
                         <Icon size={24} name="check-line"></Icon>
                         <View style={styles.jobCateDeTail}>
-                            <Text style={styles.jobCateDeTailTitle}>Application Deadline</Text>
+                            <Text style={styles.jobCateDeTailTitle}>Hạn chót ứng tuyển</Text>
                             <Text style={styles.jobCateDetailContent}>{datePost.toLocaleDateString()}</Text>
                         </View>
                     </View>
                 </View>
 
                 <View style={styles.JobDescription}>
-                    <Text style={styles.JobDescriptionTitle}>Job description</Text>
+                    <Text style={styles.JobDescriptionTitle}>Miêu tả công việc</Text>
                     <Text style={styles.JobDescriptionConent}>{postData.note}
                     </Text>
                 </View>
 
                 <View style={styles.JobReview}>
-                    <Text style={styles.JobReviewTitle}>Reviews</Text>
+                    <Text style={styles.JobReviewTitle}>Đánh giá</Text>
                     <View style={styles.JobWrapRankStar}>
                         <View style={styles.wrapRank}>
                             <View style={styles.wrapJobstart}>
@@ -324,7 +324,7 @@ const ChildInFoJob = ({ route }) => {
                     <View style={styles.wrapComment}>
                         <TextInput
                             style={styles.inputCmt}
-                            placeholder="...."
+                            placeholder="Nhập phản hồi"
                             placeholderTextColor={"#000"}
 
                             onChangeText={handleComment}
@@ -332,7 +332,7 @@ const ChildInFoJob = ({ route }) => {
 
                         <TouchableOpacity style={styles.buttonCmt} onPress={upLoadFB}>
                             <Icon name="check-line"></Icon>
-                            <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Upload</Text>
+                            <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Đăng tải</Text>
                         </TouchableOpacity>
                     </View>
                 </View>
@@ -341,22 +341,22 @@ const ChildInFoJob = ({ route }) => {
                 <View style={styles.wrapUserCmt}>
 
                     <View style={styles.wraptitleCmt}>
-                        <Text style={styles.titleCmt}>Feedbacks</Text>
+                        <Text style={styles.titleCmt}>Phản hồi</Text>
                     </View>
                     {
                         fb.length > 0 ?
                             (<FlatList
                                 data={fb}
+                                scrollEnabled={false}
                                 renderItem={renderComment}
                                 keyExtractor={(item) => item.idfb.toString()}
-                            />) : <Error message={'Be the first to post a feedback.'} title={'No feedbacks'} icon={'ri-chat-3-line'} />
-
+                            />) : <Error message={'Hãy là người đầu tiên đăng phản hồi.'} title={'Chưa có phản hồi nào'} icon={'ri-chat-3-line'} />
                     }
                 </View>
 
 
                 <View style={styles.tagTitle}>
-                    <Text style={styles.textTagTitle}>Tags</Text>
+                    <Text style={styles.textTagTitle}>Tag</Text>
                 </View>
 
                 <View style={styles.wrapTags}>

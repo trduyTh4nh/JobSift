@@ -12,6 +12,7 @@ import { API_URL } from "../constants/etc";
 import * as ImagePicker from 'expo-image-picker'
 import { utils } from '@react-native-firebase/app';
 import storage from '@react-native-firebase/storage';
+import PickerModal from "./PickerModal";
 
 const EditProfile = ({ navigation }) => {
 
@@ -19,7 +20,7 @@ const EditProfile = ({ navigation }) => {
     const [isLoading, setIsLoading] = useState(false);
     const [dateBirth, setDateBirth] = useState(new Date(global.user.user.ngaysinh)); // Initialize with a default date
     const [urlDowloaded, setUrlDownloaded] = useState('')
-
+    const [visible, setVisible] = useState(false)
     const [gender, setGender] = useState('Male');
     const [user, setUser] = useState(global.user.user);
 
@@ -31,17 +32,19 @@ const EditProfile = ({ navigation }) => {
     const handleEditProfile = () => {
         setIsLoading(true);
 
-        axios
-            .post(API_URL + '/updateUser', user, {
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-            })
+        axios.post(API_URL + '/updateUser', user, {
+            headers: {
+                'Content-Type': 'application/json',
+            },
+        })
             .then((e) => {
                 //console.log(e);
                 global.user.user = user;
-                
-                uploadImageToFireBase(image)
+                console.log(image)
+                if (image != global.user.user.profile_picture) {
+                    uploadImageToFireBase(image)
+                }
+                navigation.goBack()
             })
             .catch((e) => {
                 setIsLoading(false);
@@ -52,6 +55,7 @@ const EditProfile = ({ navigation }) => {
 
 
     useEffect(() => {
+        console.log(global.user.user)
         setImage(user.profile_picture)
     }, [])
 
@@ -65,12 +69,15 @@ const EditProfile = ({ navigation }) => {
                 quality: 1
             }
         ).then(e => {
-            console.log("IMage" + JSON.stringify(e.assets[0].uri))
-            setImage(e.assets[0].uri)
+            if (!e.canceled) {
+                console.log("IMage" + JSON.stringify(e.assets[0].uri))
+                setImage(e.assets[0].uri)
+            }
         }
         ).catch(e => {
             console.error("ERROR IMAGE: " + e)
         })
+
 
 
     }
@@ -81,13 +88,15 @@ const EditProfile = ({ navigation }) => {
 
         try {
             await reference.putFile(imagePath);
-            
+
             console.log("Image uploaded successfully");
 
             // Get the download URL and set it in the user object
             const downloadURL = await getImageFromFirebase(fileName);
-            global.user.user = {...user,
-            profile_picture: downloadURL}
+            global.user.user = {
+                ...user,
+                profile_picture: downloadURL
+            }
             const FormData = {
                 id_user: user.id_user,
                 image_picture: downloadURL
@@ -137,151 +146,117 @@ const EditProfile = ({ navigation }) => {
             }
         });
     };
-
-
-
     return (
         <ScrollView style={{ paddingBottom: 200 }}>
+            <PickerModal isVisible={visible} hideModal={() => { setVisible(false) }} onItemSelected={(e) => { setUser({ ...user, gioitinh: e }) }} items={['Nam', 'Nữ']} title={'Hãy chọn 1 giới tính'} />
             <View style={styles.wrap}>
                 <View style={styles.container}>
-
-                    <View>
-                        <Text style={styles.userName}>Thông tin cá nhân</Text>
-                    </View>
-                    <TouchableOpacity onPress={handleEditImage}>
-                        <Image source={{ uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512' }}
-                            style={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: 30,
-                            }} />
-
-                    </TouchableOpacity>
-                    <View>
-                        <Text style={styles.chucuaslart}>Full name</Text>
-                        <View style={styles.inputSearch}>
-
-                            <TextInput
-                                defaultValue={user.full_name}
-                                editable={true}
-                                style={styles.input}
-                                placeholder="0908290382"
-                                placeholderTextColor="rgba(0,0,0,0.15)"
-                                fontWeight="700"
-                                onChangeText={(e) => {
-                                    setUser({
-                                        ...user,
-                                        full_name: e
-                                    })
-                                }}
-                            >
-                            </TextInput>
-
-                        </View>
-
-                        <Text style={styles.chucuaslart}>Date of Birth</Text>
-                        <View style={styles.inputSearch}>
-
-                            <Text style={{ fontWeight: 'bold' }}>{dateBirth.toLocaleDateString()}</Text>
-                            <TouchableOpacity onPress={() => { setDatePickerOpen(true) }}>
-                                <Icon name="calendar-line"></Icon>
-                            </TouchableOpacity>
-                            <DatePicker
-                                modal
-                                mode="date"
-                                open={datePickerOpen}
-                                date={dateBirth}
-                                onConfirm={(date) => {
-                                    setDatePickerOpen(false)
-                                    setDateBirth(date)
-                                    setUser({
-                                        ...user,
-                                        ngaysinh: date
-                                    })
-                                }}
-                                onCancel={
-                                    () => { setDatePickerOpen(false) }
-                                }
-                            />
-                        </View>
-
-
-                        <Text style={styles.chucuaslart}>Gender</Text>
-                        <View style={styles.inputSearch}>
-
-                            {/* <RNPickerSelect
-                                value={user.gioitinh}
+                    <View style={{ gap: 25, flexDirection: 'row', width: '100%', alignItems: 'center' }}>
+                        <TouchableOpacity onPress={handleEditImage}>
+                            <Image source={{ uri: image ? image : 'https://images-ext-2.discordapp.net/external/J0CmYBrUaclT-rSO1X80iEkJ-Sp39yEPnqdiokPwfaU/%3Fsize%3D512/https/cdn.discordapp.com/avatars/515061888258670602/9e4b204e2b74d3264f42fbb933b1e18b.png?width=512&height=512' }}
                                 style={{
-                                    viewContainer: {
-                                        alignSelf: 'auto',
-                                        flex: 1
-                                    },
-                                    inputIOS: {
-                                        fontWeight: 'bold',
-                                    },
-                                    inputAndroid: {
-                                        fontWeight: 'bold'
+                                    width: 60,
+                                    height: 60,
+                                    borderRadius: 30,
+                                }} />
+                        </TouchableOpacity>
+                        <View style={{ flex: 1 }}>
+                            <Text style={styles.chucuaslart}>Họ tên</Text>
+                            <View style={styles.inputSearch}>
+
+                                <TextInput
+                                    defaultValue={user.full_name}
+                                    editable={true}
+                                    style={styles.input}
+                                    placeholder="0908290382"
+                                    placeholderTextColor="rgba(0,0,0,0.15)"
+                                    fontWeight="700"
+                                    onChangeText={(e) => {
+                                        setUser({
+                                            ...user,
+                                            full_name: e
+                                        })
+                                    }}
+                                >
+                                </TextInput>
+                            </View>
+                        </View>
+                    </View>
+                    <View style={{ gap: 10 }}>
+                        <View>
+                            <Text style={styles.chucuaslart}>Ngày sinh</Text>
+                            <View style={styles.inputSearch}>
+                                <Text style={{ fontWeight: 'bold' }}>{dateBirth.toLocaleDateString()}</Text>
+                                <TouchableOpacity onPress={() => { setDatePickerOpen(true) }}>
+                                    <Icon name="calendar-line"></Icon>
+                                </TouchableOpacity>
+                                <DatePicker
+                                    modal
+                                    mode="date"
+                                    open={datePickerOpen}
+                                    date={dateBirth}
+                                    onConfirm={(date) => {
+                                        setDatePickerOpen(false)
+                                        setDateBirth(date)
+                                        setUser({
+                                            ...user,
+                                            ngaysinh: date
+                                        })
+                                    }}
+                                    onCancel={
+                                        () => { setDatePickerOpen(false) }
                                     }
-                                }}
-                                onValueChange={e => {
-                                    setUser({
-                                        ...user,
-                                        gioitinh: e
-                                    })
-                                }
-                                }
-                                items={[
-                                    { label: 'Male', value: 'Male' },
-                                    { label: 'Female', value: 'Female' }
-                                ]}
-                            /> */}
-                            <Icon name="arrow-down-s-line"></Icon>
+                                />
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles.chucuaslart}>Giới tính</Text>
+                            <TouchableOpacity onPress={() => { setVisible(true) }} style={styles.inputSearch}>
+                                <Text style={{ fontWeight: 'bold', color: '#000' }}>{user.gioitinh}</Text>
+                                <Icon name="arrow-down-s-line"></Icon>
+                            </TouchableOpacity>
                         </View>
 
+                        <View>
+                            <Text style={styles.chucuaslart}>Số điện thoại</Text>
+                            <View style={styles.inputSearch}>
+                                <TextInput
 
-                        <Text style={styles.chucuaslart}>Phone number</Text>
-                        <View style={styles.inputSearch}>
-
-                            <TextInput
-
-                                defaultValue={user.phone}
-                                editable={true}
-                                style={styles.input}
-                                placeholder="0908290382"
-                                placeholderTextColor="rgba(0,0,0,0.15)"
-                                fontWeight="700"
-                            >
-                            </TextInput>
-
+                                    defaultValue={user.phone}
+                                    editable={true}
+                                    style={styles.input}
+                                    placeholder="0908290382"
+                                    placeholderTextColor="rgba(0,0,0,0.15)"
+                                    fontWeight="700"
+                                >
+                                </TextInput>
+                            </View>
+                        </View>
+                        <View>
+                            <Text style={styles.chucuaslart}>Email</Text>
+                            <View style={styles.inputSearch}>
+                                <TextInput
+                                    defaultValue={user.email}
+                                    style={styles.input}
+                                    placeholder="email@example.com"
+                                    placeholderTextColor="rgba(0,0,0,0.15)"
+                                    fontWeight="700"
+                                >
+                                </TextInput>
+                            </View>
                         </View>
 
-
-                        <Text style={styles.chucuaslart}>Email</Text>
-                        <View style={styles.inputSearch}>
-
-                            <TextInput
-                                defaultValue={user.email}
-                                style={styles.input}
-                                placeholder="email@example.com"
-                                placeholderTextColor="rgba(0,0,0,0.15)"
-                                fontWeight="700"
-                            >
-                            </TextInput>
-
-                        </View>
-
-
-                        <Text style={styles.chucuaslart}>Address</Text>
-                        <View style={styles.inputSearch}>
-
-                            <TextInput
-                                defaultValue={user.diachi}
-                                //placeholder="Quận 3"
-                                placeholderTextColor="rgba(0,0,0,0.15)"
-                                fontWeight="700"
-                            >
-                            </TextInput>
-
+                        <View>
+                            <Text style={styles.chucuaslart}>Địa chỉ</Text>
+                            <View style={styles.inputSearch}>
+                                <TextInput
+                                    defaultValue={user.diachi}
+                                    //placeholder="Quận 3"
+                                    placeholderTextColor="rgba(0,0,0,0.15)"
+                                    fontWeight="700"
+                                >
+                                </TextInput>
+                            </View>
                         </View>
                     </View>
                     <View>
@@ -290,17 +265,13 @@ const EditProfile = ({ navigation }) => {
                                 isLoading ? (<ActivityIndicator />) : (
                                     <View style={{ flexDirection: 'row', alignItems: 'center', gap: 10 }}>
                                         <Icon name="check-line" size={27} color="#000"></Icon>
-                                        <Text style={styles.chucuaslart1}>Save</Text>
+                                        <Text style={styles.chucuaslart1}>Lưu</Text>
                                     </View>
                                 )
                             }
-
                         </TouchableOpacity>
                     </View>
                 </View>
-
-
-
             </View>
         </ScrollView>
     )
@@ -318,10 +289,12 @@ const styles = StyleSheet.create({
     },
     container: {
         container: {
+
             flex: 1,
             justifyContent: 'center',
             alignItems: 'center',
             backgroundColor: 'white',
+            gap: 10
             // fontFamily: 'Raleway-Bold'
         },
 
@@ -413,7 +386,7 @@ const styles = StyleSheet.create({
         fontSize: 16,
         // fontWeight:'900',
         color: '#000',
-        marginTop: 9
+        marginTop: 0
     },
     chucuaslart1: {
         fontSize: 16,

@@ -19,10 +19,12 @@ import { ActivityIndicator } from "react-native-paper";
 
 const Job = () => {
 
+
     const showToast = (title) => {
         ToastAndroid.show(title, ToastAndroid.SHORT)
     }
     const [showModal, setShowModal] = useState(false)
+
 
     const [dataSearch, setDataSearch] = useState('No content')
 
