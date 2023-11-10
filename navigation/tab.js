@@ -350,6 +350,25 @@ const Tabs = () => {
             }} />
             <Stack.Screen name='CV' component={CV} options={{
                 header: ({ navigation, route, options, back }) => {
+                    const [diamond, setDiamond] = useState(0)
+                    useEffect(() => {
+                                socket.on('kcValChange', e => {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    })
+                    if (global.user) {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    }
+                    })
                     const title = getHeaderTitle(options, route.name)
                     return (
                         <View>
@@ -365,7 +384,10 @@ const Tabs = () => {
 
                                     </View>
                                     <View style={styles.wrapinFo}>
-                                        <Text style={styles.welcomeMessage}>💎 231 </Text>
+                                        <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
+                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
+                                            <Icon name="add-line"/>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </SafeAreaView>
@@ -380,6 +402,25 @@ const Tabs = () => {
 
             <Stack.Screen name='CVBasic' component={CreateCVBasicInFo} options={{
                 header: ({ navigation, route, options, back }) => {
+                    const [diamond, setDiamond] = useState(0)
+                    useEffect(() => {
+                                socket.on('kcValChange', e => {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    })
+                    if (global.user) {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    }
+                    })
                     const title = getHeaderTitle(options, route.name)
                     return (
                         <View>
@@ -395,7 +436,10 @@ const Tabs = () => {
 
                                     </View>
                                     <View style={styles.wrapinFo}>
-                                        <Text style={styles.welcomeMessage}>💎 231 </Text>
+                                        <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
+                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
+                                            <Icon name="add-line"/>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </SafeAreaView>
@@ -407,6 +451,25 @@ const Tabs = () => {
             <Stack.Screen name="CreateCV" component={CreateCV} options={{
                 header: ({ navigation, route, options, back }) => {
                     const title = getHeaderTitle(options, route.name)
+                    const [diamond, setDiamond] = useState(0)
+                    useEffect(() => {
+                                socket.on('kcValChange', e => {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    })
+                    if (global.user) {
+                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                            global.user.user.diamond_count = e.data.diamond_count
+                            setDiamond(e.data.diamond_count)
+                        }).catch(e => {
+                            Alert.alert('Error while getting diamond: ' + e)
+                        })
+                    }
+                    })
                     return (
                         <View>
                             <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>
@@ -421,7 +484,10 @@ const Tabs = () => {
 
                                     </View>
                                     <View style={styles.wrapinFo}>
-                                        <Text style={styles.welcomeMessage}>💎 231 </Text>
+                                        <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
+                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
+                                            <Icon name="add-line"/>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </SafeAreaView>
@@ -643,6 +709,7 @@ const styles = StyleSheet.create({
     wrapinFo: {
         display: 'flex',
         flexDirection: 'row',
+        alignItems: 'center'
     },
     sayhi: {
         fontSize: 18,

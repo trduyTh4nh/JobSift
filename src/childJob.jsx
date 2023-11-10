@@ -260,7 +260,7 @@ const ChildInFoJob = ({ route }) => {
                         <Icon size={24} name="money-dollar-circle-line"></Icon>
                         <View style={styles.jobCateDeTail}>
                             <Text style={styles.jobCateDeTailTitle}>Mức lương</Text>
-                            <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.currency}{postData.luong.toLocaleString()} - {postData.currency}{postData.highest_salary.toLocaleString()}</Text>
                         </View>
                     </View>
 

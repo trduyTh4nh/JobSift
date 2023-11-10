@@ -87,7 +87,7 @@ const Profile = ({ navigation }) => {
                         </View>
                         <View style={styles.Xuongdong1}>
                             <Text style={styles.chutrongvien}> {cvfollow} </Text>
-                            <Text style={styles.chutrongvien2}> Following </Text>
+                            <Text style={styles.chutrongvien2}> Đang th. dõi </Text>
                         </View>
                     </View>
 
@@ -183,7 +183,7 @@ const styles = StyleSheet.create({
         paddingRight: 20,
         paddingLeft: 20,
         backgroundColor: '#FFFFFF',
-        paddingBottom: 100,
+        paddingBottom: 120,
     },
     container: {
         container: {

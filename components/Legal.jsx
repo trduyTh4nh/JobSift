@@ -6,7 +6,7 @@ const Legal = () => {
     return (
         <ScrollView>
             <View style={{
-
+                marginBottom: 250
             }}>
 
                 <View style={{

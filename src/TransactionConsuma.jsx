@@ -16,43 +16,49 @@ const TransactionConsume = () => {
         { id: '10', time: '23:40 - 22/09/2023', name: 'Post đầu tiên X1', money: '- 15 KC' },
     ];
     return (
-        <View style={styles.container}>
+        <ScrollView>
+            <View style={styles.container}>
 
-            <FlatList
-                keyExtractor={(item) => item.id}
-                data={history}
-                renderItem={({ item }) => (
-                    <View style={{
-                        width: "100%",
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center"
-                    }}>
+                <FlatList
+                    scrollEnabled={false}
+                    style={{paddingBottom: 300, paddingHorizontal: 16}}
+                    keyExtractor={(item) => item.id}
+                    data={history}
+                    renderItem={({ item }) => (
+                        <View style={{
+                            width: "100%",
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center"
+                        }}>
 
-                        <TouchableOpacity style={styles.item}>
-                        
-                            <View style={{
-                                flexDirection: 'row',
-                                display: "flex",
-                                justifyContent: "space-between"
-                            }}>
+                            <View style={styles.item}>
+                            
                                 <View style={{
-                                    flexDirection: "column",
+                                    flexDirection: 'row',
                                     display: "flex",
-                                    gap: 10
+                                    alignItems: 'center',
+                                    justifyContent: "space-between"
                                 }}>
-                                    <Text style={styles.time}>{item.time}</Text>
-                                    <Text style={styles.name}>{item.name}</Text>
+                                    <View style={{
+                                        flexDirection: "column",
+                                        display: "flex",
+                                        gap: 5,
+                                        flex: 1
+                                    }}>
+                                        <Text style={styles.time}>{item.time}</Text>
+                                        <Text style={styles.name}>{item.name}</Text>
+                                    </View>
+
+                                    <Text style={styles.money}>{item.money}</Text>
                                 </View>
-
-                                <Text style={styles.money}>{item.money}</Text>
                             </View>
-                        </TouchableOpacity>
 
-                    </View>
-                )}
-            />
-        </View>
+                        </View>
+                    )}
+                />
+            </View>
+        </ScrollView>
     );
 }
 const styles = StyleSheet.create({
@@ -114,7 +120,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        paddingHorizontal: 20,
+        
     },
 
     item: {
@@ -123,11 +129,12 @@ const styles = StyleSheet.create({
         backgroundColor: '#FFECE2',
         fontSize: 24,
         borderRadius: 10,
+        width: "98%",
+        shadowColor: '#FFECE2',
         shadowOffset: { width: 1, height: 5 },
-        shadowOpacity: 0.55,
-        shadowRadius: 4.84,
+        shadowOpacity: 1,
+        shadowRadius: 7,
         elevation: 5,
-        width: "98%"
     },
 
     time: {
@@ -145,7 +152,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#F36767',
         fontSize: 16,
-        marginTop: 10,
         textShadowColor: '#000',
     },
 });

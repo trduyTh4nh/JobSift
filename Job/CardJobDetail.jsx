@@ -23,8 +23,15 @@ const CardJobDetail = (props) => {
     useEffect(() => {
         fetchFav()
     }, [])
+    const getSimplifiedSalary = (s) => {
+        if (s / 1000000 >= 1) {
+            return Math.round(s / 1000000) + 'tr'
+        } else if (s / 1000 >= 1) {
+            return Math.round(s / 1000) + 'k'
+        }
+    }
     const fetchFav = () => {
-        if(dataPostDetail){
+        if (dataPostDetail) {
             axios.post(`${API_URL}/getpostfavourite`, {
                 "id_user": global.user.user.id_user,
                 "id_job": dataPostDetail.id_post
@@ -37,7 +44,7 @@ const CardJobDetail = (props) => {
         }
     }
     const fav = () => {
-        if(dataPostDetail){
+        if (dataPostDetail) {
             onFavourite()
             axios.post(`${API_URL}/addfavourite`, {
                 "id_user": global.user.user.id_user,
@@ -58,14 +65,14 @@ const CardJobDetail = (props) => {
         'Rubik': require("../assets/fonts/SF-Pro-Rounded-Heavy.otf"),
         'RukbikNormal': require("../assets/fonts/SF-Pro.ttf")
     })
-    
+
 
     function truncateText(text, maxLength) {
         if (text.length > maxLength) {
-          return text.substring(0, maxLength) + '...';
+            return text.substring(0, maxLength) + '...';
         }
         return text;
-      }
+    }
 
 
 
@@ -75,25 +82,25 @@ const CardJobDetail = (props) => {
                 <View style={styles.jobCardInfo}>
                     <View style={styles.jobCardHeader}>
 
-                        <View style={{...styles.jobCardHeader, justifyContent: 'flex-start', alignItems: 'center'}}>    
-                            <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
+                        <View style={{ ...styles.jobCardHeader, justifyContent: 'flex-start', alignItems: 'center' }}>
+                            <Image source={{ uri: dataPostDetail ? dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
                                 style={{ width: 45, height: 45 }}
                             ></Image>
 
                             <View style={styles.jobCardName}>
                                 <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-                                <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text>
-                                
+                                <Text style={styles.jobCardAddress}>{truncateText(dataPostDetail.dia_chi, 18)}</Text>
+
                             </View>
 
-{/* //                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
+                            {/* //                         <Image source={{uri: dataPostDetail ?  dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
 //                             style={{ width: 45, height: 45, borderWidth: 2, borderColor: "#fff", borderRadius: 8, padding: 3 }}
 //                         ></Image>
 
 //                         <View style={styles.jobCardName}>
 //                             <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
 //                             <Text style={styles.jobCardAddress}>{ truncateText(dataPostDetail.dia_chi, 18)}</Text> */}
-                            
+
 
                         </View>
 
@@ -112,8 +119,8 @@ const CardJobDetail = (props) => {
                         <View style={styles.jobCate}>
                             <Text style={styles.jobCateName}>{dataPostDetail.job_category}</Text>
                             <Icon name="arrow-right-s-fill" color="#fff"></Icon>
-                            <Text style={styles.jobSalary}>$750 - $900</Text>
-                            
+                            <Text style={styles.jobSalary}>{`${dataPostDetail.currency}${getSimplifiedSalary(dataPostDetail.luong)} - ${dataPostDetail.currency}${getSimplifiedSalary(dataPostDetail.highest_salary)}`}</Text>
+
                         </View>
                     </View>
                 </View>
@@ -130,7 +137,7 @@ export default CardJobDetail
 const styles = StyleSheet.create({
     titleHomeJob: {
         color: "#999",
-     fontFamily: "RukbikNormal",
+        fontFamily: "RukbikNormal",
         fontWeight: "700"
     },
     wrapTitle: {
@@ -172,7 +179,7 @@ const styles = StyleSheet.create({
     },
     wrapJobCard: {
         marginTop: 0,
-        
+
     },
     jobCardAddress: {
         color: "#fff",
@@ -203,7 +210,7 @@ const styles = StyleSheet.create({
 
     },
     iconFavorite: {
-        
+
     }
 })
 
