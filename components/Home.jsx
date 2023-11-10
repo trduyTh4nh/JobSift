@@ -94,11 +94,12 @@ const Home = ({ navigation }) => {
                 })
 
 
-                fetchData().catch((e) => { console.error(e) });
+               
             } else {
                 navigation.getParent()?.setOptions({
                     tabBarStyle: STYLE.tabBarStyle
                 })
+                fetchData().catch((e) => { console.error(e) });
             }
         }
     }, [focus]);

@@ -19,7 +19,7 @@ const Policy = () => {
 
     return (
         <ScrollView>
-            <View>
+            <View style={{marginBottom: 250}}>
                 <View style={{
                     display: "flex",
                     alignItems: "center",

@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, Animated, FlatList } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, Animated, FlatList, SafeAreaView, Platform } from 'react-native'
 import { useFonts } from "expo-font"
 import { useState } from "react"
 import DatePicker from "react-native-date-picker"
@@ -8,6 +8,7 @@ import * as ImagePicker from 'expo-image-picker'
 import PopUpAdd from "../src/PopUpAdd"
 import Modal from 'react-native-modal'
 import { Picker } from '@react-native-picker/picker';
+import STYLE from "../assets/css/universal"
 
 
 
@@ -890,11 +891,10 @@ const CreateCV = ({ route }) => {
     const Language = ({ item }) => {
 
         return (
-            <View>
+            <View style={{gap: 16, marginTop: 10}}>
                 <View style={styles.WeItem}>
 
                     <View style={{
-                        display: "flex",
                         flexDirection: "row",
                         gap: 50
                     }}>
@@ -1086,6 +1086,8 @@ const CreateCV = ({ route }) => {
                                 <TextInput onChangeText={handleGetName} style={{
                                     backgroundColor: "#E9E9E9",
                                     paddingLeft: 12,
+                                    paddingTop: 16,
+                                    paddingBottom: 16,
                                     borderRadius: 12
                                 }}>
                                 </TextInput>
@@ -1236,26 +1238,15 @@ const CreateCV = ({ route }) => {
 
                     {/* Kinh nghiệm làm việc */}
                     <Modal
+                        avoidKeyboard
                         isVisible={showModalWE}
                         onSwipeComplete={() => { setShowModalWE(false) }}
                         onBackdropPress={() => { setShowModalWE(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
                     >
-                        <View style={{
-                            backgroundColor: "#fff",
-                            position: "absolute",
-                            bottom: 0,
-                            height: "70%",
-                            width: "100%",
-                            paddingTop: 30,
-                            display: "flex/",
-                            gap: 20,
-                            paddingLeft: 18,
-                            paddingRight: 18,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                        }}>
+                    <SafeAreaView style={STYLE.modal}>
+                        <View style={STYLE.modalChild}>
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Tên công ty</Text>
                                 <TextInput
@@ -1389,6 +1380,7 @@ const CreateCV = ({ route }) => {
                             </View>
 
                         </View>
+                    </SafeAreaView>
 
 
                     </Modal>
@@ -1413,6 +1405,7 @@ const CreateCV = ({ route }) => {
                             <View style={styles.workExperienceWrap}>
                                 <View>
                                     <FlatList
+                                        scrollEnabled={false}
                                         data={objWorkEx}
                                         renderItem={({ item }) => <WorkExperience item={item} />}
                                         keyExtractor={(item) => item.key.toString()}
@@ -1453,20 +1446,10 @@ const CreateCV = ({ route }) => {
                         onBackdropPress={() => { setShowModalBE(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
+                        avoidKeyboard
                     >
-                        <ScrollView style={{
-                            backgroundColor: "#fff",
-                            position: "absolute",
-                            bottom: 0,
-                            width: "100%",
-                            paddingTop: 30,
-                            display: "flex/",
-                            gap: 20,
-                            paddingLeft: 18,
-                            paddingRight: 18,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                        }}>
+                    <SafeAreaView style={STYLE.modal}>
+                        <ScrollView style={STYLE.modalChild}>
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Tên trường</Text>
                                 <TextInput
@@ -1634,6 +1617,7 @@ const CreateCV = ({ route }) => {
 
 
                         </ScrollView>
+                    </SafeAreaView>
 
 
                     </Modal>
@@ -1653,6 +1637,7 @@ const CreateCV = ({ route }) => {
                             <View>
                                 <View>
                                     <FlatList
+                                        scrollEnabled={false}
                                         data={objEducation}
                                         renderItem={({ item }) => <BackgroundEducation item={item} />}
                                         keyExtractor={(item) => item.key.toString()}
@@ -1689,20 +1674,10 @@ const CreateCV = ({ route }) => {
                         onBackdropPress={() => { setShowModalAC(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
+                        avoidKeyboard
                     >
-                        <ScrollView style={{
-                            backgroundColor: "#fff",
-                            position: "absolute",
-                            bottom: 0,
-                            width: "100%",
-                            paddingTop: 30,
-                            display: "flex/",
-                            gap: 20,
-                            paddingLeft: 18,
-                            paddingRight: 18,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                        }}>
+                    <SafeAreaView style={STYLE.modal}>
+                        <ScrollView style={STYLE.modalChild}>
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Tên tổ chức</Text>
                                 <TextInput
@@ -1869,6 +1844,7 @@ const CreateCV = ({ route }) => {
 
 
                         </ScrollView>
+                    </SafeAreaView>
 
 
                     </Modal>
@@ -1889,6 +1865,7 @@ const CreateCV = ({ route }) => {
                             <View>
                                 <View>
                                     <FlatList
+                                        scrollEnabled={false}
                                         data={objActivity}
                                         renderItem={({ item }) => <Activities item={item} />}
                                         keyExtractor={(item) => item.key.toString()}
@@ -1926,22 +1903,11 @@ const CreateCV = ({ route }) => {
                         isVisible={showModalLA}
                         onSwipeComplete={() => { setShowModalLA(false) }}
                         onBackdropPress={() => { setShowModalLA(false) }}
-                        swipeDirection={'down'}
                         style={{ margin: 0 }}
+                        avoidKeyboard
                     >
-                        <ScrollView style={{
-                            backgroundColor: "#fff",
-                            position: "absolute",
-                            bottom: 0,
-                            width: "100%",
-                            paddingTop: 30,
-                            display: "flex/",
-                            gap: 20,
-                            paddingLeft: 18,
-                            paddingRight: 18,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                        }}>
+                    <SafeAreaView style={STYLE.modal}>
+                        <ScrollView style={STYLE.modalChild}>
 
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Ngôn ngữ</Text>
@@ -1956,7 +1922,31 @@ const CreateCV = ({ route }) => {
 
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Trình độ</Text>
-                                <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: "#E2F367", borderRadius: 16, justifyContent: "space-between", borderWidth: 2, borderColor: "#000", width: "100%", marginTop: 6 }}>
+                                {Platform.OS == 'ios' ? (
+                                    <Picker
+                                        selectedValue={levelLA}
+                                        style={{borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16}}
+                                        onValueChange={(itemValue, itemIndex) => {
+                                            setLevelLA(itemValue);
+                                            setOjbLA({ ...objbLA, level: itemValue });
+                                        }}
+                                    >
+                                        <Picker.Item style={{
+                                            fontSize: 16,
+                                            fontWeight: "800"
+                                        }} label="Bình thường" value="Bình thường" />
+                                        <Picker.Item style={{
+                                            fontSize: 16,
+                                            fontWeight: "800"
+                                        }} label="Lưu loát" value="Lưu loát" />
+                                        <Picker.Item style={{
+                                            fontSize: 16,
+                                            fontWeight: "800"
+                                        }} label="Bản Xứ" value="Bản xứ" />
+                                    </Picker>
+
+                                ) : (
+                                    <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: "#E2F367", borderRadius: 16, justifyContent: "space-between", borderWidth: 2, borderColor: "#000", width: "100%", marginTop: 6 }}>
                                     <Picker
                                         selectedValue={levelLA}
                                         style={{ height: 50, width: 240 }}
@@ -1979,6 +1969,7 @@ const CreateCV = ({ route }) => {
                                         }} label="Bản Xứ" value="Bản xứ" />
                                     </Picker>
                                 </View>
+                                )}
                             </View>
 
 
@@ -2042,6 +2033,7 @@ const CreateCV = ({ route }) => {
 
 
                         </ScrollView>
+                    </SafeAreaView>
 
 
                     </Modal>
@@ -2060,6 +2052,7 @@ const CreateCV = ({ route }) => {
                         <View style={styles.body}>
                             <View>
                                 <FlatList
+                                    scrollEnabled={false}
                                     data={objLanguage}
                                     renderItem={({ item }) => <Language item={item} />}
                                     keyExtractor={(item) => item.key.toString()}
@@ -2099,19 +2092,8 @@ const CreateCV = ({ route }) => {
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
                     >
-                        <ScrollView style={{
-                            backgroundColor: "#fff",
-                            position: "absolute",
-                            bottom: 0,
-                            width: "100%",
-                            paddingTop: 30,
-                            display: "flex/",
-                            gap: 20,
-                            paddingLeft: 18,
-                            paddingRight: 18,
-                            borderTopLeftRadius: 20,
-                            borderTopRightRadius: 20,
-                        }}>
+                    <SafeAreaView style={STYLE.modal}>
+                        <ScrollView style={STYLE.modalChild}>
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Tên chứng chỉ</Text>
                                 <TextInput
@@ -2221,6 +2203,7 @@ const CreateCV = ({ route }) => {
 
 
                         </ScrollView>
+                    </SafeAreaView>
 
 
                     </Modal>
@@ -2240,6 +2223,7 @@ const CreateCV = ({ route }) => {
 
                             <View>
                                 <FlatList
+                                    scrollEnabled={false}
                                     data={objCertificate}
                                     renderItem={({ item }) => <Certification item={item} />}
                                     keyExtractor={(item) => item.key.toString()}
@@ -2466,7 +2450,7 @@ const styles = StyleSheet.create({
         flexDirection: "column",
         width: "100%",
         flexWrap: "wrap",
-        gap: 16,
+        gap: 10,
     },
     itemAbove: {
         flex: 1
@@ -2507,8 +2491,9 @@ const styles = StyleSheet.create({
         borderWidth: 2,
         borderColor: "#B0B0B0",
         marginTop: 4,
+        padding: 18,
         paddingLeft: 18,
-        paddingRight: 10,
+        paddingRight: 18,
         borderRadius: 16,
         marginBottom: 2
     },

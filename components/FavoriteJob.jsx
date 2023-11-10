@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, Dimensions } from "react-native";
+import { Text, View, StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import NotifiChat from "../src/NotifiChat";
 import NotifiChild from "../src/NotifiChild";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
@@ -7,7 +7,7 @@ import Icon from "react-native-remix-icon";
 const FavoriteJob = () => {
     const Tab = createMaterialTopTabNavigator();
     return (
-        <View style={styles.notifi}>
+        <SafeAreaView style={styles.notifi}>
             <View style={styles.bodyJobDetail}>
                 <Tab.Navigator style={styles.tabInFoJob}
                     screenOptions={{
@@ -115,7 +115,7 @@ const FavoriteJob = () => {
                 </Tab.Navigator>
             </View>
 
-        </View>
+        </SafeAreaView>
     )
 }
 

@@ -15,12 +15,13 @@ const TransactionHistory = () => {
         { id: '10', time: '23:40 - 22/09/2023', name: 'Tặng kim cương từ hệ thống', money: '+ 2 KC (0 đ)' },
     ];
     return (
-
+    <ScrollView>
         <View style={{
-            display: "flex",
-            justifyContent: "center",
+            
         }}>
             <FlatList
+                style={{paddingBottom: 300}}
+                scrollEnabled={false}
                 keyExtractor={(item) => item.id}
                 data={history}
                 renderItem={({ item }) => (
@@ -31,17 +32,19 @@ const TransactionHistory = () => {
                         alignItems: "center"
                     }}>
 
-                        <TouchableOpacity style={styles.item}>
+                        <View style={styles.item}>
 
                             <View style={{
                                 flexDirection: 'row',
                                 display: "flex",
+                                alignItems: 'center',
                                 justifyContent: "space-between"
                             }}>
                                 <View style={{
                                     flexDirection: "column",
                                     display: "flex",
-                                    gap: 10
+                                    gap: 5,
+                                    flex: 1
                                 }}>
                                     <Text style={styles.time}>{item.time}</Text>
                                     <Text style={styles.name}>{item.name}</Text>
@@ -49,12 +52,13 @@ const TransactionHistory = () => {
 
                                 <Text style={styles.money}>{item.money}</Text>
                             </View>
-                        </TouchableOpacity>
+                        </View>
 
                     </View>
                 )}
             />
         </View>
+    </ScrollView>
 
 
     );
@@ -131,11 +135,10 @@ const styles = StyleSheet.create({
         fontSize: 24,
         borderRadius: 10,
         shadowOffset: { width: 1, height: 5 },
-        shadowOpacity: 0.55,
-        shadowRadius: 4.84,
+        shadowOpacity: 0.05,
+        shadowRadius: 7,
         elevation: 5,
         width: "90%"
-
     },
 
     time: {
@@ -153,7 +156,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         color: '#E2F367',
         fontSize: 16,
-        marginTop: 10,
         textShadowColor: '#000',
     },
 });
