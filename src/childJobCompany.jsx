@@ -254,16 +254,8 @@ const ChildCompany = ({ route }) => {
                             onSwipeComplete={() => { setShow(false) }}
                             onBackdropPress={() => { setShow(false) }}
                             style={{ margin: 0 }}>
-                            <SafeAreaView style={{
-                                backgroundColor: "#fff", position: "absolute", bottom: 0, width: "100%", height: "35%",
-                                borderTopLeftRadius: 20,
-                                borderTopRightRadius: 20,
-                                paddingTop: 20,
-                                paddingBottom: 10,
-                                paddingLeft: 25,
-                                paddingRight: 20
-                            }}>
-                                <View style={styles.wrapModalCpn}>
+                            <SafeAreaView style={STYLE.modal}>
+                                <View style={STYLE.modalChild}>
                                     <View style={styles.wrapTextOption}>
                                         <Text style={{
                                             ...STYLE.textTitle
@@ -424,7 +416,7 @@ const ChildCompany = ({ route }) => {
                         marginTop: 10,
                         padding: 20
                     }}>
-                        <TouchableOpacity style={{
+                        {/* <TouchableOpacity style={{
                             display: "flex",
                             flexDirection: "row",
                             alignItems: "center",
@@ -448,7 +440,7 @@ const ChildCompany = ({ route }) => {
 
                             <Icon name="arrow-right-s-line"></Icon>
 
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
                     </View>
 
 
@@ -569,7 +561,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#fff"
     },
     scrollContainer: {
-        height: "75%",
+        height: "100%",
     },
     JobSumary: {
         borderWidth: 2,
@@ -643,7 +635,7 @@ const styles = StyleSheet.create({
     wrapInFoCpn: {
         display: "flex",
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     },
     gridItem: {
         flex: 1,
@@ -684,13 +676,10 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 16,
         gap: 10,
-        marginTop: 20,
         alignItems: "center"
 
     },
-    wrapTextOption: {
-        marginBottom: 20
-    }
+
 
 })
 

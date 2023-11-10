@@ -61,6 +61,30 @@ const STYLE = StyleSheet.create({
         fontSize: 18,
         color: "#000"
 
-    }
+    },
+    item: {
+        padding: 16,
+        borderColor: '#000',
+        borderWidth: 2,
+        borderRadius: 16
+    },
+    wrapModal: {
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modal: {
+        borderRadius: 16,
+        position: 'absolute',
+        bottom: 0,
+        justifyContent: 'flex-end',
+        width: '100%',
+        backgroundColor: '#fff',
+    },
+    modalChild: {
+        maxHeight: '75vh',
+        padding: 24,
+        paddingBottom: 0,
+        gap: 16
+    },
 })
 export default STYLE

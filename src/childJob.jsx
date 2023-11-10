@@ -197,14 +197,14 @@ const ChildInFoJob = ({ route }) => {
                 return response.json();
             })
             .then(data => {
-                //  console.log(data.fbs)
+             console.log("FEED BACK: " + JSON.stringify(data.fbs))
                 setFb(data.fbs)
             })
             .catch(error => {
                 console.log('Feedback' + error);
             })
     }
-
+ 
     const renderComment = ({ item }) => {
 
         const date = new Date(item.time)
@@ -212,7 +212,11 @@ const ChildInFoJob = ({ route }) => {
             <View style={styles.componentCmt}>
                 <View style={styles.headerCmt}>
                     <View style={styles.infoUserCmt}>
-                        <Image source={require('../assets/favicon.png')} />
+                        <Image source={{uri: item.profile_picture ? item.profile_picture: 'https://cdn-icons-png.flaticon.com/512/21/21104.png' }}  style={{
+                            width: 50,
+                            height: 50,
+                            borderRadius:100
+                        }}/>
                         <Text style={styles.userNameCmt}>{item.full_name}</Text>
                     </View>
                     <Text style={styles.timeCmt}>{date.toLocaleDateString()}</Text>
@@ -228,7 +232,7 @@ const ChildInFoJob = ({ route }) => {
 
 
 
-    return (
+    return (    
         <ScrollView style={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.JobSumary}>
@@ -256,7 +260,7 @@ const ChildInFoJob = ({ route }) => {
                         <Icon size={24} name="money-dollar-circle-line"></Icon>
                         <View style={styles.jobCateDeTail}>
                             <Text style={styles.jobCateDeTailTitle}>Mức lương</Text>
-                            <Text style={styles.jobCateDetailContent}>${postData.luong} - ${Math.round(postData.luong) + 300}</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.currency}{postData.luong.toLocaleString()} - {postData.currency}{postData.highest_salary.toLocaleString()}</Text>
                         </View>
                     </View>
 
@@ -351,7 +355,7 @@ const ChildInFoJob = ({ route }) => {
                 </View>
 
 
-                <View style={styles.tagTitle}>
+                {/* <View style={styles.tagTitle}>
                     <Text style={styles.textTagTitle}>Tag</Text>
                 </View>
 
@@ -365,7 +369,7 @@ const ChildInFoJob = ({ route }) => {
                         keyExtractor={(item) => item.tagID.toString()}
                         contentContainerStyle={styles.flatListContent}>
                     </FlatList>
-                </View>
+                </View> */}
             </View>
         </ScrollView>
     )
@@ -389,10 +393,11 @@ const styles = StyleSheet.create({
         paddingBottom: 150,
         display: "flex",
         alignContent: "center",
-        backgroundColor: "#fff"
+        backgroundColor: "#fff",
+ 
     },
     scrollContainer: {
-        height: "75%",
+      height: "100%",
     },
     JobSumary: {
         borderWidth: 2,
@@ -489,8 +494,7 @@ const styles = StyleSheet.create({
         gap: 5,
         borderRadius: 16,
         elevation: 3,
-        padding: 10,
-        width: 100,
+        padding: 10
     },
     inputCmt: {
         backgroundColor: "#F1F1F1",
@@ -514,7 +518,7 @@ const styles = StyleSheet.create({
     componentCmt: {
         borderColor: "#B0B0B0",
         borderWidth: 2,
-        padding: 22,
+        padding: 10,
         borderRadius: 18,
         marginTop: 18
     },

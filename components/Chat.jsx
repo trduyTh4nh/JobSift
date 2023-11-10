@@ -187,7 +187,7 @@ const ChatComponent = ({chat, navigation}) => {
     return (
         <TouchableOpacity onPress={navigate} style={styleGlobal.chatComp}>
             <View style={styleGlobal.chatWrapper}>
-                <Image style={styleGlobal.img} source={{uri: chat.profile_picture}}/>
+                <Image style={styleGlobal.img} source={{uri: chat.profile_picture ? chat.profile_picture : "https://t4.ftcdn.net/jpg/02/29/75/83/360_F_229758328_7x8jwCwjtBMmC6rgFzLFhZoEpLobB6L8.jpg"}}/>
                 <View>
                     <Text style={styleGlobal.chatName}>{chat.full_name}</Text>
                     <Text style={chat.new ? styleGlobal.newMsg : {...STYLE.textNormal, fontSize: 16}}>{chat.content}</Text>
