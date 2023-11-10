@@ -3,9 +3,15 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput,
 import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
 import { Picker } from '@react-native-picker/picker';
+
 import { ScrollView } from "react-native";
 
-const CreateCVBasicInFo = ({navigation}) => {
+import { useNavigation } from '@react-navigation/native';
+
+
+const CreateCVBasicInFo = () => {
+
+    const navigation = useNavigation();
 
     const [language, setLanguage] = useState('')
     const [category, setCategory] = useState('')
@@ -20,8 +26,7 @@ const CreateCVBasicInFo = ({navigation}) => {
     }
 
     const handleNextBasicInfo = () => {
-        console.log(formData)
-        navigation.navigate("CreateCV")
+        navigation.navigate("CreateCV", { basicInFo: formData })
     }
 
 
@@ -47,6 +52,7 @@ const CreateCVBasicInFo = ({navigation}) => {
                 paddingRight: 18
             }}>
                 <Text style={styles.title}>Thông tin cơ bản</Text>
+
                 {
                     Platform.OS == 'ios' ? (
                             <View style={styles.wrapInput}>
@@ -268,18 +274,18 @@ const CreateCVBasicInFo = ({navigation}) => {
                 
 
                 <View style={styles.btnNext}>
-                    <TouchableOpacity 
-                    onPress={handleNextBasicInfo}
-                    style={{
-                        backgroundColor: "#E2F367",
-                        width: 150,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        borderRadius: 20,
-                        elevation: 2
-                    }}>
+                    <TouchableOpacity
+                        onPress={handleNextBasicInfo}
+                        style={{
+                            backgroundColor: "#E2F367",
+                            width: 150,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            borderRadius: 20,
+                            elevation: 2
+                        }}>
                         <Text style={styles.inputItemTitle} >Next</Text>
                     </TouchableOpacity>
                 </View>
@@ -340,7 +346,7 @@ const styles = StyleSheet.create({
         display: "flex",
         gap: 20
     },
-    btnNext:{
+    btnNext: {
         marginTop: 40,
         widtd: "100%",
         display: "flex",
