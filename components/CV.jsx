@@ -2,7 +2,13 @@ import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator } from "react-native";
 import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
+import { useNavigation } from '@react-navigation/native';
+import { useRoute } from '@react-navigation/native';
+
 const CV = ({navigation}) => {
+    const route = useRoute();
+    const basicInfo = route.params;
+
 
     const [fontLoaded] = useFonts({
         'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
@@ -15,6 +21,8 @@ const CV = ({navigation}) => {
             </View>
         )
     }
+
+
 
 
     return (
@@ -96,12 +104,12 @@ const CV = ({navigation}) => {
                                 alignItems: "center",
                                 justifyContent: "space-between",
                                 flex: 1,
-                                
-                                
+
+
                             }}>
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
-                                    color: "#000", 
+                                    color: "#000",
                                     marginLeft: 6
                                 }}>Delete</Text>
                                 <Icon name="close-circle-line"></Icon>
@@ -120,7 +128,7 @@ const CV = ({navigation}) => {
                             }}>
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
-                                    color: "#000", 
+                                    color: "#000",
                                     marginLeft: 6
                                 }}>Edit</Text>
                                 <Icon name="arrow-right-s-fill"></Icon>
@@ -134,12 +142,12 @@ const CV = ({navigation}) => {
                             padding: 10,
                             margin: 4,
                             gap: 10,
-                            alignItems: "center", 
+                            alignItems: "center",
                             justifyContent: "space-between"
                         }}>
                             <Text style={{
                                 fontFamily: "RukbikNormal",
-                                color: "#000", 
+                                color: "#000",
                                 marginLeft: 6
                             }}>Create PDF</Text>
                             <Icon name="arrow-right-s-line"></Icon>

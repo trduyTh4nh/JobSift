@@ -3,8 +3,11 @@ import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput 
 import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
 import { Picker } from '@react-native-picker/picker';
+import { useNavigation } from '@react-navigation/native';
 
-const CreateCVBasicInFo = ({navigation}) => {
+const CreateCVBasicInFo = () => {
+
+    const navigation = useNavigation();
 
     const [language, setLanguage] = useState('')
     const [category, setCategory] = useState('')
@@ -19,8 +22,7 @@ const CreateCVBasicInFo = ({navigation}) => {
     }
 
     const handleNextBasicInfo = () => {
-        console.log(formData)
-        navigation.navigate("CreateCV")
+        navigation.navigate("CreateCV", { basicInFo: formData })
     }
 
 
@@ -147,14 +149,14 @@ const CreateCVBasicInFo = ({navigation}) => {
                     <View style={styles.inputItem}>
                         <Text style={styles.inputItemTitle}>Vị trí</Text>
                         <View style={styles.wrapPicker1}>
-                            <TextInput 
-                            onChangeText={(value) => {
-                                setPosition(value)
-                            }}
-                            style={{
-                                width: "100%",
-                                paddingLeft: 18
-                            }}>
+                            <TextInput
+                                onChangeText={(value) => {
+                                    setPosition(value)
+                                }}
+                                style={{
+                                    width: "100%",
+                                    paddingLeft: 18
+                                }}>
 
                             </TextInput>
                         </View>
@@ -164,18 +166,18 @@ const CreateCVBasicInFo = ({navigation}) => {
                 </View>
 
                 <View style={styles.btnNext}>
-                    <TouchableOpacity 
-                    onPress={handleNextBasicInfo}
-                    style={{
-                        backgroundColor: "#E2F367",
-                        width: 150,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        padding: 10,
-                        borderRadius: 20,
-                        elevation: 2
-                    }}>
+                    <TouchableOpacity
+                        onPress={handleNextBasicInfo}
+                        style={{
+                            backgroundColor: "#E2F367",
+                            width: 150,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            padding: 10,
+                            borderRadius: 20,
+                            elevation: 2
+                        }}>
                         <Text style={styles.inputItemTitle} >Next</Text>
                     </TouchableOpacity>
                 </View>
@@ -227,7 +229,7 @@ const styles = StyleSheet.create({
         display: "flex",
         gap: 20
     },
-    btnNext:{
+    btnNext: {
         marginTop: 40,
         widtd: "100%",
         display: "flex",

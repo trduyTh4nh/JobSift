@@ -12,7 +12,11 @@ import { Picker } from '@react-native-picker/picker';
 
 
 
-const CreateCV = () => {
+const CreateCV = ({ route }) => {
+
+    const dataInfoBasic = route.params.basicInFo
+
+    console.log("data: " + JSON.stringify(dataInfoBasic))
 
     const [animation] = useState(new Animated.Value(0));
     const [text, setText] = useState('');
@@ -73,8 +77,6 @@ const CreateCV = () => {
     const [datePickerOpen7, setDatePickerOpen7] = useState(false);
 
     const [levelLA, setLevelLA] = useState('Bình thường');
-
-
 
     const [objWrk, setOjbWrk] = useState({})
     const [objbBE, setOjbBE] = useState({})
@@ -1268,11 +1270,11 @@ const CreateCV = () => {
                             <View style={styles.itemAdd}>
                                 <Text style={styles.textTitle}>Vị trí</Text>
                                 <TextInput
-                                    placeholder={dataEditWorkEx ? dataEditWorkEx.postition : ""}
+                                    placeholder={dataEditWorkEx ? dataEditWorkEx.position : ""}
                                     onChangeText={(text) => {
                                         setOjbWrk({
                                             ...objWrk,
-                                            postition: text
+                                            position: text
                                         })
                                     }} style={styles.textInput} ></TextInput>
                             </View>
@@ -2482,8 +2484,12 @@ const styles = StyleSheet.create({
         borderColor: "#B0B0B0",
         paddingTop: 10,
         marginTop: 15,
-        marginBottom: 10
+        marginBottom: 20
     },
+    empty: {
+        marginBottom: 10
+    }
+    ,
     overlay: {
         ...StyleSheet.absoluteFillObject,
         justifyContent: 'center',
@@ -2996,4 +3002,4 @@ export default CreateCV
 
 
 
-                
+
