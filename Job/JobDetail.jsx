@@ -345,6 +345,32 @@ const JobDetail = () => {
     const handlePDFCVChoose = () => {
         setShowUngTuyen(false)
         setSuccess(false)
+        axios.post(URL + '/report/get', {
+            "id_user": global.user.user.id_user,
+            "id_post": postData.id_post
+        }).then(e => {
+            console.log(e.data.length)
+            if(e.data.length > 0){
+                Alert.alert('Bạn đã report bài đăng này với lý do ' + e.data[0].reason, 'Bài đăng này đã được report bởi bạn. Bạn có muốn tiếp tục ứng tuyển bài đăng này không?', 
+                [
+                    { text: 'Không' },
+                    {
+                        text: 'Có', onPress: () => {
+                            showUT()
+                        }
+                    },
+                ])
+            } else {
+                showUT()
+            }
+        })
+
+        
+
+
+
+    }
+    const showUT = () => {
         axios.post('http://' + API_URL + ':3001' + '/diamond/' + global.user.user.id_user).then(e => {
             if(e.data.diamond_count >= 30){
                 setEnough(true)
@@ -356,19 +382,27 @@ const JobDetail = () => {
                 setShowPDFCV(true)
             }, 400)
         })
-        
-
-
-
     }
     const handlePDFCVCancel = () => {
         setShowPDFCV(false)
         setFile(null)
-
     }
-
     const handNavigate = () => {
-        navigation.navigate('Report')
+        axios.post(URL + '/report/get', {
+            "id_user": global.user.user.id_user,
+            "id_post": postData.id_post
+        }).then(e => {
+            if(e.data.length > 0){
+                popupRef.close()
+                Alert.alert('Đã report rồi', 'Bạn đã report bài đăng này rồi.')
+            } else {
+                navigation.navigate('Report', {id_post: postData.id_post})
+                popupRef.close()
+            }
+        }).catch(e => {
+            Alert.alert('Lỗi')
+        })
+        
     }
     const convertSize = (size) => {
         if (size < 1024) {
@@ -990,10 +1024,9 @@ const styles = StyleSheet.create({
         marginTop: 0,
         color: "#000",
         fontFamily: "RukbikNormal"
-
     },
     bodyJobDetail: {
-        height: 400
+        height: '70%'
     },
     tabInFoJob: {
         fontFamily: "Rubik"

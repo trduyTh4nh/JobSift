@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert } from "react-native";
+import { SafeAreaView, ScrollView, View, Text, Button, TouchableOpacity, FlatList, Image, TextInput, StyleSheet, Alert, ActivityIndicator } from "react-native";
 import { useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
 import CardJob from "../Job/CardJob";
@@ -77,18 +77,36 @@ const Profile = ({ navigation }) => {
             <View style={styles.wrap}>
                 <View style={styles.container}>
                     <View style={styles.vien}>
-                        <View style={styles.Xuongdong1}>
-                            <Text style={styles.chutrongvien}> {applyCount} </Text>
+                        <TouchableOpacity onPress={() => {navigation.navigate('Tình trạng ứng tuyển')}} style={styles.Xuongdong1}>
+                            {
+                                applyCount == -1 ? (
+                                    <ActivityIndicator/>
+                                ) : (
+                                    <Text style={styles.chutrongvien}> {applyCount} </Text>
+                                )
+                            }
                             <Text style={styles.chutrongvien2}> Đã ứng tuyển </Text>
-                        </View>
-                        <View style={styles.Xuongdong1}>
-                            <Text style={styles.chutrongvien}> {cvCount} </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.Xuongdong1}>
+                            {
+                                cvCount == -1 ? (
+                                    <ActivityIndicator/>
+                                ) : (
+                                    <Text style={styles.chutrongvien}> {cvCount} </Text>
+                                )
+                            }
                             <Text style={styles.chutrongvien2}> CV </Text>
-                        </View>
-                        <View style={styles.Xuongdong1}>
-                            <Text style={styles.chutrongvien}> {cvfollow} </Text>
+                        </TouchableOpacity>
+                        <TouchableOpacity style={styles.Xuongdong1}>
+                            {
+                                cvfollow == -1 ? (
+                                    <ActivityIndicator/>
+                                ) : (
+                                    <Text style={styles.chutrongvien}> {cvfollow} </Text>
+                                )
+                            }
                             <Text style={styles.chutrongvien2}> Đang th. dõi </Text>
-                        </View>
+                        </TouchableOpacity>
                     </View>
 
 

@@ -69,7 +69,7 @@ export function HeaderProfile({navigation, title, LeftButton}) {
                             
                         </View>
                         <View style={styles.wrapinFo}>
-                            <Text style={{...styles.welcomeMessage, ...STYLE.textBold}}>💎 {global.user ? global.user.user.diamond_count.toLocaleString() : 0} </Text>
+                            <Text style={{...styles.welcomeMessage, ...STYLE.textBold}}>💎 {global.user ? global.user.user.diamond_count ? global.user.user.diamond_count.toLocaleString() : 0 : 0} </Text>
                             <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
                                 <Icon name="add-line"/>
                             </TouchableOpacity>

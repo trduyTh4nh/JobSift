@@ -29,6 +29,7 @@ const CardJobDetail = (props) => {
         } else if (s / 1000 >= 1) {
             return Math.round(s / 1000) + 'k'
         }
+        return s
     }
     const fetchFav = () => {
         if (dataPostDetail) {
