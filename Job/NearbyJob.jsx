@@ -135,7 +135,7 @@ const NearbyJob = (props) => {
 
                         <View style={styles.itemInNearBy}>
                             <Icon name="money-cny-circle-line"></Icon>
-                            <Text style={styles.nearByJobCategory}>{`${dataNearby.currency}${dataNearby.luong.toLocaleString()} - ${dataNearby.currency}${dataNearby.highest_salary.toLocaleString()}`}</Text>
+                            <Text style={styles.nearByJobCategory}>{`${dataNearby.currency}${dataNearby.luong ? dataNearby.luong.toLocaleString() : 0} - ${dataNearby.currency}${dataNearby.highest_salary ? dataNearby.highest_salary.toLocaleString() : 0}`}</Text>
                         </View>
 
                         <View style={styles.itemInNearBy}>

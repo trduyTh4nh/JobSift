@@ -203,12 +203,11 @@ const Job = () => {
                 swipeDirection={'down'}
                 style={{ margin: 0 }}
             >
-                <SafeAreaView style={{
+                <ScrollView style={{
                     backgroundColor: "#fff", position: "absolute", bottom: 0, width: "100%",
                     borderTopLeftRadius: 20,
                     borderTopRightRadius: 20,
-                    paddingTop: 20,
-                    paddingBottom: 10,
+                    paddingTop: 10,
                     paddingLeft: 25,
                     paddingRight: 20,
                     display: "flex",
@@ -219,18 +218,17 @@ const Job = () => {
                         display: "flex",
                         flexDirection: "row",
                         alignItems: "center",
-                        gap: 10
                     }}>
                         <Text style={{
                             ...STYLE.textTitle
-                        }}>Filter</Text>
+                        }}>Bộ lọc</Text>
 
                         <Icon name="filter-2-fill"></Icon>
                     </View>
                     <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Name job: </Text>
+                        <Text style={styles.titleFilter}>Tên công việc</Text>
                         <TextInput style={styles.textInputModal}
-                            placeholder="Name"
+                            placeholder=""
                             value={formData.nameJob}
                             onChangeText={text => handleInputChange('nameJob', text)}
 
@@ -238,26 +236,26 @@ const Job = () => {
                     </View>
 
                     <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Company</Text>
+                        <Text style={styles.titleFilter}>Tên công ty</Text>
                         <TextInput style={styles.textInputModal}
-                            placeholder="Name"
+                            placeholder=""
                             value={formData.company}
                             onChangeText={text => handleInputChange('company', text)}
 
                         ></TextInput>
                     </View>
                     <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Category</Text>
+                        <Text style={styles.titleFilter}>Loại công việc</Text>
                         <TextInput style={styles.textInputModal}
-                            placeholder="Name"
+                            placeholder=""
                             value={formData.category}
                             onChangeText={text => handleInputChange('category', text)}
                         ></TextInput>
                     </View>
                     <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Postition</Text>
+                        <Text style={styles.titleFilter}>Vị trí</Text>
                         <TextInput style={styles.textInputModal}
-                            placeholder="Name"
+                            placeholder=""
                             value={formData.position}
                             onChangeText={text => handleInputChange('position', text)}
 
@@ -268,7 +266,7 @@ const Job = () => {
                         ...styles.modal_item,
                         marginBottom: 16
                     }}>
-                        <Text style={styles.titleFilter}>Salary</Text>
+                        <Text style={styles.titleFilter}>Lương</Text>
                         <View style={{
                             display: "flex",
                             flexDirection: "row",
@@ -325,12 +323,12 @@ const Job = () => {
                         >
                             <Text style={{
                                 fontFamily: 'RukbikNormal',
-                            }}>Done</Text>
+                            }}>Hoàn thành</Text>
                         </TouchableOpacity>
                     </View>
 
 
-                </SafeAreaView>
+                </ScrollView>
             </Modal>
 
 
@@ -481,7 +479,6 @@ const styles = StyleSheet.create({
 
     },
     wrapTextOption: {
-        marginBottom: 20
     },
     titleFilter: {
         color: "#000",
