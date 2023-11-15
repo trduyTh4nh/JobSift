@@ -231,13 +231,11 @@ const ChildCompany = ({ route }) => {
 
                         <View style={styles.companyHeaderText}>
                             <Image style={{ width: 45, height: 45 }} source={{uri: infoNTD.info ? infoNTD.info.logo_dn: "https://assets.materialup.com/uploads/01d7570f-01ca-4e3a-8dc1-b8a16864f916/preview.jpg"}}></Image>
-                            <View style={styles.companyTitle}>
+                            <View style={{flex: 1}}>
                                 <Text style={styles.companyName}>{infoNTD.info ? infoNTD.info.name_dn : ''}</Text>
-                                <Text style={styles.companyDes}>Enterprise</Text>
+                                <Text style={styles.companyDes}>Doanh nghiệp</Text>
                             </View>
-
                         </View>
-
                         <View style={styles.wrapButton}>
 
                             <TouchableOpacity style={styles.buttonApplyJob} onPress={statusChange === true ? changeInboxPage : handleFollow} >
@@ -481,7 +479,7 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         alignItems: "center",
-        gap: 100,
+        justifyContent: 'space-between',
         paddingTop: 20,
         paddingBottom: 20,
         paddingLeft: 30,
@@ -492,8 +490,8 @@ const styles = StyleSheet.create({
         display: "flex",
         flexDirection: "row",
         gap: 10,
-        alignItems: "center"
-
+        alignItems: "center",
+        flex: 1
     },
     wrapButton: {
         display: "flex",

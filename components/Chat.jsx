@@ -106,14 +106,16 @@ const Chat = ({navigation}) => {
     
     useEffect(() => {
         socket.on('newMsg', (r) => {
-            axios.post(`${API_URL}/chat`, {
-                "id_user": global.user.user.id_user
-            }).then(e => {
-                console.log(e.data)
-                setChat(e.data)
-            }).catch(e => {
-                console.error(e)
-            })
+            if(r.body.id_user == global.user.user.id_user){
+                axios.post(`${API_URL}/chat`, {
+                    "id_user": global.user.user.id_user
+                }).then(e => {
+                    console.log(e.data)
+                    setChat(e.data)
+                }).catch(e => {
+                    console.error(e)
+                })
+            }
         })
         console.log('focus')
             axios.post(`${API_URL}/chat`, {

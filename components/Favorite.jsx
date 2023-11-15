@@ -9,7 +9,7 @@ import { TouchableOpacity } from "react-native";
 import { API_URL } from "../constants/etc";
 import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import axios from "axios";
-import { useFocusEffect, useIsFocused } from "@react-navigation/native";
+import { useFocusEffect, useIsFocused, useRoute } from "@react-navigation/native";
 import Error from "./Error";
 
 
@@ -19,44 +19,51 @@ const FavoritePage = () => {
     const [errorStatus, setErrorStatus] = useState(false)
     const [display, setDisplay] = useState()
     const focus = useIsFocused()
+    const route = useRoute()
     useEffect(() => {
-        axios.post(API_URL + '/favourite', { id_user: global.user.user.id_user }, {
-            headers: {
-                'Content-Type': 'application/json'
+        if(route.name === 'All Jobs'){
+            axios.get(API_URL).then(e => {
+               setData(e.data)
+            })
+        } else {
+            axios.post(API_URL + '/favourite', { id_user: global.user.user.id_user }, {
+                headers: {
+                    'Content-Type': 'application/json'
+                }
             }
+            ).then((r) => {
+                console.log(r.data)
+                const post = r.data
+                setDisplay('')
+                setData(post)
+            }).catch((e) => {
+                if (e == 'AxiosError: Request failed with status code 404') {
+                    setData([])
+                    setDisplay(() => (
+                        <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-heart-2-line'} title={'Không có bài đăng nào'} message={'Bạn chưa yêu thích bài đăng nào. Hãy ấn nút trái tim ở một bài post để thêm vào danh sách yêu thích.'} />
+                    ))
+                } else if (e == 'AxiosError: Request failed with status code 401') {
+                    console.warn('Error 401')
+                    setData([])
+                    setDisplay(() => (
+                        <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-user-line'} title={'Chưa đăng nhập'} message={'Đáng lẽ bạn phải đăng nhập chứ... Chắc do lỗi hệ thống...'} />
+                    ))
+                } else {
+                    setData([])
+                    setDisplay(() => (
+                        <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-error-warning-line'} title={'Ngại nhỉ...'} message={'Có thể là do server bị lỗi hoặc bạn không có kết nối Internet. Nguyên nhân gây ra lỗi: ' + e} />
+                    ))
+                    setErrorStatus(500)
+                }
+    
+            })
         }
-        ).then((r) => {
-            console.log(r.data)
-            const post = r.data
-            setDisplay('')
-            setData(post)
-        }).catch((e) => {
-            if (e == 'AxiosError: Request failed with status code 404') {
-                setData([])
-                setDisplay(() => (
-                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-heart-2-line'} title={'Không có bài đăng nào'} message={'Bạn chưa yêu thích bài đăng nào. Hãy ấn nút trái tim ở một bài post để thêm vào danh sách yêu thích.'} />
-                ))
-            } else if (e == 'AxiosError: Request failed with status code 401') {
-                console.warn('Error 401')
-                setData([])
-                setDisplay(() => (
-                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-user-line'} title={'Chưa đăng nhập'} message={'Đáng lẽ bạn phải đăng nhập chứ... Chắc do lỗi hệ thống...'} />
-                ))
-            } else {
-                setData([])
-                setDisplay(() => (
-                    <Error style={{paddingLeft: 16, paddingRight: 16}} icon={'ri-error-warning-line'} title={'Ngại nhỉ...'} message={'Có thể là do server bị lỗi hoặc bạn không có kết nối Internet. Nguyên nhân gây ra lỗi: ' + e} />
-                ))
-                setErrorStatus(500)
-            }
-
-        })
     }, [focus])
 
 
     return (
         <View style={{ ...style.dodgeBottom, height: '100%' }}>
-            <Text style={{ padding: 16 }}>{data.length} bài đăng yêu thích</Text>
+            <Text style={{ padding: 16 }}>{data.length} bài đăng {route.name !== 'All Jobs' ? 'yêu thích' : ''}</Text>
             <ScrollView style={style.body}>
                 {display}
                 <FlatList

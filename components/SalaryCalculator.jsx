@@ -45,39 +45,10 @@ const SalaryCalculator = ({navigation}) => {
                         ),
 
                         tabBarIndicatorStyle: {
+                            display: 'none',
                             width: 30,
                             height: 5,
-                            left: ((Dimensions.get('window').width / 2 - 30) / 2),
-                            backgroundColor: '#000',
-
-
-                        },
-                        tabBarIndicatorContainerStyle: {
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-
-
-                        }
-
-                    }}
-                         />
-                         <Tab.Screen
-                         name='Net to Gross' component={NetToGross}
-                            options={{
-                        title: "Net to Gross",
-                        tabBarLabel: ({ focused, color }) => (
-                            <Text style={{
-                                color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik"
-                            }}>
-                                Net to Gross
-                            </Text>
-                        ),
-
-                        tabBarIndicatorStyle: {
-                            width: 30,
-                            height: 5,
-                            left: ((Dimensions.get('window').width / 2 - 30) / 2),
+                            left: ((Dimensions.get('window').width / 1 - 30) / 1),
                             backgroundColor: '#000',
 
 

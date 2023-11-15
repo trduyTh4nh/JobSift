@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { View, StyleSheet, Text } from "react-native";
 import { API_URL } from "../constants/etc";
 import STYLE from "../assets/css/universal";
+import { socket } from "../constants/socket.io/socket";
 const ChatBubble = ({chat, message, from, to, isSelf, isSent}) => {
     const [sent, setSent] = useState(false)
     const [error, setError] = useState(false)
@@ -17,6 +18,7 @@ const ChatBubble = ({chat, message, from, to, isSelf, isSent}) => {
             }).then(e => {
                 console.log('sent')
                 setSent(true)
+                socket.emit('newMsg', {id_chat: chat, content: message, id_user: from})
             }).catch(e => {
                 console.log(e)
                 setError(true)
