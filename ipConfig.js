@@ -3,7 +3,6 @@ export const API_URL = "192.168.1.131"
 
 
 
-
 //192.168.1.41
 const IDHouseTP = "192.168.116.1"
 const IPBlackCoffe = "192.168.1.30"

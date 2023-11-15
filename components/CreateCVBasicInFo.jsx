@@ -26,6 +26,7 @@ const CreateCVBasicInFo = () => {
     }
 
     const handleNextBasicInfo = () => {
+        
         navigation.navigate("CreateCV", { basicInFo: formData })
     }
 
@@ -330,9 +331,7 @@ const styles = StyleSheet.create({
         marginTop: 6
     },
     wrapPicker1: {
-        paddingTop: 16,
-        paddingBottom: 16,
-        alignItems: 'center',
+         alignItems: 'center',
         justifyContent: 'center',
        
         borderRadius: 16,

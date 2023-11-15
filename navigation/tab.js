@@ -43,6 +43,7 @@ import ViewPropTypes from 'deprecated-react-native-prop-types';
 import PrivacyAndProlicy from '../components/PrivacyAndPolicy'
 import Transaction from '../components/Transaction';
 import CreateCVBasicInFo from '../components/CreateCVBasicInFo';
+import CvDetail from '../components/CvDetail';
 
 const Stack = createNativeStackNavigator();
 
@@ -175,7 +176,7 @@ const Tabs = () => {
                         },
                     }}
                 ></Stack.Screen>
-                 <Stack.Screen
+                <Stack.Screen
                     name='Report'
                     component={Report}
                     options={{
@@ -360,22 +361,22 @@ const Tabs = () => {
                 header: ({ navigation, route, options, back }) => {
                     const [diamond, setDiamond] = useState(0)
                     useEffect(() => {
-                                socket.on('kcValChange', e => {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
+                        socket.on('kcValChange', e => {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
                         })
-                    })
-                    if (global.user) {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
-                        })
-                    }
+                        if (global.user) {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
+                        }
                     })
                     const title = getHeaderTitle(options, route.name)
                     return (
@@ -393,8 +394,8 @@ const Tabs = () => {
                                     </View>
                                     <View style={styles.wrapinFo}>
                                         <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
-                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
-                                            <Icon name="add-line"/>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('Mua KC') }}>
+                                            <Icon name="add-line" />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -412,22 +413,22 @@ const Tabs = () => {
                 header: ({ navigation, route, options, back }) => {
                     const [diamond, setDiamond] = useState(0)
                     useEffect(() => {
-                                socket.on('kcValChange', e => {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
+                        socket.on('kcValChange', e => {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
                         })
-                    })
-                    if (global.user) {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
-                        })
-                    }
+                        if (global.user) {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
+                        }
                     })
                     const title = getHeaderTitle(options, route.name)
                     return (
@@ -445,8 +446,8 @@ const Tabs = () => {
                                     </View>
                                     <View style={styles.wrapinFo}>
                                         <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
-                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
-                                            <Icon name="add-line"/>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('Mua KC') }}>
+                                            <Icon name="add-line" />
                                         </TouchableOpacity>
                                     </View>
                                 </View>
@@ -456,27 +457,31 @@ const Tabs = () => {
                 }
             }} ></Stack.Screen>
 
+            <Stack.Screen name='CV chi tiết' component={CvDetail} options={{
+                headerShown: false
+            }} ></Stack.Screen>
+
             <Stack.Screen name="CreateCV" component={CreateCV} options={{
                 header: ({ navigation, route, options, back }) => {
                     const title = getHeaderTitle(options, route.name)
                     const [diamond, setDiamond] = useState(0)
                     useEffect(() => {
-                                socket.on('kcValChange', e => {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
+                        socket.on('kcValChange', e => {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
                         })
-                    })
-                    if (global.user) {
-                        axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
-                            global.user.user.diamond_count = e.data.diamond_count
-                            setDiamond(e.data.diamond_count)
-                        }).catch(e => {
-                            Alert.alert('Error while getting diamond: ' + e)
-                        })
-                    }
+                        if (global.user) {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
+                        }
                     })
                     return (
                         <View>
@@ -493,8 +498,8 @@ const Tabs = () => {
                                     </View>
                                     <View style={styles.wrapinFo}>
                                         <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
-                                        <TouchableOpacity onPress={() => {navigation.navigate('Mua KC')}}>
-                                            <Icon name="add-line"/>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('Mua KC') }}>
+                                            <Icon name="add-line" />
                                         </TouchableOpacity>
                                     </View>
                                 </View>

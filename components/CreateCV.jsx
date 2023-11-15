@@ -9,15 +9,16 @@ import PopUpAdd from "../src/PopUpAdd"
 import Modal from 'react-native-modal'
 import { Picker } from '@react-native-picker/picker';
 import STYLE from "../assets/css/universal"
+import axios from "axios"
+import { API_URL } from "../ipConfig"
+import { socket } from "../constants/socket.io/socket"
+import storage from '@react-native-firebase/storage';
 
-
-
-
-const CreateCV = ({ route }) => {
+const CreateCV = ({ route, navigation }) => {
 
     const dataInfoBasic = route.params.basicInFo
 
-    console.log("data: " + JSON.stringify(dataInfoBasic))
+
 
     const [animation] = useState(new Animated.Value(0));
     const [text, setText] = useState('');
@@ -59,22 +60,22 @@ const CreateCV = ({ route }) => {
     const [keyCounter4, setKeyCounter4] = useState(0);
     const [keyCounter5, setKeyCounter5] = useState(0);
 
-    const [dateBirtht, setDateBirtht] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirtht, setDateBirtht] = useState(new Date());
     const [datePickerOpent, setDatePickerOpent] = useState(false);
-    const [dateBirth2, setDateBirth2] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth2, setDateBirth2] = useState(new Date());
     const [datePickerOpen2, setDatePickerOpen2] = useState(false);
 
-    const [dateBirth3, setDateBirth3] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth3, setDateBirth3] = useState(new Date());
     const [datePickerOpen3, setDatePickerOpen3] = useState(false);
-    const [dateBirth4, setDateBirth4] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth4, setDateBirth4] = useState(new Date());
     const [datePickerOpen4, setDatePickerOpen4] = useState(false);
 
-    const [dateBirth5, setDateBirth5] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth5, setDateBirth5] = useState(new Date());
     const [datePickerOpen5, setDatePickerOpen5] = useState(false);
-    const [dateBirth6, setDateBirth6] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth6, setDateBirth6] = useState(new Date());
     const [datePickerOpen6, setDatePickerOpen6] = useState(false);
 
-    const [dateBirth7, setDateBirth7] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth7, setDateBirth7] = useState(new Date());
     const [datePickerOpen7, setDatePickerOpen7] = useState(false);
 
     const [levelLA, setLevelLA] = useState('Bình thường');
@@ -141,7 +142,7 @@ const CreateCV = ({ route }) => {
 
 
 
-    const [dateBirth, setDateBirth] = useState(new Date(global.user.user.ngaysinh));
+    const [dateBirth, setDateBirth] = useState(new Date());
 
     const [datePickerOpen, setDatePickerOpen] = useState(false);
 
@@ -190,6 +191,7 @@ const CreateCV = ({ route }) => {
         //     data
 
         // ]);
+
 
 
     }
@@ -566,28 +568,108 @@ const CreateCV = ({ route }) => {
                 quality: 1
             }
         ).then(e => {
-            console.log("IMage" + JSON.stringify(e.assets[0].uri))
-            setImageProfile(e.assets[0].uri)
-            setDataCv({
-                imageUserCV: e.assets[0].uri
-            })
+            if (!e.canceled) {
+                console.log("IMage" + JSON.stringify(e.assets[0].uri))
+                setImageProfile(e.assets[0].uri)
+
+                uploadImageToFireBase(e.assets[0].uri)
+            }
+
         }).catch(e => {
             console.error("ERROR IMAGE: " + e)
         })
     }
+
+    const getImageFromFirebase = (pathName) => {
+        return new Promise(async (resolve, reject) => {
+            try {
+                const imageRef = storage().ref(pathName);
+                const downloadURL = await imageRef.getDownloadURL();
+                resolve(downloadURL);
+            } catch (error) {
+                console.error('Error getting image from Firebase:', error);
+                reject(error);
+            }
+        });
+    };
+
+    const uploadImageToFireBase = async (imagePath) => {
+        const fileName = `${Date.now()}.jpg`;
+        const reference = storage().ref().child(fileName);
+
+        try {
+            await reference.putFile(imagePath);
+
+            console.log("Image uploaded successfully");
+
+            // Get the download URL and set it in the user object
+            const downloadURL = await getImageFromFirebase(fileName);
+            setDataCv({
+                ...DataCv,
+                imageUserCV: downloadURL
+            })
+            console.log("DATA đã upload ảnh: " + JSON.stringify(DataCv))
+
+        } catch (error) {
+            console.error("Error uploading image:", error);
+        }
+    };
 
     const handleGetName = (name) => {
         setDataCv({
             ...DataCv,
             nameUserCV: name
         })
-
-
     }
 
     const handleDoneInfoCV = () => {
-        console.log("DATA CV: " + JSON.stringify(DataCv))
+        const dataGenrate = {
+            ...DataCv,
+            ...dataInfoBasic,
+            working_experience: objWorkEx,
+            education: objEducation,
+            activity: objActivity,
+            language: objLanguage,
+            certificate: objCertificate
+        }
+
+        const idUser = global.user.user.id_user
+
+        axios.post(`http://${API_URL}:3001/genratecv/${idUser}`, dataGenrate, {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+            .then((e) => {
+                console.log("SUCCESSFULLY! : " + JSON.stringify(e.data))
+                axios.post(`http://${API_URL}:3001/diamond/${idUser}`).then(e => {
+                    const d = e.data
+                    if (e.data.diamond_count > 20) {
+                        axios.post(`http://${API_URL}:3001/diamond/set`, {
+                            "diamond_count": e.data.diamond_count - 20,
+                            "id_user": idUser
+                        }).then((e) => {
+                            socket.emit('kcValChange', { diamond_count: d.diamond_count - 20 })
+                            navigation.navigate('CV')
+                        }).catch((error) => {
+                            console.log(error)
+                        })
+                    }
+                })
+            })
+            .catch((error) => {
+                console.log("ERROR!: " + error)
+            })
+
+
+
+        
+
+
     }
+
+
+
     const formattedDate = (utcDate) => {
         const date = new Date(utcDate);
         const year = date.getFullYear();
@@ -891,7 +973,7 @@ const CreateCV = ({ route }) => {
     const Language = ({ item }) => {
 
         return (
-            <View style={{gap: 16, marginTop: 10}}>
+            <View style={{ gap: 16, marginTop: 10 }}>
                 <View style={styles.WeItem}>
 
                     <View style={{
@@ -1238,149 +1320,156 @@ const CreateCV = ({ route }) => {
 
                     {/* Kinh nghiệm làm việc */}
                     <Modal
-                        avoidKeyboard
+                        avoidKeyboard={Platform.OS == 'ios'}
                         isVisible={showModalWE}
                         onSwipeComplete={() => { setShowModalWE(false) }}
                         onBackdropPress={() => { setShowModalWE(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
                     >
-                    <SafeAreaView style={STYLE.modal}>
-                        <View style={STYLE.modalChild}>
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Tên công ty</Text>
-                                <TextInput
-                                    placeholder={dataEditWorkEx ? dataEditWorkEx.nameCompany : ""}
-                                    onChangeText={(text) => {
-                                        setOjbWrk(
-                                            { ...objWrk, nameCompany: text })
-                                    }}
-                                    style={styles.textInput} ></TextInput>
-                            </View>
+                        <SafeAreaView style={STYLE.modal}>
+                            <View style={STYLE.modalChild}>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Tên công ty</Text>
+                                    <TextInput
+                                        placeholder={dataEditWorkEx ? dataEditWorkEx.nameCompany : ""}
+                                        onChangeText={(text) => {
+                                            setOjbWrk(
+                                                { ...objWrk, nameCompany: text })
+                                        }}
+                                        style={styles.textInput} ></TextInput>
+                                </View>
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Vị trí</Text>
-                                <TextInput
-                                    placeholder={dataEditWorkEx ? dataEditWorkEx.position : ""}
-                                    onChangeText={(text) => {
-                                        setOjbWrk({
-                                            ...objWrk,
-                                            position: text
-                                        })
-                                    }} style={styles.textInput} ></TextInput>
-                            </View>
-
-                            <View>
-                                <Text style={styles.textTitle}>Ngày bắt đầu</Text>
-                                <View style={styles.inputSearch}>
-                                    <Text style={{ fontWeight: 'bold' }}>{dateBirtht.toLocaleDateString()}</Text>
-                                    <TouchableOpacity onPress={() => { setDatePickerOpent(true) }}>
-                                        <Icon name="calendar-line"></Icon>
-                                    </TouchableOpacity>
-                                    <DatePicker
-                                        modal
-                                        mode="date"
-                                        open={datePickerOpent}
-                                        date={dateBirtht}
-                                        onConfirm={(date) => {
-                                            setDatePickerOpent(false)
-                                            setDateBirtht(date)
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Vị trí</Text>
+                                    <TextInput
+                                        placeholder={dataEditWorkEx ? dataEditWorkEx.position : ""}
+                                        onChangeText={(text) => {
                                             setOjbWrk({
                                                 ...objWrk,
-                                                dateStart: date
+                                                position: text
                                             })
-                                            // setDataCv({
-                                            //     ...DataCv,
-                                            //     birthUserCV: date
-                                            // })
-                                            // setUser({
-                                            //     ...user,
-                                            //     ngaysinh: date
-                                            // })
-                                        }}
-                                        onCancel={
-                                            () => { setDatePickerOpen(false) }
-                                        }
-                                    />
+                                        }} style={styles.textInput} ></TextInput>
                                 </View>
-                            </View>
+
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    justifyContent: "space-between",
+                                    padding: 10
+                                }}>
+                                    <View>
+                                        <Text style={styles.textTitle}>Ngày bắt đầu</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirtht.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpent(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpent}
+                                                date={dateBirtht}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpent(false)
+                                                    setDateBirtht(date)
+                                                    setOjbWrk({
+                                                        ...objWrk,
+                                                        dateStart: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen(false) }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
 
 
 
-                            <View>
-                                <Text style={styles.textTitle}>Ngày kết thúc</Text>
-                                <View style={styles.inputSearch}>
-                                    <Text style={{ fontWeight: 'bold' }}>{dateBirth2.toLocaleDateString()}</Text>
-                                    <TouchableOpacity onPress={() => { setDatePickerOpen2(true) }}>
-                                        <Icon name="calendar-line"></Icon>
+                                    <View >
+                                        <Text style={styles.textTitle}>Ngày kết thúc</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth2.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen2(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen2}
+                                                date={dateBirth2}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen2(false)
+                                                    setDateBirth2(date)
+                                                    setOjbWrk({
+                                                        ...objWrk,
+                                                        dateEnd: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen2(false) }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View style={styles.buttonOption}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setShowModalWE(false)
+                                        }}
+                                        style={{
+                                            backgroundColor: "#ccc",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Cancel</Text>
                                     </TouchableOpacity>
-                                    <DatePicker
-                                        modal
-                                        mode="date"
-                                        open={datePickerOpen2}
-                                        date={dateBirth2}
-                                        onConfirm={(date) => {
-                                            setDatePickerOpen2(false)
-                                            setDateBirth2(date)
-                                            setOjbWrk({
-                                                ...objWrk,
-                                                dateEnd: date
-                                            })
-                                            // setDataCv({
-                                            //     ...DataCv,
-                                            //     birthUserCV: date
-                                            // })
-                                            // setUser({
-                                            //     ...user,
-                                            //     ngaysinh: date
-                                            // })
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+
+
+
+                                            if (dataEditWorkEx === undefined || Object.keys(dataEditWorkEx).length === 0) {
+                                                handleWEAddData();
+                                            } else {
+                                                handleUpdateWorkEx();
+                                            }
                                         }}
-                                        onCancel={
-                                            () => { setDatePickerOpen2(false) }
-                                        }
-                                    />
+                                        style={{
+                                            backgroundColor: "#E2F367",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Add</Text>
+                                    </TouchableOpacity>
                                 </View>
+
                             </View>
-
-                            <View style={styles.buttonOption}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setShowModalWE(false)
-                                    }}
-                                    style={{
-                                        backgroundColor: "#ccc",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Cancel</Text>
-                                </TouchableOpacity>
-
-                                <TouchableOpacity
-                                    onPress={() => {
-
-
-
-                                        if (dataEditWorkEx === undefined || Object.keys(dataEditWorkEx).length === 0) {
-                                            handleWEAddData();
-                                        } else {
-                                            handleUpdateWorkEx();
-                                        }
-                                    }}
-                                    style={{
-                                        backgroundColor: "#E2F367",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                            </View>
-
-                        </View>
-                    </SafeAreaView>
+                        </SafeAreaView>
 
 
                     </Modal>
@@ -1446,178 +1535,181 @@ const CreateCV = ({ route }) => {
                         onBackdropPress={() => { setShowModalBE(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
-                        avoidKeyboard
+                        avoidKeyboard={Platform.OS == 'ios'}
                     >
-                    <SafeAreaView style={STYLE.modal}>
-                        <ScrollView style={STYLE.modalChild}>
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Tên trường</Text>
-                                <TextInput
-                                    placeholder={dataEditBE ? dataEditBE.nameSchool : ""}
-                                    onChangeText={(text) => {
-                                        setOjbBE(
-                                            { ...objbBE, nameSchool: text })
-                                    }}
-                                    style={styles.textInput} ></TextInput>
-                            </View>
+                        <SafeAreaView style={STYLE.modal}>
+                            <ScrollView style={STYLE.modalChild}>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Tên trường</Text>
+                                    <TextInput
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Ngành học</Text>
-                                <TextInput
-                                    placeholder={dataEditBE ? dataEditBE.major : ""}
-                                    onChangeText={(text) => {
-                                        setOjbBE({
-                                            ...objbBE,
-                                            major: text
-                                        })
-                                    }} style={styles.textInput} ></TextInput>
-                            </View>
+                                        placeholder={dataEditBE ? dataEditBE.nameSchool : ""}
+                                        onChangeText={(text) => {
+                                            setOjbBE(
+                                                { ...objbBE, nameSchool: text })
+                                        }}
+                                        style={{
+                                            ...styles.textInput,
+                                        }} ></TextInput>
+                                </View>
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Mô tả</Text>
-                                <TextInput
-                                    placeholder={dataEditBE ? dataEditBE.description : ""}
-                                    onChangeText={(text) => {
-                                        setOjbBE({
-                                            ...objbBE,
-                                            description: text
-                                        })
-                                    }} style={{
-                                        fontFamily: "RukbikNormal",
-                                        borderWidth: 2,
-                                        borderColor: "#B0B0B0",
-                                        marginTop: 4,
-                                        borderRadius: 16,
-                                        marginBottom: 2,
-                                        paddingBottom: 60,
-                                        paddingLeft: 16
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Ngành học</Text>
+                                    <TextInput
+                                        placeholder={dataEditBE ? dataEditBE.major : ""}
+                                        onChangeText={(text) => {
+                                            setOjbBE({
+                                                ...objbBE,
+                                                major: text
+                                            })
+                                        }} style={styles.textInput} ></TextInput>
+                                </View>
 
-                                    }} ></TextInput>
-                            </View>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Mô tả</Text>
+                                    <TextInput
+                                        placeholder={dataEditBE ? dataEditBE.description : ""}
+                                        onChangeText={(text) => {
+                                            setOjbBE({
+                                                ...objbBE,
+                                                description: text
+                                            })
+                                        }} style={{
+                                            fontFamily: "RukbikNormal",
+                                            borderWidth: 2,
+                                            borderColor: "#B0B0B0",
+                                            marginTop: 4,
+                                            borderRadius: 16,
+                                            marginBottom: 2,
+                                            paddingBottom: 30,
+                                            paddingLeft: 16
 
-
-
-                            <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 10
-                            }}>
-                                <View style={{
-                                    flex: 1
-                                }}>
-                                    <Text style={styles.textTitle}>Ngày bắt đầu</Text>
-                                    <View style={styles.inputSearch}>
-                                        <Text style={{ fontWeight: 'bold' }}>{dateBirth3.toLocaleDateString()}</Text>
-                                        <TouchableOpacity onPress={() => { setDatePickerOpen3(true) }}>
-                                            <Icon name="calendar-line"></Icon>
-                                        </TouchableOpacity>
-                                        <DatePicker
-                                            modal
-                                            mode="date"
-                                            open={datePickerOpen3}
-                                            date={dateBirth3}
-                                            onConfirm={(date) => {
-                                                setDatePickerOpen3(false)
-                                                setDateBirth3(date)
-                                                setOjbBE({
-                                                    ...objbBE,
-                                                    dateStart: date
-                                                })
-                                                // setDataCv({
-                                                //     ...DataCv,
-                                                //     birthUserCV: date
-                                                // })
-                                                // setUser({
-                                                //     ...user,
-                                                //     ngaysinh: date
-                                                // })
-                                            }}
-                                            onCancel={
-                                                () => { setDatePickerOpen3(false) }
-                                            }
-                                        />
-                                    </View>
+                                        }} ></TextInput>
                                 </View>
 
 
 
-
                                 <View style={{
-                                    flex: 1
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 10
                                 }}>
-                                    <Text style={styles.textTitle}>Ngày tốt nghiệp</Text>
-                                    <View style={styles.inputSearch}>
-                                        <Text style={{ fontWeight: 'bold' }}>{dateBirth4.toLocaleDateString()}</Text>
-                                        <TouchableOpacity onPress={() => { setDatePickerOpen4(true) }}>
-                                            <Icon name="calendar-line"></Icon>
-                                        </TouchableOpacity>
-                                        <DatePicker
-                                            modal
-                                            mode="date"
-                                            open={datePickerOpen4}
-                                            date={dateBirth4}
-                                            onConfirm={(date) => {
-                                                setDatePickerOpen4(false)
-                                                setDateBirth4(date)
-                                                setOjbBE({
-                                                    ...objbBE,
-                                                    dateEnd: date
-                                                })
-                                                // setDataCv({
-                                                //     ...DataCv,
-                                                //     birthUserCV: date
-                                                // })
-                                                // setUser({
-                                                //     ...user,
-                                                //     ngaysinh: date
-                                                // })
-                                            }}
-                                            onCancel={
-                                                () => { setDatePickerOpen4(false) }
-                                            }
-                                        />
+                                    <View style={{
+                                        flex: 1
+                                    }}>
+                                        <Text style={styles.textTitle}>Ngày bắt đầu</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth3.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen3(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen3}
+                                                date={dateBirth3}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen3(false)
+                                                    setDateBirth3(date)
+                                                    setOjbBE({
+                                                        ...objbBE,
+                                                        dateStart: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen3(false) }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
+
+
+
+
+                                    <View style={{
+                                        flex: 1
+                                    }}>
+                                        <Text style={styles.textTitle}>Ngày tốt nghiệp</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth4.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen4(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen4}
+                                                date={dateBirth4}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen4(false)
+                                                    setDateBirth4(date)
+                                                    setOjbBE({
+                                                        ...objbBE,
+                                                        dateEnd: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen4(false) }
+                                                }
+                                            />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
-                            <View style={styles.buttonOption}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setShowModalBE(false)
-                                    }}
-                                    style={{
-                                        backgroundColor: "#ccc",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Cancel</Text>
-                                </TouchableOpacity>
+                                <View style={styles.buttonOption}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setShowModalBE(false)
+                                        }}
+                                        style={{
+                                            backgroundColor: "#ccc",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Cancel</Text>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    onPress={() => {
+                                    <TouchableOpacity
+                                        onPress={() => {
 
-                                        if (dataEditBE === undefined || Object.keys(dataEditBE).length === 0) {
-                                            handleBEAddData();
-                                        } else {
-                                            handleUpdateBE();
-                                        }
-                                    }}
-                                    style={{
-                                        backgroundColor: "#E2F367",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                            </View>
+                                            if (dataEditBE === undefined || Object.keys(dataEditBE).length === 0) {
+                                                handleBEAddData();
+                                            } else {
+                                                handleUpdateBE();
+                                            }
+                                        }}
+                                        style={{
+                                            backgroundColor: "#E2F367",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Add</Text>
+                                    </TouchableOpacity>
+                                </View>
 
 
-                        </ScrollView>
-                    </SafeAreaView>
+                            </ScrollView>
+                        </SafeAreaView>
 
 
                     </Modal>
@@ -1674,177 +1766,177 @@ const CreateCV = ({ route }) => {
                         onBackdropPress={() => { setShowModalAC(false) }}
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
-                        avoidKeyboard
+                        avoidKeyboard={Platform.OS == 'ios'}
                     >
-                    <SafeAreaView style={STYLE.modal}>
-                        <ScrollView style={STYLE.modalChild}>
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Tên tổ chức</Text>
-                                <TextInput
-                                    placeholder={dataEditAC ? dataEditAC.nameOrganize : ""}
-                                    onChangeText={(text) => {
-                                        setOjbAC(
-                                            { ...objbAC, nameOrganize: text })
-                                    }}
-                                    style={styles.textInput} ></TextInput>
-                            </View>
+                        <SafeAreaView style={STYLE.modal}>
+                            <ScrollView style={STYLE.modalChild}>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Tên tổ chức</Text>
+                                    <TextInput
+                                        placeholder={dataEditAC ? dataEditAC.nameOrganize : ""}
+                                        onChangeText={(text) => {
+                                            setOjbAC(
+                                                { ...objbAC, nameOrganize: text })
+                                        }}
+                                        style={styles.textInput} ></TextInput>
+                                </View>
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Vị trí</Text>
-                                <TextInput
-                                    placeholder={dataEditAC ? dataEditAC.postition : ""}
-                                    onChangeText={(text) => {
-                                        setOjbAC({
-                                            ...objbAC,
-                                            position: text
-                                        })
-                                    }} style={styles.textInput} ></TextInput>
-                            </View>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Vị trí</Text>
+                                    <TextInput
+                                        placeholder={dataEditAC ? dataEditAC.postition : ""}
+                                        onChangeText={(text) => {
+                                            setOjbAC({
+                                                ...objbAC,
+                                                position: text
+                                            })
+                                        }} style={styles.textInput} ></TextInput>
+                                </View>
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Mô tả</Text>
-                                <TextInput
-                                    placeholder={dataEditAC ? dataEditAC.description : ""}
-                                    onChangeText={(text) => {
-                                        setOjbAC({
-                                            ...objbAC,
-                                            description: text
-                                        })
-                                    }} style={{
-                                        fontFamily: "RukbikNormal",
-                                        borderWidth: 2,
-                                        borderColor: "#B0B0B0",
-                                        marginTop: 4,
-                                        borderRadius: 16,
-                                        marginBottom: 2,
-                                        paddingBottom: 60,
-                                        paddingLeft: 16
-                                    }} ></TextInput>
-                            </View>
-
-
-
-                            <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 10
-                            }}>
-                                <View style={{
-                                    flex: 1
-                                }}>
-                                    <Text style={styles.textTitle}>Ngày bắt đầu</Text>
-                                    <View style={styles.inputSearch}>
-                                        <Text style={{ fontWeight: 'bold' }}>{dateBirth5.toLocaleDateString()}</Text>
-                                        <TouchableOpacity onPress={() => { setDatePickerOpen5(true) }}>
-                                            <Icon name="calendar-line"></Icon>
-                                        </TouchableOpacity>
-                                        <DatePicker
-                                            modal
-                                            mode="date"
-                                            open={datePickerOpen5}
-                                            date={dateBirth5}
-                                            onConfirm={(date) => {
-                                                setDatePickerOpen5(false)
-                                                setDateBirth5(date)
-                                                setOjbAC({
-                                                    ...objbAC,
-                                                    dateStart: date
-                                                })
-                                                // setDataCv({
-                                                //     ...DataCv,
-                                                //     birthUserCV: date
-                                                // })
-                                                // setUser({
-                                                //     ...user,
-                                                //     ngaysinh: date
-                                                // })
-                                            }}
-                                            onCancel={
-                                                () => { setDatePickerOpen5(false) }
-                                            }
-                                        />
-                                    </View>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Mô tả</Text>
+                                    <TextInput
+                                        placeholder={dataEditAC ? dataEditAC.description : ""}
+                                        onChangeText={(text) => {
+                                            setOjbAC({
+                                                ...objbAC,
+                                                description: text
+                                            })
+                                        }} style={{
+                                            fontFamily: "RukbikNormal",
+                                            borderWidth: 2,
+                                            borderColor: "#B0B0B0",
+                                            marginTop: 4,
+                                            borderRadius: 16,
+                                            marginBottom: 2,
+                                            paddingBottom: 60,
+                                            paddingLeft: 16
+                                        }} ></TextInput>
                                 </View>
 
 
 
-
                                 <View style={{
-                                    flex: 1
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 10
                                 }}>
-                                    <Text style={styles.textTitle}>Ngày kết thúc</Text>
-                                    <View style={styles.inputSearch}>
-                                        <Text style={{ fontWeight: 'bold' }}>{dateBirth6.toLocaleDateString()}</Text>
-                                        <TouchableOpacity onPress={() => { setDatePickerOpen6(true) }}>
-                                            <Icon name="calendar-line"></Icon>
-                                        </TouchableOpacity>
-                                        <DatePicker
-                                            modal
-                                            mode="date"
-                                            open={datePickerOpen6}
-                                            date={dateBirth6}
-                                            onConfirm={(date) => {
-                                                setDatePickerOpen6(false)
-                                                setDateBirth6(date)
-                                                setOjbAC({
-                                                    ...objbAC,
-                                                    dateEnd: date
-                                                })
-                                                // setDataCv({
-                                                //     ...DataCv,
-                                                //     birthUserCV: date
-                                                // })
-                                                // setUser({
-                                                //     ...user,
-                                                //     ngaysinh: date
-                                                // })
-                                            }}
-                                            onCancel={
-                                                () => { setDatePickerOpen6(false) }
-                                            }
-                                        />
+                                    <View style={{
+                                        flex: 1
+                                    }}>
+                                        <Text style={styles.textTitle}>Ngày bắt đầu</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth5.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen5(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen5}
+                                                date={dateBirth5}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen5(false)
+                                                    setDateBirth5(date)
+                                                    setOjbAC({
+                                                        ...objbAC,
+                                                        dateStart: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen5(false) }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
+
+
+
+
+                                    <View style={{
+                                        flex: 1
+                                    }}>
+                                        <Text style={styles.textTitle}>Ngày kết thúc</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth6.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen6(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen6}
+                                                date={dateBirth6}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen6(false)
+                                                    setDateBirth6(date)
+                                                    setOjbAC({
+                                                        ...objbAC,
+                                                        dateEnd: date
+                                                    })
+                                                    // setDataCv({
+                                                    //     ...DataCv,
+                                                    //     birthUserCV: date
+                                                    // })
+                                                    // setUser({
+                                                    //     ...user,
+                                                    //     ngaysinh: date
+                                                    // })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen6(false) }
+                                                }
+                                            />
+                                        </View>
                                     </View>
                                 </View>
-                            </View>
 
-                            <View style={styles.buttonOption}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setShowModalAC(false)
-                                    }}
-                                    style={{
-                                        backgroundColor: "#ccc",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Cancel</Text>
-                                </TouchableOpacity>
+                                <View style={styles.buttonOption}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setShowModalAC(false)
+                                        }}
+                                        style={{
+                                            backgroundColor: "#ccc",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Cancel</Text>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    onPress={() => {
+                                    <TouchableOpacity
+                                        onPress={() => {
 
-                                        if (dataEditAC === undefined || Object.keys(dataEditAC).length === 0) {
-                                            handleACAddData();
-                                        } else {
-                                            handleUpdateAC();
-                                        }
-                                    }}
-                                    style={{
-                                        backgroundColor: "#E2F367",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                            </View>
+                                            if (dataEditAC === undefined || Object.keys(dataEditAC).length === 0) {
+                                                handleACAddData();
+                                            } else {
+                                                handleUpdateAC();
+                                            }
+                                        }}
+                                        style={{
+                                            backgroundColor: "#E2F367",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Add</Text>
+                                    </TouchableOpacity>
+                                </View>
 
 
-                        </ScrollView>
-                    </SafeAreaView>
+                            </ScrollView>
+                        </SafeAreaView>
 
 
                     </Modal>
@@ -1904,136 +1996,136 @@ const CreateCV = ({ route }) => {
                         onSwipeComplete={() => { setShowModalLA(false) }}
                         onBackdropPress={() => { setShowModalLA(false) }}
                         style={{ margin: 0 }}
-                        avoidKeyboard
+                        avoidKeyboard={Platform.OS == 'ios'}
                     >
-                    <SafeAreaView style={STYLE.modal}>
-                        <ScrollView style={STYLE.modalChild}>
+                        <SafeAreaView style={STYLE.modal}>
+                            <ScrollView style={STYLE.modalChild}>
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Ngôn ngữ</Text>
-                                <TextInput
-                                    placeholder={dataEditLA ? dataEditLA.language : ""}
-                                    onChangeText={(text) => {
-                                        setOjbLA(
-                                            { ...objbLA, language: text })
-                                    }}
-                                    style={styles.textInput} ></TextInput>
-                            </View>
-
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Trình độ</Text>
-                                {Platform.OS == 'ios' ? (
-                                    <Picker
-                                        selectedValue={levelLA}
-                                        style={{borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16}}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setLevelLA(itemValue);
-                                            setOjbLA({ ...objbLA, level: itemValue });
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Ngôn ngữ</Text>
+                                    <TextInput
+                                        placeholder={dataEditLA ? dataEditLA.language : ""}
+                                        onChangeText={(text) => {
+                                            setOjbLA(
+                                                { ...objbLA, language: text })
                                         }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Bình thường" value="Bình thường" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Lưu loát" value="Lưu loát" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Bản Xứ" value="Bản xứ" />
-                                    </Picker>
-
-                                ) : (
-                                    <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: "#E2F367", borderRadius: 16, justifyContent: "space-between", borderWidth: 2, borderColor: "#000", width: "100%", marginTop: 6 }}>
-                                    <Picker
-                                        selectedValue={levelLA}
-                                        style={{ height: 50, width: 240 }}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setLevelLA(itemValue);
-                                            setOjbLA({ ...objbLA, level: itemValue });
-                                        }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Bình thường" value="Bình thường" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Lưu loát" value="Lưu loát" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Bản Xứ" value="Bản xứ" />
-                                    </Picker>
+                                        style={styles.textInput} ></TextInput>
                                 </View>
-                                )}
-                            </View>
+
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Trình độ</Text>
+                                    {Platform.OS == 'ios' ? (
+                                        <Picker
+                                            selectedValue={levelLA}
+                                            style={{ borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16 }}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setLevelLA(itemValue);
+                                                setOjbLA({ ...objbLA, level: itemValue });
+                                            }}
+                                        >
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Bình thường" value="Bình thường" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Lưu loát" value="Lưu loát" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Bản Xứ" value="Bản xứ" />
+                                        </Picker>
+
+                                    ) : (
+                                        <View style={{ alignItems: 'center', justifyContent: 'center', backgroundColor: "#E2F367", borderRadius: 16, justifyContent: "space-between", borderWidth: 2, borderColor: "#000", width: "100%", marginTop: 6 }}>
+                                            <Picker
+                                                selectedValue={levelLA}
+                                                style={{ height: 50, width: 240 }}
+                                                onValueChange={(itemValue, itemIndex) => {
+                                                    setLevelLA(itemValue);
+                                                    setOjbLA({ ...objbLA, level: itemValue });
+                                                }}
+                                            >
+                                                <Picker.Item style={{
+                                                    fontSize: 16,
+                                                    fontWeight: "800"
+                                                }} label="Bình thường" value="Bình thường" />
+                                                <Picker.Item style={{
+                                                    fontSize: 16,
+                                                    fontWeight: "800"
+                                                }} label="Lưu loát" value="Lưu loát" />
+                                                <Picker.Item style={{
+                                                    fontSize: 16,
+                                                    fontWeight: "800"
+                                                }} label="Bản Xứ" value="Bản xứ" />
+                                            </Picker>
+                                        </View>
+                                    )}
+                                </View>
 
 
 
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Mô tả</Text>
-                                <TextInput
-                                    placeholder={dataEditLA ? dataEditLA.description : ""}
-                                    onChangeText={(text) => {
-                                        setOjbLA({
-                                            ...objbLA,
-                                            description: text
-                                        })
-                                    }} style={{
-                                        fontFamily: "RukbikNormal",
-                                        borderWidth: 2,
-                                        borderColor: "#B0B0B0",
-                                        marginTop: 4,
-                                        borderRadius: 16,
-                                        marginBottom: 2,
-                                        paddingBottom: 60,
-                                        paddingLeft: 16
-                                    }} ></TextInput>
-                            </View>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Mô tả</Text>
+                                    <TextInput
+                                        placeholder={dataEditLA ? dataEditLA.description : ""}
+                                        onChangeText={(text) => {
+                                            setOjbLA({
+                                                ...objbLA,
+                                                description: text
+                                            })
+                                        }} style={{
+                                            fontFamily: "RukbikNormal",
+                                            borderWidth: 2,
+                                            borderColor: "#B0B0B0",
+                                            marginTop: 4,
+                                            borderRadius: 16,
+                                            marginBottom: 2,
+                                            paddingBottom: 60,
+                                            paddingLeft: 16
+                                        }} ></TextInput>
+                                </View>
 
 
-                            <View style={styles.buttonOption}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setShowModalLA(false)
-                                    }}
-                                    style={{
-                                        backgroundColor: "#ccc",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Cancel</Text>
-                                </TouchableOpacity>
+                                <View style={styles.buttonOption}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setShowModalLA(false)
+                                        }}
+                                        style={{
+                                            backgroundColor: "#ccc",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Cancel</Text>
+                                    </TouchableOpacity>
 
-                                <TouchableOpacity
-                                    onPress={() => {
+                                    <TouchableOpacity
+                                        onPress={() => {
 
-                                        if (dataEditLA === undefined || Object.keys(dataEditLA).length === 0) {
-                                            handleLAAddData();
-                                        } else {
-                                            handleUpdateLA();
-                                        }
-                                    }}
-                                    style={{
-                                        backgroundColor: "#E2F367",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                            </View>
+                                            if (dataEditLA === undefined || Object.keys(dataEditLA).length === 0) {
+                                                handleLAAddData();
+                                            } else {
+                                                handleUpdateLA();
+                                            }
+                                        }}
+                                        style={{
+                                            backgroundColor: "#E2F367",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Add</Text>
+                                    </TouchableOpacity>
+                                </View>
 
 
-                        </ScrollView>
-                    </SafeAreaView>
+                            </ScrollView>
+                        </SafeAreaView>
 
 
                     </Modal>
@@ -2092,118 +2184,118 @@ const CreateCV = ({ route }) => {
                         swipeDirection={'down'}
                         style={{ margin: 0 }}
                     >
-                    <SafeAreaView style={STYLE.modal}>
-                        <ScrollView style={STYLE.modalChild}>
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Tên chứng chỉ</Text>
-                                <TextInput
-                                    placeholder={dataEditCer ? dataEditCer.nameCer : ""}
-                                    onChangeText={(text) => {
-                                        setOjbCer(
-                                            { ...objbCer, nameCer: text })
-                                    }}
-                                    style={styles.textInput} ></TextInput>
-                            </View>
-
-
-
-                            <View style={styles.itemAdd}>
-                                <Text style={styles.textTitle}>Mô tả</Text>
-                                <TextInput
-                                    placeholder={dataEditCer ? dataEditCer.description : ""}
-                                    onChangeText={(text) => {
-                                        setOjbCer({
-                                            ...objbCer,
-                                            description: text
-                                        })
-                                    }} style={{
-                                        fontFamily: "RukbikNormal",
-                                        borderWidth: 2,
-                                        borderColor: "#B0B0B0",
-                                        marginTop: 4,
-                                        borderRadius: 16,
-                                        marginBottom: 2,
-                                        paddingBottom: 60,
-                                        paddingLeft: 16
-                                    }} ></TextInput>
-                            </View>
-
-
-
-                            <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 10
-                            }}>
-                                <View style={{
-                                    flex: 1
-                                }}>
-                                    <Text style={styles.textTitle}>Ngày cấp</Text>
-                                    <View style={styles.inputSearch}>
-                                        <Text style={{ fontWeight: 'bold' }}>{dateBirth7.toLocaleDateString()}</Text>
-                                        <TouchableOpacity onPress={() => { setDatePickerOpen7(true) }}>
-                                            <Icon name="calendar-line"></Icon>
-                                        </TouchableOpacity>
-                                        <DatePicker
-                                            modal
-                                            mode="date"
-                                            open={datePickerOpen7}
-                                            date={dateBirth7}
-                                            onConfirm={(date) => {
-                                                setDatePickerOpen7(false)
-                                                setDateBirth7(date)
-                                                setOjbCer({
-                                                    ...objbCer,
-                                                    dateStart: date
-                                                })
-                                            }}
-                                            onCancel={
-                                                () => { setDatePickerOpen7(false) }
-                                            }
-                                        />
-                                    </View>
+                        <SafeAreaView style={STYLE.modal}>
+                            <ScrollView style={STYLE.modalChild}>
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Tên chứng chỉ</Text>
+                                    <TextInput
+                                        placeholder={dataEditCer ? dataEditCer.nameCer : ""}
+                                        onChangeText={(text) => {
+                                            setOjbCer(
+                                                { ...objbCer, nameCer: text })
+                                        }}
+                                        style={styles.textInput} ></TextInput>
                                 </View>
 
-                            </View>
 
-                            <View style={styles.buttonOption}>
-                                <TouchableOpacity
-                                    onPress={() => {
-                                        setShowModalCer(false)
-                                    }}
-                                    style={{
-                                        backgroundColor: "#ccc",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
+
+                                <View style={styles.itemAdd}>
+                                    <Text style={styles.textTitle}>Mô tả</Text>
+                                    <TextInput
+                                        placeholder={dataEditCer ? dataEditCer.description : ""}
+                                        onChangeText={(text) => {
+                                            setOjbCer({
+                                                ...objbCer,
+                                                description: text
+                                            })
+                                        }} style={{
+                                            fontFamily: "RukbikNormal",
+                                            borderWidth: 2,
+                                            borderColor: "#B0B0B0",
+                                            marginTop: 4,
+                                            borderRadius: 16,
+                                            marginBottom: 2,
+                                            paddingBottom: 60,
+                                            paddingLeft: 16
+                                        }} ></TextInput>
+                                </View>
+
+
+
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 10
+                                }}>
+                                    <View style={{
+                                        flex: 1
                                     }}>
-                                    <Text>Cancel</Text>
-                                </TouchableOpacity>
+                                        <Text style={styles.textTitle}>Ngày cấp</Text>
+                                        <View style={styles.inputSearch}>
+                                            <Text style={{ fontWeight: 'bold' }}>{dateBirth7.toLocaleDateString()}</Text>
+                                            <TouchableOpacity onPress={() => { setDatePickerOpen7(true) }}>
+                                                <Icon name="calendar-line"></Icon>
+                                            </TouchableOpacity>
+                                            <DatePicker
+                                                modal
+                                                mode="date"
+                                                open={datePickerOpen7}
+                                                date={dateBirth7}
+                                                onConfirm={(date) => {
+                                                    setDatePickerOpen7(false)
+                                                    setDateBirth7(date)
+                                                    setOjbCer({
+                                                        ...objbCer,
+                                                        dateStart: date
+                                                    })
+                                                }}
+                                                onCancel={
+                                                    () => { setDatePickerOpen7(false) }
+                                                }
+                                            />
+                                        </View>
+                                    </View>
 
-                                <TouchableOpacity
-                                    onPress={() => {
+                                </View>
 
-                                        if (dataEditCer === undefined || Object.keys(dataEditCer).length === 0) {
-                                            handleCerAddData();
-                                        } else {
-                                            handleUpdateCer();
-                                        }
-                                    }}
-                                    style={{
-                                        backgroundColor: "#E2F367",
-                                        padding: 10,
-                                        marginTop: 10,
-                                        borderRadius: 20,
-                                        flex: 1,
-                                    }}>
-                                    <Text>Add</Text>
-                                </TouchableOpacity>
-                            </View>
+                                <View style={styles.buttonOption}>
+                                    <TouchableOpacity
+                                        onPress={() => {
+                                            setShowModalCer(false)
+                                        }}
+                                        style={{
+                                            backgroundColor: "#ccc",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Cancel</Text>
+                                    </TouchableOpacity>
+
+                                    <TouchableOpacity
+                                        onPress={() => {
+
+                                            if (dataEditCer === undefined || Object.keys(dataEditCer).length === 0) {
+                                                handleCerAddData();
+                                            } else {
+                                                handleUpdateCer();
+                                            }
+                                        }}
+                                        style={{
+                                            backgroundColor: "#E2F367",
+                                            padding: 10,
+                                            marginTop: 10,
+                                            borderRadius: 20,
+                                            flex: 1,
+                                        }}>
+                                        <Text>Add</Text>
+                                    </TouchableOpacity>
+                                </View>
 
 
-                        </ScrollView>
-                    </SafeAreaView>
+                            </ScrollView>
+                        </SafeAreaView>
 
 
                     </Modal>
@@ -2261,26 +2353,22 @@ const CreateCV = ({ route }) => {
                     <View style={styles.optionFinal}>
                         <TouchableOpacity
                             style={{
-                                backgroundColor: "#E9E9E9",
+                                backgroundColor: "#FFA7B7",
                                 display: "flex",
                                 justifyContent: "space-between",
                                 flexDirection: "row",
                                 alignItems: "center",
-                                width: "48%",
                                 borderRadius: 30,
-
                                 paddingLeft: 20,
                                 paddingRight: 20,
                                 paddingTop: 10,
                                 paddingBottom: 10
-
-
                             }}
                         >
                             <Text style={{
                                 fontFamily: "RukbikNormal",
                                 fontSize: 20
-                            }}>Cancel</Text>
+                            }}>Hủy</Text>
                             <Icon name="close-line"></Icon>
                         </TouchableOpacity>
                         <TouchableOpacity
@@ -2292,22 +2380,20 @@ const CreateCV = ({ route }) => {
                                 justifyContent: "space-between",
                                 flexDirection: "row",
                                 alignItems: "center",
-                                width: "48%",
                                 borderRadius: 30,
-
                                 paddingLeft: 20,
                                 paddingRight: 20,
                                 paddingTop: 10,
-                                paddingBottom: 10
-
-
+                                paddingBottom: 10,
+                                flex: 1
                             }}
                         >
                             <Text style={{
                                 fontFamily: "RukbikNormal",
-                                fontSize: 20
-                            }}>Next</Text>
-                            <Icon name="arrow-right-s-line"></Icon>
+                                fontSize: 20,
+                                color: '#000'
+                            }}>Hoàn thành</Text>
+                            <Icon name="check-double-line"></Icon>
                         </TouchableOpacity>
                     </View>
 
@@ -2398,7 +2484,7 @@ const styles = StyleSheet.create({
 
     },
     wrapCreateCV: {
-        marginBottom: 200
+        marginBottom: 100
     },
     contentTitle: {
         fontFamily: "RukbikNormal",
@@ -2411,6 +2497,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 10,
         width: "85%",
+        alignItems: "center"
     },
     imgeWETitle: {
         color: "#000",
