@@ -4,7 +4,6 @@ import NotifiChat from "../src/NotifiChat";
 import NotifiChild from "../src/NotifiChild";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from "react-native-remix-icon";
-import messaging from '@react-native-firebase/messaging';
 
 
 const FavoriteJob = () => {
