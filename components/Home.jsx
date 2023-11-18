@@ -256,7 +256,7 @@ const Home = ({ navigation }) => {
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
-                        <TouchableOpacity><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => {navigation.navigate('All Jobs')}}><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
                     </View>
 
 

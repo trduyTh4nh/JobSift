@@ -134,6 +134,14 @@ const Tabs = () => {
                         headerTransparent: true
                     }}
                 />
+                <Stack.Screen name='All Jobs' component={FavoritePage} options={{
+                header: ({ navigation, route, options, back }) => {
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <Header navigation={navigation} title={"Tất cả công việc"} LeftButton={back}></Header>
+                    )
+                }
+            }} ></Stack.Screen>
                 <Stack.Screen
                     name='JobDetail'
                     component={JobDetail}
