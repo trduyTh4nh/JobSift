@@ -19,6 +19,8 @@ const CreateCV = ({ route, navigation }) => {
     const dataInfoBasic = route.params.basicInFo
 
 
+    console.log("Data đã navigate: " + JSON.stringify(dataInfoBasic))
+
 
     const [animation] = useState(new Animated.Value(0));
     const [text, setText] = useState('');

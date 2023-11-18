@@ -6,7 +6,6 @@ import Icon from 'react-native-remix-icon';
 import { useEffect, useState } from "react";
 import { useRoute } from "@react-navigation/native";
 import axios from "axios";
-import { FlatList } from "react-native-gesture-handler";
 import { API_URL } from "../ipConfig"
 import Carousel from 'react-native-snap-carousel';
 import STYLE from '../assets/css/universal'

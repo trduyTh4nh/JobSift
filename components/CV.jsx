@@ -23,7 +23,6 @@ const CV = ({ navigation }) => {
                 console.log("ERROR: " + error)
             })
     }, [])
-
     const [fontLoaded] = useFonts({
         'Rubik': require("../assets/fonts/Rubik/static/Rubik-Bold.ttf"),
         'RukbikNormal': require("../assets/fonts/Rubik/static/Rubik-Regular.ttf")
@@ -31,7 +30,7 @@ const CV = ({ navigation }) => {
     if (!fontLoaded) {
         return (
             <View>
-                <ActivityIndicator></ActivityIndicator>
+                <ActivityIndicator></ActivityIndicator> 
             </View>
         )
     }

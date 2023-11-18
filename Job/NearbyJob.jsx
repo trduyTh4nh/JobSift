@@ -121,7 +121,7 @@ const NearbyJob = (props) => {
                     </View>
 
 
-                    <View style={{
+                    <View style={{ 
                         display: "flex",
                         flexDirection: "column",
                         gap: 16
@@ -130,7 +130,7 @@ const NearbyJob = (props) => {
 
                         <View style={styles.itemInNearBy}>
                             <Icon name="briefcase-line"></Icon>
-                            <Text style={styles.nearByJobCategory}>{dataNearby.nganh_nghe}</Text>
+                            <Text style={styles.nearByJobCategory}>{dataNearby.ten_loai}</Text>
                         </View>
 
                         <View style={styles.itemInNearBy}>

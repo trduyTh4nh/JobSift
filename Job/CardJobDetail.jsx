@@ -115,7 +115,7 @@ const CardJobDetail = (props) => {
                     </View>
 
                     <View style={styles.jobCardBody}>
-                        <Text style={styles.nameJob}>{dataPostDetail.nganh_nghe}</Text>
+                        <Text style={styles.nameJob}>{dataPostDetail.ten_loai}</Text>
 
                         <View style={styles.jobCate}>
                             <Text style={styles.jobCateName}>{dataPostDetail.job_category}</Text>

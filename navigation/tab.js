@@ -44,6 +44,7 @@ import PrivacyAndProlicy from '../components/PrivacyAndPolicy'
 import Transaction from '../components/Transaction';
 import CreateCVBasicInFo from '../components/CreateCVBasicInFo';
 import CvDetail from '../components/CvDetail';
+import PaymentDiamon from '../components/PaymentDiamon';
 
 const Stack = createNativeStackNavigator();
 
@@ -357,6 +358,60 @@ const Tabs = () => {
                         )
                     }
             }} />
+
+            <Stack.Screen name="MuaKCDetail" component={PaymentDiamon} options={{
+
+                header: ({ navigation, route, options, back }) => {
+                    const [diamond, setDiamond] = useState(0)
+                    useEffect(() => {
+                        socket.on('kcValChange', e => {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
+                        })
+                        if (global.user) {
+                            axios.post(API_URL + '/diamond/' + global.user.user.id_user).then(e => {
+                                global.user.user.diamond_count = e.data.diamond_count
+                                setDiamond(e.data.diamond_count)
+                            }).catch(e => {
+                                Alert.alert('Error while getting diamond: ' + e)
+                            })
+                        }
+                    })
+                    const title = getHeaderTitle(options, route.name)
+                    return (
+                        <View>
+                            <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>
+                                <View style={styles.wrap_welcome}>
+                                    <View style={styles.Xuongdong} >
+                                        <TouchableOpacity onPress={() => { navigation.goBack() }}>
+                                            <Icon name='arrow-left-s-line'></Icon>
+                                        </TouchableOpacity>
+                                        <Text style={styles.userName}>Giao dịch</Text>
+                                    </View>
+                                    <View>
+
+                                    </View>
+                                    <View style={styles.wrapinFo}>
+                                        <Text style={styles.welcomeMessage}>💎 {diamond} </Text>
+                                        <TouchableOpacity onPress={() => { navigation.navigate('Mua KC') }}>
+                                            <Icon name="add-line" />
+                                        </TouchableOpacity>
+                                    </View>
+                                </View>
+                            </SafeAreaView>
+                        </View>
+                    )
+                }
+
+            }} />
+
+
+
+
             <Stack.Screen name='CV' component={CV} options={{
                 header: ({ navigation, route, options, back }) => {
                     const [diamond, setDiamond] = useState(0)
@@ -483,6 +538,7 @@ const Tabs = () => {
                             })
                         }
                     })
+
                     return (
                         <View>
                             <SafeAreaView style={{ backgroundColor: "rgba(255,255,255,1)" }}>

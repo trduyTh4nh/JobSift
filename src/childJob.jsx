@@ -53,8 +53,6 @@ const ChildInFoJob = ({ route }) => {
 
 
 
-
-
     // console.log(business)
 
     const dataTag = [
@@ -276,7 +274,7 @@ const ChildInFoJob = ({ route }) => {
                         <Icon size={24} name="user-2-line"></Icon>
                         <View style={styles.jobCateDeTail}>
                             <Text style={styles.jobCateDeTailTitle}>Vị trí</Text>
-                            <Text style={styles.jobCateDetailContent}>{postData.position}</Text>
+                            <Text style={styles.jobCateDetailContent}>{postData.ten_vitri}</Text>
                         </View>
                     </View>
 
