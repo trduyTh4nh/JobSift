@@ -58,13 +58,13 @@ const style = StyleSheet.create({
     }, 
     bubbleSelf: {
         backgroundColor: '#E2F367',
-        borderRadius: 50,
+        borderRadius: 25,
         maxWidth: '75%',
         padding: 16,
     },
     bubbleNotSelf: {
         backgroundColor: '#E9E9E9',
-        borderRadius: 50,
+        borderRadius: 25,
         padding: 16,
         maxWidth: '75%',
     },

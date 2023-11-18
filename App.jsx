@@ -4,7 +4,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { useEffect, useState } from 'react';
 import Tabs from './navigation/tab';
 import { createStackNavigator } from '@react-navigation/stack';
-
+import { SheetProvider } from 'react-native-actions-sheet';
+import './sheets'
 import FormSignup from './src/FormSignup'
 import LoginForm from './src/LoginForm';
 import Main from './components/Main';
@@ -17,15 +18,15 @@ const Stack = createStackNavigator();
 export default function App() {
 
   return (
-    <StripeProvider
-      publishableKey="pk_test_51ODOjFDqDQ31HEFQwTDCiTH1AyfrMZGiFNjgitItFOyPkQliWEUJEC4RkcspbyNpm8n7sxwH5VZEdc7oy9ZHqGOT00LByYtfnn"
-      urlScheme="your-url-scheme"
-      merchantIdentifier="merchant.com.{{JobSift}}"
-    >
-      <Main></Main>
-
-    </StripeProvider>
-
+    <SheetProvider>
+      <StripeProvider
+        publishableKey="pk_test_51ODOjFDqDQ31HEFQwTDCiTH1AyfrMZGiFNjgitItFOyPkQliWEUJEC4RkcspbyNpm8n7sxwH5VZEdc7oy9ZHqGOT00LByYtfnn"
+        urlScheme="your-url-scheme"
+        merchantIdentifier="merchant.com.{{JobSift}}"
+      >
+        <Main></Main>
+      </StripeProvider>
+    </SheetProvider>
   );
 }
 

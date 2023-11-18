@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation, useRoute } from "@react-navigation/native";
-import React from "react";
+import React, { useRef } from "react";
 import { uploadFile } from "../firebase/storage";
 import { Text, View, StyleSheet, TouchableOpacity, Image, Dimensions, ScrollView, FlatList, Animated, Easing, ActivityIndicator, SafeAreaView, Pressable, Alert } from "react-native";
 import Icon from 'react-native-remix-icon';
@@ -19,11 +19,12 @@ import Modal from 'react-native-modal'
 import STYLE from "../assets/css/universal";
 import * as DocumentPicker from 'expo-document-picker';
 import { ProgressBar } from "react-native-paper";
-
+import { ActionSheetRef, SheetManager, SheetProvider } from "react-native-actions-sheet";
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
 // const Tab = createBottomTabNavigator();
 import { API_URL as URL } from "../constants/etc";
+import ActionSheet from "react-native-actions-sheet";
 const Tab = createMaterialTopTabNavigator();
 
 
@@ -37,10 +38,11 @@ const JobDetail = () => {
     const [showPDFCV, setShowPDFCV] = useState(false)
     const [showUngTuyen, setShowUngTuyen] = useState(false)
     const [doanhNghiep, setDoanhNghiep] = useState({})
-
+    const ActionRef = useRef(null);
+ 
     const [file, setFile] = useState()
     const [showSuccess, setSuccess] = useState(false)
-
+    
     const handleDataFromChild = (data) => {
         Animated.timing(fadeAnim, {
             toValue: 0,
@@ -158,19 +160,6 @@ const JobDetail = () => {
                 console.log(error)
             })
     }, [focus])
-
-
-
-
-
-
-
-
-
-
-
-
-
     useEffect(() => {
         axios.get(`http://${API_URL}:3001/upfeedback/getrate/${postData.id_post}`, {
 
@@ -183,9 +172,7 @@ const JobDetail = () => {
             .catch((error) => {
                 console.log(error);
             });
-
     }, []);
-
     useEffect(() => {
         if (postData) {
             console.log(postData)
@@ -199,6 +186,41 @@ const JobDetail = () => {
             })
         }
     }, [postData])
+    const handleCVApply = () => {
+        if(diamond < 10){
+            setEnough(false)
+            setShowPDFCV(true)
+            return
+        }
+        setShowUngTuyen(false)
+        setTimeout(() => showSheet(), 500)
+        
+    }
+    const showSheet = async () => {
+        const data = await SheetManager.show('apply-sheet', {
+            payload: {
+                id_post: postData.id_post,
+                title: postData.tieu_de + ' @ ' + doanhNghiep.ntd.name_dn,
+            }
+        })
+        if(data){
+            if(data.type == 'CreateCV'){
+                navigation.navigate('CVBasic')
+            } else if(data.data){
+                setCV(data.data)
+                axios.post(URL + '/diamond/set', {
+                    "id_user": global.user.user.id_user,
+                    "diamond_count": diamond - 10
+                }).then(e => {
+                    setDiamond(diamond - 10)
+                    socket.emit('kcValChange', {kcInfo: diamond - 30})
+                }).catch(e => {
+                    Alert.alert('ERROR subtracting diamond (FATAL): ' + e)
+                })
+                setTimeout(() => setSuccess(true), 500)
+            }
+        }
+    }
     const getCV = () => {
         axios.post(URL + '/getcv', {
             "id_post": postData.id_post,
@@ -482,6 +504,16 @@ const JobDetail = () => {
         }
 
     }
+    const handleApply = () => {
+        if (cv) {
+            setSuccess(true); return 
+        } 
+        if((new Date()) > (new Date(postData.ngay_hethan))){
+            Alert.alert('Đã quá hạn nộp đơn ứng tuyển', 'Bài đăng này đã quá hạn nộp đơn ứng tuyển.')
+            return
+        }
+        setShowUngTuyen(true)
+    }
     return (
         <View style={styles.wrapMain}>
             <View style={styles.containerJobDetail}>
@@ -504,9 +536,8 @@ const JobDetail = () => {
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
 
-                                        <TouchableOpacity onPress={() => { if (cv) { setSuccess(true); return } setShowUngTuyen(true) }} style={styles.buttonApplyJob}>
-
-                                            <Icon name="check-fill" size={24} ></Icon>
+                                        <TouchableOpacity onPress={() => { handleApply() }} style={(new Date()) < (new Date(postData.ngay_hethan)) ? styles.buttonApplyJob : {...styles.buttonApplyJob, backgroundColor: '#E1E1E1'}}>
+                                            <Icon name={(new Date()) < (new Date(postData.ngay_hethan)) ? "check-fill" : "time-line"} size={24} ></Icon>
                                         </TouchableOpacity>
 
                                         <View style={styles.wrapDiamond}>
@@ -623,14 +654,14 @@ const JobDetail = () => {
                                                     <Icon name="briefcase-4-line" />
                                                     <View>
                                                         <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
-                                                        <Text style={{ fontSize: 18 }}>cate</Text>
+                                                        <Text style={{ fontSize: 18 }}>{cv.loai_cong_viec}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={styles.CVDetailsSection}>
                                                     <Icon name="user-2-line" />
                                                     <View>
                                                         <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
-                                                        <Text style={{ fontSize: 18 }}>cate</Text>
+                                                        <Text style={{ fontSize: 18 }}>{cv.vi_tri}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -654,7 +685,7 @@ const JobDetail = () => {
                                         <View style={{gap: 16}}>
                                             <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
                                             <Text>Cảm thấy mình đã cải thiện?</Text>
-                                            <TouchableOpacity style={styles.buttonStyle}>
+                                            <TouchableOpacity onPress={handleCVApply} style={styles.buttonStyle}>
                                                 <Text>Ứng tuyển với CV đã có</Text>
                                                 <View style={styles.priceTag}>
                                                     <Text>💎 10</Text>
@@ -781,6 +812,7 @@ const JobDetail = () => {
                     </SafeAreaView>
                 </Modal>
             </View>
+            
             <View style={styles.wrapModal}>
                 <Modal
                     style={{ margin: 0 }}
@@ -793,7 +825,7 @@ const JobDetail = () => {
                     <SafeAreaView style={styles.modal}>
                         <View style={styles.modalChild}>
                             <Text style={STYLE.textTitle}>Đang ứng tuyển cho <Text>{postData.tieu_de}</Text> @ {doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}</Text>
-                            <TouchableOpacity style={styles.buttonStyle}>
+                            <TouchableOpacity style={styles.buttonStyle} onPress={handleCVApply}>
                                 <Text>Ứng tuyển với CV đã có</Text>
                                 <View style={styles.priceTag}>
                                     <Text>💎 10</Text>

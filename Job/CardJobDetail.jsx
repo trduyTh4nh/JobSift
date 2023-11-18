@@ -85,7 +85,7 @@ const CardJobDetail = (props) => {
 
                         <View style={{ ...styles.jobCardHeader, justifyContent: 'flex-start', alignItems: 'center' }}>
                             <Image source={{ uri: dataPostDetail ? dataPostDetail.logo_dn : "https://limosa.vn/wp-content/uploads/2023/08/job-la-gi.jpg" }}
-                                style={{ width: 45, height: 45 }}
+                                style={{ borderRadius: 8, width: 45, height: 45 }}
                             ></Image>
 
                             <View style={styles.jobCardName}>
@@ -158,7 +158,10 @@ const styles = StyleSheet.create({
         paddingBottom: 15,
         elevation: 8,
         marginBottom: 12,
-        marginLeft: 10
+        marginLeft: 10,
+        shadowColor: '#000',
+        shadowOpacity: 0.2,
+        shadowRadius: 15
     }
     ,
     jobCardHeader: {

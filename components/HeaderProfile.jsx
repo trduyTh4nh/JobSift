@@ -142,6 +142,7 @@ const styles = StyleSheet.create({
     Xuongdong:{
         display:'flex',
         flex: 1,
+        marginRight: 10,
         flexDirection:'column',
     },
     welcomeMessage: {

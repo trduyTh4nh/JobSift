@@ -40,7 +40,7 @@ const SalaryCalculator = ({navigation}) => {
                             <Text style={{
                                 color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik"
                             }}>
-                                Gross to Net
+                                Gross → Net
                             </Text>
                         ),
 

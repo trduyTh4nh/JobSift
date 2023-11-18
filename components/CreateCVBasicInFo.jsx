@@ -155,14 +155,16 @@ const CreateCVBasicInFo = () => {
 
                                 <Text style={styles.inputItemTitle}>Vị trí</Text>
                                 <View style={styles.wrapPicker1}>
-                                    <TextInput
-                                        onChangeText={(value) => {
-                                            setPosition(value)
-                                        }}
-                                        style={{
-                                            width: "100%",
-                                            paddingLeft: 18
-                                        }}>
+                                    <TextInput 
+                                    onChangeText={(value) => {
+                                        setPosition(value)
+                                    }}
+                                    style={{
+                                        width: "100%",
+                                        paddingLeft: 18,
+                                        paddingTop: 18,
+                                        paddingBottom: 18
+                                    }}>
 
                                     </TextInput>
                                 </View>

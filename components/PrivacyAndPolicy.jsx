@@ -58,7 +58,7 @@ const PrivacyAndPolicy = () => {
                                     fontSize: 16,
                                     fontFamily: "Rubik"
                                 }}>
-                                    Policy
+                                    Chính sách
                                 </Text>
                             ),
                             tabBarIndicatorStyle: {
@@ -80,7 +80,7 @@ const PrivacyAndPolicy = () => {
                             title: "Legal",
                             tabBarLabel: ({ focused, color }) => (
                                 <Text style={{ color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik" }}>
-                                    Legal things
+                                    Pháp lý
                                 </Text>
                             ),
 

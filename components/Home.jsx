@@ -57,7 +57,6 @@ const Home = ({ navigation }) => {
             console.error(error)
         })
     }, [focus])
-
     const refreshJob = () => {
         setPopuplarJob([])
         axios.post(`http://${API_URL}:3001/popularjob`, {}, {
@@ -206,14 +205,7 @@ const Home = ({ navigation }) => {
 
 
 
-    const RenderJobNearBy = ({ item, onfavourite }) => (
-        <NearbyJob dataNearby={item} onFavouritePress={onfavourite} />
-    );
-
-
-    const RenderItem = ({ item, onfavourite }) => (
-        <CardJob onFavourite={onfavourite} dataPost={item} />
-    );
+    
     if (!global.user) {
         return (
             <SafeAreaView style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
@@ -256,7 +248,7 @@ const Home = ({ navigation }) => {
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
-                        <TouchableOpacity onPress={() => {navigation.navigate('All Jobs')}}><Text style={styles.titleHomeShowMore}>Show all</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => {navigation.navigate('All Jobs')}}><Text style={styles.titleHomeShowMore}>Hiển thị tất cả</Text></TouchableOpacity>
                     </View>
 
 
@@ -299,7 +291,14 @@ const Home = ({ navigation }) => {
         </SafeAreaView>
     )
 }
+const RenderJobNearBy = ({ item, onfavourite }) => (
+    <NearbyJob dataNearby={item} onFavouritePress={onfavourite} />
+);
 
+
+const RenderItem = ({ item, onfavourite }) => (
+    <CardJob onFavourite={onfavourite} dataPost={item} />
+);
 const styles = StyleSheet.create({
     
     body: {

@@ -34,11 +34,6 @@ const BuyDiamond = ({ navigation }) => {
 
                     </View>
 
-
-
-
-
-
                     <View style={{
                         alignItems: "center",
                     }}>
@@ -88,12 +83,6 @@ const BuyDiamond = ({ navigation }) => {
                                         <View style={styles.dongngang} >
                                             <Text style={{ fontSize: 17, color: "#000000" }}>💎 100</Text>
 
-                                        </View>
-
-                                    </View>
-                                </View>
-                            </View>
-
                             <View style={styles.vien}>
                                 <View style={{ marginEnd: 10, marginStart: 10 }}>
                                     <Text style={styles.chucuaslart3}>Gói Vip</Text>
@@ -109,7 +98,6 @@ const BuyDiamond = ({ navigation }) => {
 
                                         </View>
                                     </View>
-
                                     <View style={styles.dongngang1}>
                                         <View style={styles.wrapSearchBtn}>
                                             <TouchableOpacity style={styles.searchBtn} onPress={() => { navigation.navigate('MuaKCDetail', { KC: 600, price: 5999, priceText: '599.999' }) }}>
@@ -119,7 +107,6 @@ const BuyDiamond = ({ navigation }) => {
                                         </View>
                                         <View style={styles.dongngang} >
                                             <Text style={{ fontSize: 17, color: "#000000" }}>💎 600</Text>
-
                                         </View>
 
                                     </View>

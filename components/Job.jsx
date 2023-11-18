@@ -16,6 +16,7 @@ import { API_URL } from "../ipConfig";
 
 import NearbyJob from "../Job/NearbyJob";
 import { ActivityIndicator } from "react-native-paper";
+import ActionSheet from "react-native-actions-sheet";
 
 const Job = () => {
 
@@ -24,15 +25,17 @@ const Job = () => {
         ToastAndroid.show(title, ToastAndroid.SHORT)
     }
     const [showModal, setShowModal] = useState(false)
+    const applyCVRef = useRef<ActionSheet>(null)
 
-
-    const [dataSearch, setDataSearch] = useState('No content')
+    const [dataSearch, setDataSearch] = useState('Không có nội dung')
 
     const [checkVar, setCheckVar] = useState(false)
 
     const [kq, setKq] = useState({})
 
-
+    const handleCVApply = () => {
+        applyCVRef.current?.show()
+    }
     const handleSearch = (text) => {
 
         setDataSearch(text);
@@ -150,7 +153,7 @@ const Job = () => {
 
 
     return (
-        <View style={{ width: "100%", marginTop: 16 }}>
+        <SafeAreaView style={{ width: "100%", marginTop: 16 }}>
             <View style={styles.wrapSearch}>
                 <View style={{
                     backgroundColor: 'rgba(230, 230, 230, 1)',
@@ -164,7 +167,7 @@ const Job = () => {
                 }}>
                     <TextInput
                         style={styles.inputSearch}
-                        placeholder="Find your new job"
+                        placeholder="Tìm kiếm"
                         placeholderTextColor="#999"
                         onChangeText={handleSearch}
                     >
@@ -191,11 +194,13 @@ const Job = () => {
                     <Text style={{
                         fontFamily: 'Rubik',
                         fontSize: 14
-                    }}>Fillter</Text>
+                    }}>Bộ lọc</Text>
                     <Icon name="equalizer-fill"></Icon>
                 </TouchableOpacity>
             </View>
-
+            <ActionSheet ref={applyCVRef}>
+                <Text>Hi</Text>
+            </ActionSheet>
             <Modal
                 isVisible={showModal}
                 // onSwipeComplete={() => { setShowModal(false) }}
@@ -203,132 +208,128 @@ const Job = () => {
                 swipeDirection={'down'}
                 style={{ margin: 0 }}
             >
-                <ScrollView style={{
-                    backgroundColor: "#fff", position: "absolute", bottom: 0, width: "100%",
-                    borderTopLeftRadius: 20,
-                    borderTopRightRadius: 20,
-                    paddingTop: 10,
-                    paddingLeft: 25,
-                    paddingRight: 20,
-                    display: "flex",
-                    gap: 14
-                }}>
-                    <View style={{
-                        ...styles.wrapTextOption,
-                        display: "flex",
-                        flexDirection: "row",
-                        alignItems: "center",
-                    }}>
-                        <Text style={{
-                            ...STYLE.textTitle
-                        }}>Bộ lọc</Text>
+                <SafeAreaView style={STYLE.modal}>
+                    <View style={STYLE.modalChild}>
+                        <ScrollView>
+                            <View style={{gap: 16}}>
 
-                        <Icon name="filter-2-fill"></Icon>
+                                <View style={{
+                                    ...styles.wrapTextOption,
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                }}>
+                                    <Text style={{
+                                        ...STYLE.textTitle
+                                    }}>Bộ lọc</Text>
+
+                                    <Icon name="filter-2-fill"></Icon>
+                                </View>
+                                <View style={styles.modal_item}>
+                                    <Text style={styles.titleFilter}>Tên công việc</Text>
+                                    <TextInput style={styles.textInputModal}
+                                        placeholder=""
+                                        value={formData.nameJob}
+                                        onChangeText={text => handleInputChange('nameJob', text)}
+
+                                    ></TextInput>
+                                </View>
+
+                                <View style={styles.modal_item}>
+                                    <Text style={styles.titleFilter}>Tên công ty</Text>
+                                    <TextInput style={styles.textInputModal}
+                                        placeholder=""
+                                        value={formData.company}
+                                        onChangeText={text => handleInputChange('company', text)}
+
+                                    ></TextInput>
+                                </View>
+                                <View style={styles.modal_item}>
+                                    <Text style={styles.titleFilter}>Loại công việc</Text>
+                                    <TextInput style={styles.textInputModal}
+                                        placeholder=""
+                                        value={formData.category}
+                                        onChangeText={text => handleInputChange('category', text)}
+                                    ></TextInput>
+                                </View>
+                                <View style={styles.modal_item}>
+                                    <Text style={styles.titleFilter}>Vị trí</Text>
+                                    <TextInput style={styles.textInputModal}
+                                        placeholder=""
+                                        value={formData.position}
+                                        onChangeText={text => handleInputChange('position', text)}
+
+                                    ></TextInput>
+                                </View>
+
+                                <View style={{
+                                    ...styles.modal_item,
+                                    marginBottom: 16
+                                }}>
+                                    <Text style={styles.titleFilter}>Lương</Text>
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        justifyContent: "space-between",
+                                        alignItems: "center",
+                                        gap: 10
+                                    }}>
+                                        <TextInput style={{
+                                            ...styles.textInputModal,
+                                            width: "42%",
+                                            borderWidth: checkVar ? 1 : 0,
+                                            borderColor: checkVar ? "red" : "#000"
+
+                                        }}
+                                            placeholder="Thấp nhất"
+                                            value={formData.salaryFrom ? formData.salaryFrom : ""}
+                                            onChangeText={text => handleInputChange('salaryFrom', text)}
+                                        ></TextInput>
+                                        <Icon name="arrow-left-right-fill"></Icon>
+                                        <TextInput style={{
+                                            ...styles.textInputModal,
+                                            width: "42%",
+                                            borderWidth: checkVar ? 1 : 0,
+                                            borderColor: checkVar ? "red" : "#000",
+
+                                        }}
+                                            placeholder="Cao nhất"
+                                            value={formData.salaryTo ? formData.salaryTo : ""}
+                                            onChangeText={text => handleInputChange('salaryTo', text)}
+                                        ></TextInput>
+                                    </View>
+                                </View>
+
+
+                                <View style={{
+                                    display: "flex",
+                                    justifyContent: "center",
+                                    alignItems: "center",
+                                    marginBottom: 16
+
+                                }}>
+                                    <TouchableOpacity style={{
+                                        backgroundColor: "#e2f367",
+                                        width: '100%',
+                                        display: "flex",
+                                        justifyContent: "center",
+                                        alignItems: "center",
+                                        padding: 16,
+                                        borderRadius: 10
+
+                                    }}
+
+                                        onPress={handleGetAllData}
+                                    >
+                                        <Text style={{
+                                            fontFamily: 'RukbikNormal',
+                                        }}>Hoàn thành</Text>
+                                    </TouchableOpacity>
+                                </View>
+                            </View>
+                        </ScrollView>
                     </View>
-                    <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Tên công việc</Text>
-                        <TextInput style={styles.textInputModal}
-                            placeholder=""
-                            value={formData.nameJob}
-                            onChangeText={text => handleInputChange('nameJob', text)}
-
-                        ></TextInput>
-                    </View>
-
-                    <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Tên công ty</Text>
-                        <TextInput style={styles.textInputModal}
-                            placeholder=""
-                            value={formData.company}
-                            onChangeText={text => handleInputChange('company', text)}
-
-                        ></TextInput>
-                    </View>
-                    <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Loại công việc</Text>
-                        <TextInput style={styles.textInputModal}
-                            placeholder=""
-                            value={formData.category}
-                            onChangeText={text => handleInputChange('category', text)}
-                        ></TextInput>
-                    </View>
-                    <View style={styles.modal_item}>
-                        <Text style={styles.titleFilter}>Vị trí</Text>
-                        <TextInput style={styles.textInputModal}
-                            placeholder=""
-                            value={formData.position}
-                            onChangeText={text => handleInputChange('position', text)}
-
-                        ></TextInput>
-                    </View>
-
-                    <View style={{
-                        ...styles.modal_item,
-                        marginBottom: 16
-                    }}>
-                        <Text style={styles.titleFilter}>Lương</Text>
-                        <View style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            justifyContent: "space-between",
-                            alignItems: "center",
-                            gap: 10
-                        }}>
-                            <TextInput style={{
-                                ...styles.textInputModal,
-                                width: "42%",
-                                borderWidth: checkVar ? 1 : 0,
-                                borderColor: checkVar ? "red" : "#000"
-
-                            }}
-                                placeholder="To"
-                                value={formData.salaryFrom ? formData.salaryFrom : ""}
-                                onChangeText={text => handleInputChange('salaryFrom', text)}
-                            ></TextInput>
-                            <Icon name="arrow-left-right-fill"></Icon>
-                            <TextInput style={{
-                                ...styles.textInputModal,
-                                width: "42%",
-                                borderWidth: checkVar ? 1 : 0,
-                                borderColor: checkVar ? "red" : "#000",
-
-                            }}
-                                placeholder="From"
-                                value={formData.salaryTo ? formData.salaryTo : ""}
-                                onChangeText={text => handleInputChange('salaryTo', text)}
-                            ></TextInput>
-                        </View>
-                    </View>
-
-
-                    <View style={{
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        marginBottom: 16
-
-                    }}>
-                        <TouchableOpacity style={{
-                            backgroundColor: "#e2f367",
-                            width: "80%",
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 6,
-                            borderRadius: 10
-
-                        }}
-
-                            onPress={handleGetAllData}
-                        >
-                            <Text style={{
-                                fontFamily: 'RukbikNormal',
-                            }}>Hoàn thành</Text>
-                        </TouchableOpacity>
-                    </View>
-
-
-                </ScrollView>
+                </SafeAreaView>
             </Modal>
 
 
@@ -343,7 +344,7 @@ const Job = () => {
                         fontFamily: 'RukbikNormal',
                         color: "#000"
                     }}
-                >Showing {kq ? kq.length : "0"} result of "{dataSearch}"</Text>
+                >Đang hiển thị {kq ? kq.length : "0"} kết quả của "{dataSearch}"</Text>
             </View>
             <ScrollView style={{ height: '100%' }}>
                 <View style={styles.resSearch}>
@@ -378,7 +379,7 @@ const Job = () => {
             </ScrollView>
 
 
-        </View>
+        </SafeAreaView>
     )
 }
 
@@ -486,7 +487,7 @@ const styles = StyleSheet.create({
     },
     textInputModal: {
         backgroundColor: "#F1F1F1",
-        padding: 10,
+        padding: 16,
         borderRadius: 12,
         marginTop: 8,
         alignItems: "center"

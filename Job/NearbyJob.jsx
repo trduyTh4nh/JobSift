@@ -76,7 +76,7 @@ const NearbyJob = (props) => {
                         }} >
 
                             <Image
-                                style={styles.jobImage}
+                                style={{borderRadius: 8}}
                                 source={{
                                     uri: dataNearby ? dataNearby.logo_dn : 'https://cdn-icons-png.flaticon.com/512/306/306424.png'
                                 }}
