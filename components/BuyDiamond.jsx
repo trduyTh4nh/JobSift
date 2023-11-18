@@ -11,16 +11,21 @@ import JobDetail from "../Job/JobDetail";
 
 
 
-const BuyDiamond = () => {
+const BuyDiamond = ({ navigation }) => {
     return (
         <ScrollView style={{ paddingBottom: 200 }}>
             <View style={styles.wrap}>
                 <View style={styles.container}>
-                    <Text style={styles.chucuaslart}> Current balance</Text>
+                    <Text style={{
+                        ...styles.chucuaslart,
+                        fontSize: 20,
+                        fontWeight: "800",
+                        marginTop: 10
+                    }}>Số dư hiện tại</Text>
 
 
                     <View style={styles.Xuongdong} >
-                        
+
                         <Text style={{
                             fontSize: 32,
                             fontWeight: '900',
@@ -28,105 +33,126 @@ const BuyDiamond = () => {
                         }}>💎 100</Text>
 
                     </View>
-                    <View style={styles.wrap_welcome}>
 
-                        <Text style={styles.chucuaslart}> Category</Text>
-                        <Text style={styles.chucuaslart1}> Show All</Text>
-                    </View>
+
+
+
 
 
                     <View style={{
                         alignItems: "center",
                     }}>
-                        <View style={styles.vien}>
-                            <View style={{ marginEnd: 10, marginStart: 10 }}>
-                                <Text style={styles.chucuaslart3}>Gói Normal</Text>
-                                <View style={styles.dongngang}>
-                                    <Icon name="ri-money-dollar-circle-line"></Icon>
-                                    <View style={styles.dongdoc}>
-                                        <Text style={styles.chucuaslart1}> Giá </Text>
-                                        <View style={styles.dongngang}>
-
-                                            <Text style={styles.chucuaslart}>199.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
-                                        </View>
-
-                                    </View>
-                                </View>
-
-                                <View style={styles.dongngang1}>
-                                    <View style={styles.wrapSearchBtn}>
-                                        <TouchableOpacity style={styles.searchBtn}>
-                                            <Text style={styles.chucuaslart}>Chi tiết </Text>
-                                            <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={styles.dongngang} >
-                                        <Text style={{ fontSize: 17, color: "#000000" }}>💎 100</Text>
-                                        
-                                    </View>
-
-                                </View>
-                            </View>
+                        <View style={{
+                            width: "100%",
+                            alignItems: "left",
+                            marginTop: 20,
+                            paddingLeft: 10,
+                        }}>
+                            <Text style={{
+                                ...styles.chucuaslart,
+                                fontSize: 18,
+                                fontWeight: "700"
+                            }}>Loại gói</Text>
                         </View>
 
-                        <View style={styles.vien}>
-                            <View style={{ marginEnd: 10, marginStart: 10 }}>
-                                <Text style={styles.chucuaslart3}>Gói Vip</Text>
-                                <View style={styles.dongngang}>
-                                    <Icon name="ri-money-dollar-circle-line"></Icon>
-                                    <View style={styles.dongdoc}>
-                                        <Text style={styles.chucuaslart1}> Giá </Text>
-                                        <View style={styles.dongngang}>
+                        <View style={{
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: "100%",
+                            gap: 20
+                        }}>
+                            <View style={styles.vien}>
+                                <View style={{ marginEnd: 10, marginStart: 10 }}>
+                                    <Text style={styles.chucuaslart3}>Gói Normal</Text>
+                                    <View style={styles.dongngang}>
+                                        <Icon name="ri-money-dollar-circle-line"></Icon>
+                                        <View style={styles.dongdoc}>
+                                            <Text style={styles.chucuaslart1}> Giá </Text>
+                                            <View style={styles.dongngang}>
 
-                                            <Text style={styles.chucuaslart}>599.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
+                                                <Text style={styles.chucuaslart}>199.999</Text>
+                                                <Text style={styles.chucuaslart}>vnd</Text>
+                                            </View>
+
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.dongngang1}>
+                                        <View style={styles.wrapSearchBtn}>
+                                            <TouchableOpacity onPress={() => { navigation.navigate('MuaKCDetail', { KC: 100, price: 1999, priceText: '199.999'}) }} style={styles.searchBtn}>
+                                                <Text style={styles.chucuaslart}>Chi tiết </Text>
+                                                <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.dongngang} >
+                                            <Text style={{ fontSize: 17, color: "#000000" }}>💎 100</Text>
+
                                         </View>
 
                                     </View>
-                                </View>
-
-                                <View style={styles.dongngang1}>
-                                    <View style={styles.wrapSearchBtn}>
-                                        <TouchableOpacity style={styles.searchBtn}>
-                                            <Text style={styles.chucuaslart}>Chi tiết </Text>
-                                            <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={styles.dongngang} >
-                                        <Text style={{ fontSize: 17, color: "#000000" }}>💎 600</Text>
-                                        
-                                    </View>
-
                                 </View>
                             </View>
-                        </View>
-                        <View style={styles.vien}>
-                            <View style={{ marginEnd: 10, marginStart: 10 }}>
-                                <Text style={styles.chucuaslart3}>Gói Super</Text>
-                                <View style={styles.dongngang}>
-                                    <Icon name="ri-money-dollar-circle-line"></Icon>
-                                    <View style={styles.dongdoc}>
-                                        <Text style={styles.chucuaslart1}> Giá </Text>
-                                        <View style={styles.dongngang}>
 
-                                            <Text style={styles.chucuaslart}>999.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
+                            <View style={styles.vien}>
+                                <View style={{ marginEnd: 10, marginStart: 10 }}>
+                                    <Text style={styles.chucuaslart3}>Gói Vip</Text>
+                                    <View style={styles.dongngang}>
+                                        <Icon name="ri-money-dollar-circle-line"></Icon>
+                                        <View style={styles.dongdoc}>
+                                            <Text style={styles.chucuaslart1}> Giá </Text>
+                                            <View style={styles.dongngang}>
+
+                                                <Text style={styles.chucuaslart}>599.999</Text>
+                                                <Text style={styles.chucuaslart}>vnd</Text>
+                                            </View>
+
+                                        </View>
+                                    </View>
+
+                                    <View style={styles.dongngang1}>
+                                        <View style={styles.wrapSearchBtn}>
+                                            <TouchableOpacity style={styles.searchBtn} onPress={() => { navigation.navigate('MuaKCDetail', { KC: 600, price: 5999, priceText: '599.999' }) }}>
+                                                <Text style={styles.chucuaslart} >Chi tiết </Text>
+                                                <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.dongngang} >
+                                            <Text style={{ fontSize: 17, color: "#000000" }}>💎 600</Text>
+
                                         </View>
 
                                     </View>
                                 </View>
-                                <View style={styles.dongngang1}>
-                                    <View style={styles.wrapSearchBtn}>
-                                        <TouchableOpacity style={styles.searchBtn}>
-                                            <Text style={styles.chucuaslart}>Chi tiết </Text>
-                                            <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
-                                        </TouchableOpacity>
-                                    </View>
-                                    <View style={styles.dongngang} >
-                                        <Text style={{ fontSize: 17, color: "#000000" }}>💎 1000</Text>
-                                    </View>
+                            </View>
 
+                            <View style={styles.vien}>
+                                <View style={{ marginEnd: 10, marginStart: 10 }}>
+                                    <Text style={styles.chucuaslart3}>Gói Super</Text>
+                                    <View style={styles.dongngang}>
+                                        <Icon name="ri-money-dollar-circle-line"></Icon>
+                                        <View style={styles.dongdoc}>
+                                            <Text style={styles.chucuaslart1}> Giá </Text>
+                                            <View style={styles.dongngang}>
+
+                                                <Text style={styles.chucuaslart}>999.999</Text>
+                                                <Text style={styles.chucuaslart}>vnd</Text>
+                                            </View>
+
+                                        </View>
+                                    </View>
+                                    <View style={styles.dongngang1}>
+                                        <View style={styles.wrapSearchBtn}>
+                                            <TouchableOpacity style={styles.searchBtn} onPress={() => { navigation.navigate('MuaKCDetail', { KC: 1000, price: 10000, priceText: '999.999' }) }}>
+                                                <Text style={styles.chucuaslart}>Chi tiết </Text>
+                                                <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
+                                            </TouchableOpacity>
+                                        </View>
+                                        <View style={styles.dongngang} >
+                                            <Text style={{ fontSize: 17, color: "#000000" }}>💎 1000</Text>
+                                        </View>
+
+                                    </View>
                                 </View>
                             </View>
                         </View>
@@ -264,13 +290,10 @@ const styles = StyleSheet.create({
     vien: {
         display: "flex",
         flexDirection: "column",
-        gap: 10,
-
-        // alignItems: "center",
         borderColor: "#B0B0B0",
         borderWidth: 3,
         borderRadius: 20,
-        marginTop: 25,
+        marginTop: 15,
         padding: 10,
         width: "95%"
 

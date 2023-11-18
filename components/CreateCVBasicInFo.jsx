@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, TextInput, Platform } from "react-native";
 import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
@@ -7,6 +7,9 @@ import { Picker } from '@react-native-picker/picker';
 import { ScrollView } from "react-native";
 
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+import { API_URL } from "../ipConfig";
+import { FlatList } from "react-native-gesture-handler";
 
 
 const CreateCVBasicInFo = () => {
@@ -17,6 +20,8 @@ const CreateCVBasicInFo = () => {
     const [category, setCategory] = useState('')
     const [experience, setExperience] = useState('')
     const [position, setPosition] = useState('')
+    const [allPosition, setAllPosition] = useState('')
+
 
     const formData = {
         ngon_ngu: language,
@@ -25,8 +30,19 @@ const CreateCVBasicInFo = () => {
         position: position
     }
 
+    useEffect(() => {
+        axios.post(`http://${API_URL}:3001/getallposition`)
+            .then((result) => {
+                setAllPosition(result.data.allPosition || []); 
+            })
+            .catch((error) => {
+                console.log("ERROR at getallposition: " + error)
+            })
+    }, [])
+
     const handleNextBasicInfo = () => {
-        
+        console.log("full data: " + JSON.stringify(formData))
+
         navigation.navigate("CreateCV", { basicInFo: formData })
     }
 
@@ -44,27 +60,27 @@ const CreateCVBasicInFo = () => {
     }
 
     return (
-    <ScrollView>
-        <View style={styles.container}>
-            <View style={{
-                paddingLeft: 18,
-                paddingRight: 18,
-                paddingTop: 10,
-                paddingRight: 18
-            }}>
-                <Text style={styles.title}>Thông tin cơ bản</Text>
+        <ScrollView>
+            <View style={styles.container}>
+                <View style={{
+                    paddingLeft: 18,
+                    paddingRight: 18,
+                    paddingTop: 10,
+                    paddingRight: 18
+                }}>
+                    <Text style={styles.title}>Thông tin cơ bản</Text>
 
-                {
-                    Platform.OS == 'ios' ? (
+                    {
+                        Platform.OS == 'ios' ? (
                             <View style={styles.wrapInput}>
                                 <Text style={styles.inputItemTitle}>Ngôn ngữ</Text>
                                 <Picker
-                                            selectedValue={language}
-                                            style={styles.selectIOS}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setLanguage(itemValue);
-                                            }}
-                                        >
+                                    selectedValue={language}
+                                    style={styles.selectIOS}
+                                    onValueChange={(itemValue, itemIndex) => {
+                                        setLanguage(itemValue);
+                                    }}
+                                >
                                     <Picker.Item style={{
                                         fontSize: 16,
                                         fontWeight: "800",
@@ -91,12 +107,12 @@ const CreateCVBasicInFo = () => {
                                 </Picker>
                                 <Text style={styles.inputItemTitle}>Loại công việc</Text>
                                 <Picker
-                                            selectedValue={category}
-                                            style={styles.selectIOS}
-                                            onValueChange={(itemValue, itemIndex) => {
-                                                setCategory(itemValue);
-                                            }}
-                                        >
+                                    selectedValue={category}
+                                    style={styles.selectIOS}
+                                    onValueChange={(itemValue, itemIndex) => {
+                                        setCategory(itemValue);
+                                    }}
+                                >
                                     <Picker.Item style={{
                                         fontSize: 16,
                                         fontWeight: "800",
@@ -114,185 +130,207 @@ const CreateCVBasicInFo = () => {
                                     }} label="Remote" value="Remote" />
                                 </Picker>
                                 <Text style={styles.inputItemTitle}>Kinh nghiệm</Text>
-                                    <Picker
-                                        selectedValue={experience}
-                                        style={styles.selectIOS}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setExperience(itemValue);
-                                        }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800",
-                                            fontFamily: "RukbikNormal"
-                                        }} label="6 tháng" value="6 tháng" >
-                                        </Picker.Item>
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="1 năm" value="1 năm" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="5 năm" value="5 năm" />
-                                    </Picker>
-                               
+                                <Picker
+                                    selectedValue={experience}
+                                    style={styles.selectIOS}
+                                    onValueChange={(itemValue, itemIndex) => {
+                                        setExperience(itemValue);
+                                    }}
+                                >
+                                    <Picker.Item style={{
+                                        fontSize: 16,
+                                        fontWeight: "800",
+                                        fontFamily: "RukbikNormal"
+                                    }} label="6 tháng" value="6 tháng" >
+                                    </Picker.Item>
+                                    <Picker.Item style={{
+                                        fontSize: 16,
+                                        fontWeight: "800"
+                                    }} label="1 năm" value="1 năm" />
+                                    <Picker.Item style={{
+                                        fontSize: 16,
+                                        fontWeight: "800"
+                                    }} label="5 năm" value="5 năm" />
+                                </Picker>
+
                                 <Text style={styles.inputItemTitle}>Vị trí</Text>
                                 <View style={styles.wrapPicker1}>
-                                    <TextInput 
-                                    onChangeText={(value) => {
-                                        setPosition(value)
-                                    }}
-                                    style={{
-                                        width: "100%",
-                                        paddingLeft: 18
-                                    }}>
-
-                                    </TextInput>
-                                </View>
-                            </View>
-                        
-                    ) : (
-                        <View style={styles.wrapInput}>
-                            <View style={styles.inputItem}>
-                                <Text style={styles.inputItemTitle}>Ngôn ngữ</Text>
-                                <View style={styles.wrapPicker}>
-                                    <Picker
-                                        selectedValue={language}
-                                        style={styles.pickerItem}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setLanguage(itemValue);
+                                    <TextInput
+                                        onChangeText={(value) => {
+                                            setPosition(value)
                                         }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800",
-                                            fontFamily: "RukbikNormal"
-                                        }} label="Tiếng Việt 🇻🇳" value="Tiếng Việt" >
-
-                                        </Picker.Item>
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Tiếng Anh 🇬🇧" value="Tiếng Anh" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Tiếng Trung 🇨🇳" value="Tiếng Trung" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Tiếng Pháp 🇫🇷" value="Tiếng Pháp" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Tiếng Tây Ban Nha 🇪🇸" value="Tiếng Tây Ban Nha" />
-                                    </Picker>
-                                </View>
-                            </View>
-
-                            <View style={styles.inputItem}>
-                                <Text style={styles.inputItemTitle}>Loại công việc</Text>
-                                <View style={styles.wrapPicker1}>
-                                    <Picker
-                                        selectedValue={category}
-                                        style={styles.pickerItem}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setCategory(itemValue);
-                                        }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800",
-                                            fontFamily: "RukbikNormal"
-                                        }} label="Part-time" value="Part-time" >
-
-                                        </Picker.Item>
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Full-time" value="Full-time" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="Remote" value="Remote" />
-
-                                    </Picker>
-                                </View>
-                            </View>
-
-
-                            <View style={styles.inputItem}>
-                                <Text style={styles.inputItemTitle}>Kinh nghiệm</Text>
-                                <View style={styles.wrapPicker1}>
-                                    <Picker
-                                        selectedValue={experience}
-                                        style={styles.pickerItem}
-                                        onValueChange={(itemValue, itemIndex) => {
-                                            setExperience(itemValue);
-                                        }}
-                                    >
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800",
-                                            fontFamily: "RukbikNormal"
-                                        }} label="6 tháng" value="6 tháng" >
-
-                                        </Picker.Item>
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="1 năm" value="1 năm" />
-                                        <Picker.Item style={{
-                                            fontSize: 16,
-                                            fontWeight: "800"
-                                        }} label="5 năm" value="5 năm" />
-
-                                    </Picker>
-                                </View>
-                            </View>
-
-                            <View style={styles.inputItem}>
-                                <Text style={styles.inputItemTitle}>Vị trí</Text>
-                                <View style={styles.wrapPicker1}>
-                                    <TextInput 
-                                    onChangeText={(value) => {
-                                        setPosition(value)
-                                    }}
-                                    style={{
-                                        width: "100%",
-                                        paddingLeft: 18
-                                    }}>
+                                        style={{
+                                            width: "100%",
+                                            paddingLeft: 18
+                                        }}>
 
                                     </TextInput>
                                 </View>
                             </View>
 
+                        ) : (
+                            <View style={styles.wrapInput}>
+                                <View style={styles.inputItem}>
+                                    <Text style={styles.inputItemTitle}>Ngôn ngữ</Text>
+                                    <View style={styles.wrapPicker}>
+                                        <Picker
+                                            selectedValue={language}
+                                            style={styles.pickerItem}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setLanguage(itemValue);
+                                            }}
+                                        >
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800",
+                                                fontFamily: "RukbikNormal"
+                                            }} label="Tiếng Việt 🇻🇳" value="Tiếng Việt" >
 
-                        </View>
-                    )
-                }
-                
+                                            </Picker.Item>
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Tiếng Anh 🇬🇧" value="Tiếng Anh" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Tiếng Trung 🇨🇳" value="Tiếng Trung" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Tiếng Pháp 🇫🇷" value="Tiếng Pháp" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Tiếng Tây Ban Nha 🇪🇸" value="Tiếng Tây Ban Nha" />
+                                        </Picker>
+                                    </View>
+                                </View>
 
-                <View style={styles.btnNext}>
-                    <TouchableOpacity
-                        onPress={handleNextBasicInfo}
-                        style={{
-                            backgroundColor: "#E2F367",
-                            width: 150,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            padding: 10,
-                            borderRadius: 20,
-                            elevation: 2
-                        }}>
-                        <Text style={styles.inputItemTitle} >Next</Text>
-                    </TouchableOpacity>
+                                <View style={styles.inputItem}>
+                                    <Text style={styles.inputItemTitle}>Loại công việc</Text>
+                                    <View style={styles.wrapPicker1}>
+                                        <Picker
+                                            selectedValue={category}
+                                            style={styles.pickerItem}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setCategory(itemValue);
+                                            }}
+                                        >
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800",
+                                                fontFamily: "RukbikNormal"
+                                            }} label="Part-time" value="Part-time" >
+
+                                            </Picker.Item>
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Full-time" value="Full-time" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="Remote" value="Remote" />
+
+                                        </Picker>
+                                    </View>
+                                </View>
+
+
+                                <View style={styles.inputItem}>
+                                    <Text style={styles.inputItemTitle}>Kinh nghiệm</Text>
+                                    <View style={styles.wrapPicker1}>
+                                        <Picker
+                                            selectedValue={experience}
+                                            style={styles.pickerItem}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setExperience(itemValue);
+                                            }}
+                                        >
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800",
+                                                fontFamily: "RukbikNormal"
+                                            }} label="6 tháng" value="6 tháng" >
+
+                                            </Picker.Item>
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="1 năm" value="1 năm" />
+                                            <Picker.Item style={{
+                                                fontSize: 16,
+                                                fontWeight: "800"
+                                            }} label="5 năm" value="5 năm" />
+
+                                        </Picker>
+                                    </View>
+                                </View>
+
+                                <View style={styles.inputItem}>
+                                    <Text style={styles.inputItemTitle}>Vị trí</Text>
+                                    <View style={styles.wrapPicker1}>
+                                        {/* <TextInput
+                                            onChangeText={(value) => {
+                                                setPosition(value)
+                                            }}
+                                            style={{
+                                                width: "100%",
+                                                paddingLeft: 18
+                                            }}>
+
+                                        </TextInput> */}
+
+                                        <Picker
+                                            selectedValue={position}
+                                            style={styles.pickerItem}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setPosition(itemValue);
+                                            }}
+                                        >
+                                            {Array.isArray(allPosition) &&
+                                                allPosition.map((item, index) => (
+                                                    <Picker.Item
+                                                        key={index}
+                                                        label={item.ten_vitri}
+                                                        value={item.ten_vitri}
+                                                        style={{
+                                                            fontSize: 16,
+                                                            fontWeight: "800",
+                                                            fontFamily: "RukbikNormal"
+                                                        }}
+                                                    />
+                                                ))}
+                                        </Picker>
+                                    </View>
+                                </View>
+
+
+                            </View>
+                        )
+                    }
+
+
+                    <View style={styles.btnNext}>
+                        <TouchableOpacity
+                            onPress={handleNextBasicInfo}
+                            style={{
+                                backgroundColor: "#E2F367",
+                                width: 150,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                padding: 10,
+                                borderRadius: 20,
+                                elevation: 2
+                            }}>
+                            <Text style={styles.inputItemTitle} >Next</Text>
+                        </TouchableOpacity>
+                    </View>
                 </View>
             </View>
-        </View>
-    </ScrollView>
+        </ScrollView>
     )
 }
 
@@ -300,8 +338,8 @@ const CreateCVBasicInFo = () => {
 const styles = StyleSheet.create({
     container: {
         marginBottom: 100
-    },  
-    selectIOS: {borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16},
+    },
+    selectIOS: { borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16 },
     title: {
         fontFamily: "Rubik",
         fontSize: 20,
@@ -331,11 +369,11 @@ const styles = StyleSheet.create({
         marginTop: 6
     },
     wrapPicker1: {
-         alignItems: 'center',
+        alignItems: 'center',
         justifyContent: 'center',
-       
+
         borderRadius: 16,
-        borderWidth: 2, 
+        borderWidth: 2,
         borderColor: "#B0B0B0",
         width: "100%",
         marginTop: 6

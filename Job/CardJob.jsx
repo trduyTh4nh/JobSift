@@ -12,13 +12,10 @@ import CardJobDetail from "./CardJobDetail";
 import { useNavigation } from '@react-navigation/native';
 
 const Stack = createNativeStackNavigator();
-
+ 
 const CardJob = (props) => {
     const navigation = useNavigation();
     const { dataPost, onFavourite } = props;
-
-
-
 
     return (
         <CardJobDetail onFavourite={onFavourite} dataPostDetail={dataPost}></CardJobDetail>

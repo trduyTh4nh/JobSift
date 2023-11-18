@@ -1234,7 +1234,7 @@ const CvDetail = ({ navigation }) => {
                                             color: "#000",
                                             fontSize: 16,
                                             fontWeight: "600"
-                                        }}>{cv ? cv.vi_tri_hien_tai : 'không có'}</Text>
+                                        }}>{cv ? cv.position : 'không có'}</Text>
                                     </View>
                                 </View>
                             </View>

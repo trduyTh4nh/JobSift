@@ -1,11 +1,37 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Text, View, StyleSheet, Dimensions, SafeAreaView } from "react-native";
 import NotifiChat from "../src/NotifiChat";
 import NotifiChild from "../src/NotifiChild";
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import Icon from "react-native-remix-icon";
+import messaging from '@react-native-firebase/messaging';
+
+
 const FavoriteJob = () => {
     const Tab = createMaterialTopTabNavigator();
+
+
+    // async function requestUserPermission() {
+    //     const authStatus = await messaging().requestPermission();
+    //     const enabled =
+    //         authStatus === messaging.AuthorizationStatus.AUTHORIZED ||
+    //         authStatus === messaging.AuthorizationStatus.PROVISIONAL;
+
+    //     if (enabled) {
+    //         console.log('Authorization status:', authStatus);
+    //     }
+    // }
+
+    // const getToken = async () => {
+    //     const token = await messaging().getToken()
+    //     console.log("TOKEN: " + token)
+    // }
+
+    // useEffect(() => {
+    //     requestUserPermission()
+    //     getToken()
+    // }, [])
+
     return (
         <SafeAreaView style={styles.notifi}>
             <View style={styles.bodyJobDetail}>
@@ -41,7 +67,7 @@ const FavoriteJob = () => {
                                     justifyContent: "center"
                                 }}>
                                     <Icon size={22} name={focused ? 'notification-2-fill' : 'notification-2-line'}
-                                        // color={focused ? 'black' : '#A3BA00'}
+                                    // color={focused ? 'black' : '#A3BA00'}
                                     ></Icon>
                                     <Text style={{
                                         color: focused ? 'black' : '#A3BA00',
@@ -55,7 +81,7 @@ const FavoriteJob = () => {
                                 </View>
 
 
-                           
+
                             ),
                             tabBarIndicatorStyle: {
                                 width: 80,
@@ -86,9 +112,9 @@ const FavoriteJob = () => {
                                     justifyContent: "center"
                                 }}>
                                     <Icon size={22} name={focused ? 'message-3-fill' : 'message-3-line'}
-                                    
+
                                     // color={focused ? "black" : "#A3BA00"}
-                                    
+
                                     ></Icon>
                                     <Text style={{
                                         color: focused ? 'black' : '#A3BA00',
