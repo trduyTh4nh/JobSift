@@ -145,7 +145,9 @@ const CreateCVBasicInFo = () => {
                                     }}
                                     style={{
                                         width: "100%",
-                                        paddingLeft: 18
+                                        paddingLeft: 18,
+                                        paddingTop: 18,
+                                        paddingBottom: 18
                                     }}>
 
                                     </TextInput>

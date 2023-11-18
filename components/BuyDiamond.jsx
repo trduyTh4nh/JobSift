@@ -16,7 +16,7 @@ const BuyDiamond = () => {
         <ScrollView style={{ paddingBottom: 200 }}>
             <View style={styles.wrap}>
                 <View style={styles.container}>
-                    <Text style={styles.chucuaslart}> Current balance</Text>
+                    <Text style={styles.chucuaslart}>Lượng kim cương hiện có</Text>
 
 
                     <View style={styles.Xuongdong} >
@@ -30,11 +30,8 @@ const BuyDiamond = () => {
                     </View>
                     <View style={styles.wrap_welcome}>
 
-                        <Text style={styles.chucuaslart}> Category</Text>
-                        <Text style={styles.chucuaslart1}> Show All</Text>
+                        <Text style={styles.chucuaslart}>Các gói</Text>
                     </View>
-
-
                     <View style={{
                         alignItems: "center",
                     }}>
@@ -47,8 +44,7 @@ const BuyDiamond = () => {
                                         <Text style={styles.chucuaslart1}> Giá </Text>
                                         <View style={styles.dongngang}>
 
-                                            <Text style={styles.chucuaslart}>199.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
+                                            <Text style={styles.chucuaslart}>199.999 VND</Text>
                                         </View>
 
                                     </View>
@@ -79,8 +75,7 @@ const BuyDiamond = () => {
                                         <Text style={styles.chucuaslart1}> Giá </Text>
                                         <View style={styles.dongngang}>
 
-                                            <Text style={styles.chucuaslart}>599.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
+                                            <Text style={styles.chucuaslart}>599.999 VND</Text>
                                         </View>
 
                                     </View>
@@ -110,8 +105,7 @@ const BuyDiamond = () => {
                                         <Text style={styles.chucuaslart1}> Giá </Text>
                                         <View style={styles.dongngang}>
 
-                                            <Text style={styles.chucuaslart}>999.999</Text>
-                                            <Text style={styles.chucuaslart}> nvđ</Text>
+                                            <Text style={styles.chucuaslart}>999.999 VND</Text>
                                         </View>
 
                                     </View>

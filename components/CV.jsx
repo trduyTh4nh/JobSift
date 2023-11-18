@@ -41,7 +41,7 @@ const CV = ({ navigation }) => {
         return (
             <View style={styles.itemCV}>
 
-                <Text style={styles.nameCV}>{item.cv_title}</Text>
+                <Text style={styles.nameCV}>{item.cv_title ? item.cv_title : 'CV không tên'}</Text>
                 <View style={styles.createCVdetail}>
                     <Icon name="briefcase-2-line"></Icon>
                     <View style={styles.detailTime}>

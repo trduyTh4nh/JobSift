@@ -646,90 +646,89 @@ const CvDetail = ({ navigation }) => {
         const dayEnd = formattedDate(item.dateEnd)
 
         return (
-            <View style={
-                checkLength ? styles.box : styles.empty
-            }>
-                <View style={styles.WeItem}>
+                <View style={
+                    checkLength ? styles.box : styles.empty
+                }>
+                    <View style={styles.WeItem}>
 
-                    <View style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: 50
-                    }}>
-                        <View style={styles.itemAbove}>
-                            <View style={styles.wrapitemAbove}>
-                                <Text style={styles.nameField}>Tên công ty</Text>
-                                <Text style={styles.contentField}>{item.nameCompany}</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.itemAbove}>
-                            <View style={styles.wrapitemAbove}>
-                                <Text style={styles.nameField}>Vị trí</Text>
-                                <Text style={styles.contentField}>{item.position}</Text>
-                            </View>
-                        </View>
-                    </View>
-
-                    <View style={{
-                        display: "flex",
-                        flexDirection: "row",
-                        gap: 50,
-                        marginBottom: 10
-                    }}>
-                        <View style={styles.itemAbove}>
-                            <View style={styles.wrapitemAbove}>
-                                <Text style={styles.nameField}>Ngày bắt đầu</Text>
-                                <Text style={styles.contentField}>{item.dateStart !== undefined ? dayStart : "không có thông tin"}</Text>
-                            </View>
-                        </View>
-
-                        <View style={styles.itemAbove}>
-                            <View style={styles.wrapitemAbove}>
-                                <Text style={styles.nameField}>Ngày kết thúc</Text>
-                                <Text style={styles.contentField}>{item.dateEnd !== undefined ? dayEnd : "không có thông tin"}</Text>
-                            </View>
-                        </View>
-                    </View>
-                </View>
-
-
-                <View style={styles.buttonOption}>
-                    <TouchableOpacity onPress={() => handleDeleteItemWE(item.key)} style={{
-                        backgroundColor: "#FFC1C5",
-                        padding: 10,
-                        borderRadius: 20,
-                        display: "flex",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        width: 60
-                    }}>
-                        <Icon name="close-line"></Icon>
-                    </TouchableOpacity>
-
-                    <TouchableOpacity
-
-                        onPress={() => handleEditWE(item.key)}
-                        style={{
+                        <View style={{
                             display: "flex",
                             flexDirection: "row",
-                            backgroundColor: "#E9E9E9",
-                            padding: 10,
-                            flex: 1,
-                            alignItems: "center",
-                            paddingLeft: 20,
-                            borderRadius: 20,
-                            justifyContent: "space-between"
+                            gap: 50
                         }}>
-                        <Text style={{
-                            fontFamily: "RukbikNormal",
-                            color: "#000"
-                        }} >Edit</Text>
-                        <Icon name="arrow-right-s-line"></Icon>
-                    </TouchableOpacity>
-                </View>
-            </View>
+                            <View style={styles.itemAbove}>
+                                <View style={styles.wrapitemAbove}>
+                                    <Text style={styles.nameField}>Tên công ty</Text>
+                                    <Text style={styles.contentField}>{item.nameCompany}</Text>
+                                </View>
+                            </View>
 
+                            <View style={styles.itemAbove}>
+                                <View style={styles.wrapitemAbove}>
+                                    <Text style={styles.nameField}>Vị trí</Text>
+                                    <Text style={styles.contentField}>{item.position}</Text>
+                                </View>
+                            </View>
+                        </View>
+
+                        <View style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            gap: 50,
+                            marginBottom: 10
+                        }}>
+                            <View style={styles.itemAbove}>
+                                <View style={styles.wrapitemAbove}>
+                                    <Text style={styles.nameField}>Ngày bắt đầu</Text>
+                                    <Text style={styles.contentField}>{item.dateStart !== undefined ? dayStart : "không có thông tin"}</Text>
+                                </View>
+                            </View>
+
+                            <View style={styles.itemAbove}>
+                                <View style={styles.wrapitemAbove}>
+                                    <Text style={styles.nameField}>Ngày kết thúc</Text>
+                                    <Text style={styles.contentField}>{item.dateEnd !== undefined ? dayEnd : "không có thông tin"}</Text>
+                                </View>
+                            </View>
+                        </View>
+                    </View>
+
+
+                    <View style={styles.buttonOption}>
+                        <TouchableOpacity onPress={() => handleDeleteItemWE(item.key)} style={{
+                            backgroundColor: "#FFC1C5",
+                            padding: 10,
+                            borderRadius: 20,
+                            display: "flex",
+                            justifyContent: "center",
+                            alignItems: "center",
+                            width: 60
+                        }}>
+                            <Icon name="close-line"></Icon>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity
+
+                            onPress={() => handleEditWE(item.key)}
+                            style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                backgroundColor: "#E9E9E9",
+                                padding: 10,
+                                flex: 1,
+                                alignItems: "center",
+                                paddingLeft: 20,
+                                borderRadius: 20,
+                                justifyContent: "space-between"
+                            }}>
+                            <Text style={{
+                                fontFamily: "RukbikNormal",
+                                color: "#000"
+                            }} >Edit</Text>
+                            <Icon name="arrow-right-s-line"></Icon>
+                        </TouchableOpacity>
+                    </View>
+                </View>
         )
     }
 
@@ -1087,166 +1086,18 @@ const CvDetail = ({ navigation }) => {
 
 
     return (
-        <ScrollView>
-            <View style={styles.createCv}>
-
-                <View style={{
-                    paddingTop: 10
-                }}>
+        <SafeAreaView>
+            <ScrollView>
+                <View style={styles.createCv}>
 
                     <View style={{
-                        display: "flex",
-                        gap: 18,
-                        marginBottom: 10
+                        paddingTop: 10
                     }}>
+
                         <View style={{
                             display: "flex",
-                            flexDirection: "row",
-                            alignItems: "center",
-                            gap: 10
-                        }}>
-                            <View>
-                                <TouchableOpacity onPress={() => {
-                                    navigation.goBack()
-                                }}>
-                                    <Icon name="arrow-left-s-line" size={30}></Icon>
-                                </TouchableOpacity>
-                            </View>
-                            <View>
-                                <Image style={{
-                                    width: 55,
-                                    height: 55,
-                                    backgroundColor: '#ccc',
-                                    borderRadius: 100000,
-
-                                }}
-                                    source={{ uri: cv ? cv.file_imagge : '' }}
-                                ></Image>
-                            </View>
-
-                            <View>
-                                <Text style={{
-                                    fontSize: 28,
-                                    fontWeight: "700",
-                                    color: "#000"
-                                }}>{cv ? cv.full_name : 'Không có tiêu đề'}</Text>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            borderWidth: 1,
-                            borderColor: "#B0B0B0"
-                        }}></View>
-
-                        <View style={{
-                            paddingLeft: 10,
-                            paddingRight: 10,
-                            display: "flex",
-                            gap: 20
-                        }}>
-
-                            <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 80
-                            }}>
-                                <View style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 6,
-                                    flex: 1
-                                }}>
-                                    <Icon name="global-line"></Icon>
-                                    <View style={{
-                                        display: "flex",
-                                    }}>
-                                        <Text style={{
-                                        }}>Ngôn ngữ</Text>
-                                        <Text style={{
-                                            color: "#000",
-                                            fontSize: 16,
-                                            fontWeight: "600"
-                                        }}>{cv ? cv.ngon_ngu : 'Không có ngôn ngữ nào'}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 6
-                                }}>
-                                    <Icon name="filter-line"></Icon>
-                                    <View style={{
-                                        display: "flex",
-                                    }}>
-                                        <Text style={{
-                                        }}>Loại công việc</Text>
-                                        <Text style={{
-                                            color: "#000",
-                                            fontSize: 16,
-                                            fontWeight: "600"
-                                        }}>{cv ? cv.loai_cong_viec : 'Không có'}</Text>
-                                    </View>
-                                </View>
-                            </View>
-
-                            <View style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                gap: 85
-                            }}>
-                                <View style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 6
-                                }}>
-                                    <Icon name="timer-2-line"></Icon>
-                                    <View style={{
-                                        display: "flex",
-                                    }}>
-                                        <Text style={{
-                                        }}>Kinh nghiệm</Text>
-                                        <Text style={{
-                                            color: "#000",
-                                            fontSize: 16,
-                                            fontWeight: "600"
-                                        }}>{cv ? cv.kinh_nghiem : 'không có'}</Text>
-                                    </View>
-                                </View>
-
-                                <View style={{
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                    gap: 6,
-                                    flex: 1
-                                }}>
-                                    <Icon name="briefcase-line"></Icon>
-                                    <View style={{
-                                        display: "flex",
-                                    }}>
-                                        <Text style={{
-                                        }}>Vị trí</Text>
-                                        <Text style={{
-                                            color: "#000",
-                                            fontSize: 16,
-                                            fontWeight: "600"
-                                        }}>{cv ? cv.vi_tri_hien_tai : 'không có'}</Text>
-                                    </View>
-                                </View>
-                            </View>
-                        </View>
-
-                        <View style={{
-                            borderWidth: 1,
-                            borderColor: "#B0B0B0"
-                        }}></View>
-
-                        <View style={{
-
+                            gap: 18,
+                            marginBottom: 10
                         }}>
                             <View style={{
                                 display: "flex",
@@ -1254,165 +1105,318 @@ const CvDetail = ({ navigation }) => {
                                 alignItems: "center",
                                 gap: 10
                             }}>
-                                <Icon name="user-line" size={32}></Icon>
-                                <Text style={styles.imgeWETitle}>Thông tin cá nhân</Text>
+                                <View>
+                                    <TouchableOpacity onPress={() => {
+                                        navigation.goBack()
+                                    }}>
+                                        <Icon name="arrow-left-s-line" size={30}></Icon>
+                                    </TouchableOpacity>
+                                </View>
+                                <View>
+                                    <Image style={{
+                                        width: 55,
+                                        height: 55,
+                                        backgroundColor: '#ccc',
+                                        borderRadius: 100000,
+
+                                    }}
+                                        source={{ uri: cv ? cv.file_imagge : '' }}
+                                    ></Image>
+                                </View>
+
+                                <View style={{flex: 1}}>
+                                    <Text style={{
+                                        ...STYLE.textTitle,
+                                        fontSize: 28,
+                                        
+                                        fontWeight: "700",
+                                        color: "#000"
+                                    }}>{cv ? cv.cv_title : 'Không có tiêu đề'}</Text>
+                                </View>
                             </View>
 
                             <View style={{
+                                borderWidth: 1,
+                                borderColor: "#B0B0B0"
+                            }}></View>
+
+                            <View style={{
+                                paddingLeft: 10,
+                                paddingRight: 10,
                                 display: "flex",
-                                gap: 20,
-                                marginTop: 10
+                                gap: 20
+                            }}>
+
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 80
+                                }}>
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 6,
+                                        flex: 1
+                                    }}>
+                                        <Icon name="global-line"></Icon>
+                                        <View style={{
+                                            display: "flex",
+                                        }}>
+                                            <Text style={{
+                                            }}>Ngôn ngữ</Text>
+                                            <Text style={{
+                                                color: "#000",
+                                                fontSize: 16,
+                                                fontWeight: "600"
+                                            }}>{cv ? cv.ngon_ngu : 'Không có ngôn ngữ nào'}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 6,
+                                        flex: 1
+                                    }}>
+                                        <Icon name="filter-line"></Icon>
+                                        <View style={{
+                                            display: "flex",
+                                        }}>
+                                            <Text style={{
+                                            }}>Loại công việc</Text>
+                                            <Text style={{
+                                                color: "#000",
+                                                fontSize: 16,
+                                                fontWeight: "600"
+                                            }}>{cv ? cv.loai_cong_viec : 'Không có'}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+
+                                <View style={{
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    gap: 85
+                                }}>
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 6
+                                    }}>
+                                        <Icon name="timer-2-line"></Icon>
+                                        <View style={{
+                                            display: "flex",
+                                        }}>
+                                            <Text style={{
+                                            }}>Kinh nghiệm</Text>
+                                            <Text style={{
+                                                color: "#000",
+                                                fontSize: 16,
+                                                fontWeight: "600"
+                                            }}>{cv ? cv.kinh_nghiem : 'không có'}</Text>
+                                        </View>
+                                    </View>
+
+                                    <View style={{
+                                        display: "flex",
+                                        flexDirection: "row",
+                                        alignItems: "center",
+                                        gap: 6,
+                                        flex: 1
+                                    }}>
+                                        <Icon name="briefcase-line"></Icon>
+                                        <View style={{
+                                            display: "flex",
+                                        }}>
+                                            <Text style={{
+                                            }}>Vị trí</Text>
+                                            <Text style={{
+                                                color: "#000",
+                                                fontSize: 16,
+                                                fontWeight: "600"
+                                            }}>{cv ? cv.vi_tri_hien_tai : 'không có'}</Text>
+                                        </View>
+                                    </View>
+                                </View>
+                            </View>
+
+                            <View style={{
+                                borderWidth: 1,
+                                borderColor: "#B0B0B0"
+                            }}></View>
+
+                            <View style={{
+
                             }}>
                                 <View style={{
-
+                                    display: "flex",
+                                    flexDirection: "row",
+                                    alignItems: "center",
+                                    gap: 10
                                 }}>
-                                    <Text style={{
-                                        ...styles.imgeWETitle,
-                                        fontSize: 16,
-                                        color: '#000',
-                                        marginBottom: 4
-                                    }} >Ngày sinh</Text>
-                                    <Text style={{
-                                        backgroundColor: '#F1F1F1',
-                                        padding: 15,
-                                        borderRadius: 16,
-                                        color: '#000',
-                                        ...styles.imgeWETitle,
-                                        fontSize: 14
-                                    }}>{cv ? cv.ngaysinh : 'không có'}</Text>
+                                    <Icon name="user-line" size={32}></Icon>
+                                    <Text style={styles.imgeWETitle}>Thông tin cá nhân</Text>
                                 </View>
-                                <View style={{
-
-                                }}>
-                                    <Text style={{
-                                        ...styles.imgeWETitle,
-                                        fontSize: 16,
-                                        color: '#000',
-                                        marginBottom: 4
-                                    }} >Mô tả bản thân</Text>
-                                    <Text style={{
-                                        backgroundColor: '#F1F1F1',
-                                        padding: 15,
-                                        borderRadius: 16,
-                                        color: '#000',
-                                        ...styles.imgeWETitle,
-                                        fontSize: 14
-                                    }}>{cv ? cv.introduction : 'Không có'}</Text>
-                                </View>
-
 
                                 <View style={{
-
+                                    display: "flex",
+                                    gap: 20,
+                                    marginTop: 10
                                 }}>
-                                    <Text style={{
-                                        ...styles.imgeWETitle,
-                                        fontSize: 16,
-                                        color: '#000',
-                                        marginBottom: 4
-                                    }} >Mục tiêu cần đạt</Text>
-                                    <Text style={{
-                                        backgroundColor: '#F1F1F1',
-                                        padding: 15,
-                                        borderRadius: 16,
-                                        color: '#000',
-                                        ...styles.imgeWETitle,
-                                        fontSize: 14
-                                    }}>{cv ? cv.goal : 'Không có'}</Text>
+                                    <View style={{
+
+                                    }}>
+                                        <Text style={{
+                                            ...styles.imgeWETitle,
+                                            fontSize: 16,
+                                            color: '#000',
+                                            marginBottom: 4
+                                        }} >Ngày sinh</Text>
+                                        <Text style={{
+                                            backgroundColor: '#F1F1F1',
+                                            padding: 15,
+                                            borderRadius: 16,
+                                            color: '#000',
+                                            ...styles.imgeWETitle,
+                                            fontSize: 14
+                                        }}>{cv ? (new Date(cv.ngaysinh)).toLocaleDateString() : 'không có'}</Text>
+                                    </View>
+                                    <View style={{
+
+                                    }}>
+                                        <Text style={{
+                                            ...styles.imgeWETitle,
+                                            fontSize: 16,
+                                            color: '#000',
+                                            marginBottom: 4
+                                        }} >Mô tả bản thân</Text>
+                                        <Text style={{
+                                            backgroundColor: '#F1F1F1',
+                                            padding: 15,
+                                            borderRadius: 16,
+                                            color: '#000',
+                                            ...styles.imgeWETitle,
+                                            fontSize: 14
+                                        }}>{cv ? cv.introduction : 'Không có'}</Text>
+                                    </View>
+
+
+                                    <View style={{
+
+                                    }}>
+                                        <Text style={{
+                                            ...styles.imgeWETitle,
+                                            fontSize: 16,
+                                            color: '#000',
+                                            marginBottom: 4
+                                        }} >Mục tiêu cần đạt</Text>
+                                        <Text style={{
+                                            backgroundColor: '#F1F1F1',
+                                            padding: 15,
+                                            borderRadius: 16,
+                                            color: '#000',
+                                            ...styles.imgeWETitle,
+                                            fontSize: 14
+                                        }}>{cv ? cv.goal : 'Không có'}</Text>
+                                    </View>
+
+
                                 </View>
-
-
                             </View>
+
+
+                        </View>
+
+
+
+                        {/* Kinh nghiệm làm việc */}
+
+                        <View style={styles.workExperience}>
+                            <View style={styles.head}>
+                                <Icon name="briefcase-line"
+                                    size={28}
+                                ></Icon>
+                                <View style={styles.headTtitle}>
+                                    <Text style={styles.imgeWETitle}>Kinh nghiệm làm việc</Text>
+                                </View>
+                            </View>
+
+                        </View>
+
+                        {/* Trình độ học vấn */}
+
+                        <View style={styles.workExperience}>
+                            <View style={styles.head}>
+                                <Icon name="quill-pen-line"
+                                    size={28}
+                                ></Icon>
+                                <View style={styles.headTtitle}>
+                                    <Text style={styles.imgeWETitle}>Trình độ học vấn</Text>
+                                </View>
+                            </View>
+
+
+                        </View>
+
+                        {/* Hoạt động */}
+
+
+                        <View style={styles.workExperience}>
+                            <View style={styles.head}>
+                                <Icon name="community-line"
+                                    size={28}
+                                ></Icon>
+                                <View style={styles.headTtitle}>
+                                    <Text style={styles.imgeWETitle}>Hoạt động</Text>
+                                </View>
+                            </View>
+
+
+                        </View>
+
+                        {/* Ngoại ngữ */}
+
+
+                        <View style={styles.workExperience}>
+                            <View style={styles.head}>
+                                <Icon name="translate-2"
+                                    size={28}
+                                ></Icon>
+                                <View style={styles.headTtitle}>
+                                    <Text style={styles.imgeWETitle}>Ngôn ngữ</Text>
+                                </View>
+                            </View>
+
+
+                        </View>
+
+                        {/* Chứng chỉ, bằng cấp */}
+
+                        <View style={styles.workExperience}>
+                            <View style={styles.head}>
+                                <Icon name="file-mark-line"
+                                    size={28}
+                                ></Icon>
+                                <View style={styles.headTtitle}>
+                                    <Text style={styles.imgeWETitle}>Chứng chỉ</Text>
+                                </View>
+                            </View>
+
+
                         </View>
 
 
                     </View>
-
-
-
-                    {/* Kinh nghiệm làm việc */}
-
-                    <View style={styles.workExperience}>
-                        <View style={styles.head}>
-                            <Icon name="briefcase-line"
-                                size={28}
-                            ></Icon>
-                            <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}>Kinh nghiệm làm việc</Text>
-                            </View>
-                        </View>
-
-                    </View>
-
-                    {/* Trình độ học vấn */}
-
-                    <View style={styles.workExperience}>
-                        <View style={styles.head}>
-                            <Icon name="quill-pen-line"
-                                size={28}
-                            ></Icon>
-                            <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}>Trình độ học vấn</Text>
-                            </View>
-                        </View>
-
-
-                    </View>
-
-                    {/* Hoạt động */}
-
-
-                    <View style={styles.workExperience}>
-                        <View style={styles.head}>
-                            <Icon name="community-line"
-                                size={28}
-                            ></Icon>
-                            <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}>Hoạt động</Text>
-                            </View>
-                        </View>
-
-
-                    </View>
-
-                    {/* Ngoại ngữ */}
-
-
-                    <View style={styles.workExperience}>
-                        <View style={styles.head}>
-                            <Icon name="translate-2"
-                                size={28}
-                            ></Icon>
-                            <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}>Ngôn ngữ</Text>
-                            </View>
-                        </View>
-
-
-                    </View>
-
-                    {/* Chứng chỉ, bằng cấp */}
-
-                    <View style={styles.workExperience}>
-                        <View style={styles.head}>
-                            <Icon name="file-mark-line"
-                                size={28}
-                            ></Icon>
-                            <View style={styles.headTtitle}>
-                                <Text style={styles.imgeWETitle}>Chứng chỉ</Text>
-                            </View>
-                        </View>
-
-
-                    </View>
-
 
                 </View>
 
-            </View>
+                {/* {isVisible && <PopUpAdd style={styles.popUpAdd} sendDataToParent={handleDataFromChild} sendSignalToParent={handleWhenRecieve} dataWEedited={dataEditWorkEx} />} */}
 
-            {/* {isVisible && <PopUpAdd style={styles.popUpAdd} sendDataToParent={handleDataFromChild} sendSignalToParent={handleWhenRecieve} dataWEedited={dataEditWorkEx} />} */}
-
-        </ScrollView>
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

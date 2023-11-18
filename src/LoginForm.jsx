@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ToastAndroid, ToastAndroidStatic, ScrollView } from "react-native";
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ToastAndroid, ToastAndroidStatic, ScrollView, SafeAreaView } from "react-native";
 import axios from 'axios';
 
 
@@ -16,7 +16,7 @@ const IPlD = "192.168.116.1"
 
 const LoginForm = ({ navigation }) => {
 
-
+  const [validStatus, setValidStatus] = useState(false)
   const [email, setEmail] = useState('')
   const [password, setPassWord] = useState('')
 
@@ -55,7 +55,7 @@ const LoginForm = ({ navigation }) => {
   const handleChangePassword = (text) => {
     setPassWord(text)
   }
-
+  
   const handleSubmit = () => {
 
     axios.post(`http://${API_URL}:3001/login`, FormData, {
@@ -75,7 +75,7 @@ const LoginForm = ({ navigation }) => {
 
       })
       .catch((error) => {
-        console.error(error)
+        setValidStatus(true)
       })
 
 
@@ -86,92 +86,102 @@ const LoginForm = ({ navigation }) => {
   }
 
   return (
-    <ScrollView style={styles.containerLogin}>
-      <View style={styles.wrapHeader}>
-        <Image style={styles.imageLogin} source={require('../assets/JobSift.png')} >
-        </Image>
-      </View>
-
-      <View style={styles.titlePage}>
-        <Text style={styles.textTitle}>Login</Text>
-      </View>
-
-
-      <View style={styles.decordPage}>
-        <Image style={styles.decordPageImage} source={require('../assets/personLogin1.png')}>
-
-        </Image>
-
-        <Text style={styles.decordPageText}>
-          Đăng nhập và sử dụng ứng dụng theo cách của bạn
-        </Text>
-      </View>
-
-      <View style={styles.wrapInput}>
-
-        <View style={styles.wrapEmail}>
-          {/* <Text style={styles.lableInput}>Email</Text> */}
-          <PaperTextInput
-
-          theme={{
-            roundness: 16,
-            colors: {
-                    placeholder: 'black',
-                    primary: '#000',
-                    accent: '#E2F367',
-                    text: '#000',
-                    surface: '#fff',
-                    background: '#fff'
-                }
-            }}
-            label={"Email"}
-            style={styles.inputBox}
-            placeholderTextColor={'#000'}
-            outlineColor="#000"
-            activeOutlineColor="black"
-            value={email}
-            onChangeText={handleChangeEmail}
-          />
+    <SafeAreaView>
+      <ScrollView style={styles.containerLogin}
+      contentContainerStyle={{gap: 10}}>
+        <View style={styles.wrapHeader}>
+          <Image style={styles.imageLogin} source={require('../assets/JobSift.png')} >
+          </Image>
         </View>
 
-        <View style={styles.wrapPassword}>
-          {/* <Text style={styles.lableInput}>Password</Text> */}
-          <PaperTextInput
-          secureTextEntry
+        <View style={styles.titlePage}>
+          <Text style={styles.textTitle}>Login</Text>
+        </View>
+
+
+        <View style={styles.decordPage}>
+          <Image style={styles.decordPageImage} source={require('../assets/personLogin1.png')}>
+
+          </Image>
+
+          <Text style={styles.decordPageText}>
+            Đăng nhập và sử dụng ứng dụng theo cách của bạn
+          </Text>
+        </View>
+
+        <View style={styles.wrapInput}>
+
+          <View style={styles.wrapEmail}>
+            {/* <Text style={styles.lableInput}>Email</Text> */}
+            <PaperTextInput
+            mode='outlined'
             theme={{
               roundness: 16,
-            colors: {
-                    placeholder: 'black',
-                    primary: '#000',
-                    accent: '#E2F367',
-                    text: '#000',
-                    surface: '#fff',
-                    background: '#fff'
-                }
-            }}
-            label={"Password"}
-            style={styles.inputBox}
-            value={password}
-            
-            onChangeText={handleChangePassword}
-          />
+              colors: {
+                      placeholder: 'black',
+                      primary: !validStatus ? '#000' : '#F36767',
+                      accent: '#E2F367',
+                      text: '#000',
+                      surface: '#fff',
+                      background: '#fff',
+                      surfaceVariant: '#fff'
+                  }
+              }}
+              label={"Email"}
+              style={styles.inputBox}
+              placeholderTextColor={'#000'}
+              outlineColor={!validStatus ? "#CECECE" : "#F36767"}
+              activeOutlineColor="black"
+              value={email}
+              onChangeText={handleChangeEmail}
+            />
+          </View>
+          <View style={styles.wrapPassword}>
+            {/* <Text style={styles.lableInput}>Password</Text> */}
+            <PaperTextInput
+            mode="outlined"
+            secureTextEntry
+              theme={{
+                roundness: 16,
+              colors: {
+                      placeholder: 'black',
+                      primary: !validStatus ? '#000' : '#F36767',
+                      accent: '#E2F367',
+                      text: '#000',
+                      surface: '#fff',
+                      background: '#fff',
+                      surfaceVariant: '#fff'
+                  }
+              }}
+              label={"Password"}
+              style={styles.inputBox}
+              value={password}
+              outlineColor={!validStatus ? "#CECECE" : "#F36767"}
+              onChangeText={handleChangePassword}
+            />
+            {
+                !validStatus ? '' : (
+                  <Text style={{...STYLE.textBold, color: '#F36767', textAlign: 'center'}}>Thông tin không hợp lệ, vui lòng kiểm tra lại Email và Mật khẩu</Text>
+                )
+            }
+          </View>
+
+          <View style={styles.wrapButtonLogin}>
+            <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit}>
+              <Text style={styles.textInbtnLogin} >Login</Text>
+            </TouchableOpacity>
+          </View>
+          
         </View>
 
-        <View style={styles.wrapButtonLogin}>
-          <TouchableOpacity style={styles.btnLogin} onPress={handleSubmit}>
-            <Text style={styles.textInbtnLogin} >Login</Text>
+        <View style={styles.descBottom}>
+          <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
+          <TouchableOpacity onPress={changeSignupScreen}>
+            <Text style={styles.descBottomLogin}>Signup</Text>
           </TouchableOpacity>
         </View>
-
-      </View>
-
-      <View style={styles.descBottom}>
-        <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-        <TouchableOpacity onPress={changeSignupScreen}>
-          <Text style={styles.descBottomLogin}>Signup</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   )
 }
 
@@ -183,7 +193,8 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   containerLogin: {
-    padding: 20
+    padding: 20,
+    gap: 16
   },
   headerNavigation: {
     height: 10,
@@ -194,7 +205,7 @@ const styles = StyleSheet.create({
     // borderColor: '#ccc',
     // paddingLeft: 18,
     // borderRadius: 16,
-    marginTop: 15,
+    
 
 
   },
@@ -222,14 +233,12 @@ const styles = StyleSheet.create({
     display: "flex",
     justifyContent: "center",
     alignItems: "center",
-    marginBottom: 18
   },
   imageLogin: {
     transform: [{ scale: 0.5 }]
   },
   titlePage: {
     marginTop: 10,
-    marginBottom: 10,
     display: "flex",
     justifyContent: "center",
     alignItems: "center"
@@ -267,7 +276,6 @@ const styles = StyleSheet.create({
     gap: 20
   },
   lableInput: {
-    marginBottom: 8,
     fontFamily: "Rubik",
     color: "#000",
     marginLeft: 2
@@ -284,7 +292,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     gap: 10,
-    marginBottom: 40
+    
   },
   descBottomLogin: {
     fontFamily: "Rubik",
@@ -296,5 +304,11 @@ const styles = StyleSheet.create({
     fontFamily: "Rubik",
     color: "#000"
   },
+  wrapEmail: {
+    gap: 10
+  },
+  wrapPassword: {
+    gap: 10
+  }
 });
 export default LoginForm 

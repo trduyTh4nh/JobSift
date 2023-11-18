@@ -71,7 +71,7 @@ const FavoritePage = () => {
                     renderItem={renderFavJobs}
                     style={STYLE.body}
                     scrollEnabled={false}
-                    keyExtractor={(item) => (item.id_yt)}
+                    keyExtractor={(item) => (item.id_yt ? item.id_yt : item.id_post)}
                     ItemSeparatorComponent={() => (<View style={{ height: 0 }} />)}
                 />
             </ScrollView>

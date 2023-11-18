@@ -521,7 +521,7 @@ const Tabs = () => {
                                         <TouchableOpacity onPress={() => { navigation.goBack() }}>
                                             <Icon name='arrow-left-s-line'></Icon>
                                         </TouchableOpacity>
-                                        <Text style={styles.userName}>Policies</Text>
+                                        <Text style={styles.userName}>Quyền và luật</Text>
                                     </View>
                                 </View>
                             </SafeAreaView>
@@ -542,7 +542,7 @@ const Tabs = () => {
                                         <TouchableOpacity onPress={() => { navigation.goBack() }}>
                                             <Icon name='arrow-left-s-line'></Icon>
                                         </TouchableOpacity>
-                                        <Text style={styles.userName}>Transaction</Text>
+                                        <Text style={styles.userName}>Giao dịch</Text>
                                     </View>
                                 </View>
                             </SafeAreaView>

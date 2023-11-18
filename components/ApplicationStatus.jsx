@@ -26,8 +26,9 @@ const ApplicationStatus = ({navigation}) => {
                     <Text style={{...STYLE.textNormal, fontSize: 15}}>{aList.length} công việc đã ứng tuyển</Text>
                     <FlatList
                         data={aList}
-                        renderItem={({item}) => (<ApplicationItem navigation={navigation} item={item} key={item.id_recruit}/>)}
+                        renderItem={({item}) => (<ApplicationItem navigation={navigation} item={item}/>)}
                         scrollEnabled={false}
+                        keyExtractor={(item) => (item.id_recruit)}
                         ItemSeparatorComponent={() => (<View style={{height: 16}}></View>)}
                     />
                 </View>

@@ -786,7 +786,7 @@ const CreateCV = ({ route, navigation }) => {
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
-                        gap: 50
+                        justifyContent: 'space-between'
                     }}>
                         <View style={styles.itemAbove}>
                             <View style={styles.wrapitemAbove}>
@@ -1250,8 +1250,7 @@ const CreateCV = ({ route, navigation }) => {
                                             borderTopWidth: 2,
                                             marginTop: 16,
                                             marginBottom: 16,
-                                            paddingTop: -10
-
+                                            paddingTop: Platform.OS == 'ios' ? 10 : -10,
                                         }}
                                         multiline={true}
                                         numberOfLines={3}
@@ -1302,8 +1301,7 @@ const CreateCV = ({ route, navigation }) => {
                                             borderTopWidth: 2,
                                             marginTop: 16,
                                             marginBottom: 16,
-                                            paddingTop: -10
-
+                                            paddingTop: Platform.OS == 'ios' ? 10 : -10,
                                         }}
                                         multiline={true}
                                         numberOfLines={3}
@@ -1582,8 +1580,8 @@ const CreateCV = ({ route, navigation }) => {
                                             borderRadius: 16,
                                             marginBottom: 2,
                                             paddingBottom: 30,
-                                            paddingLeft: 16
-
+                                            paddingLeft: 16,
+                                            paddingTop: Platform.OS == 'ios' ? 16 : 0
                                         }} ></TextInput>
                                 </View>
 
@@ -1810,7 +1808,8 @@ const CreateCV = ({ route, navigation }) => {
                                             borderRadius: 16,
                                             marginBottom: 2,
                                             paddingBottom: 60,
-                                            paddingLeft: 16
+                                            paddingLeft: 16,
+                                            paddingTop: Platform.OS == 'ios' ? 16 : 0
                                         }} ></TextInput>
                                 </View>
 
@@ -2083,7 +2082,8 @@ const CreateCV = ({ route, navigation }) => {
                                             borderRadius: 16,
                                             marginBottom: 2,
                                             paddingBottom: 60,
-                                            paddingLeft: 16
+                                            paddingLeft: 16,
+                                            paddingTop: Platform.OS == 'ios' ? 16 : 0
                                         }} ></TextInput>
                                 </View>
 
@@ -2216,7 +2216,8 @@ const CreateCV = ({ route, navigation }) => {
                                             borderRadius: 16,
                                             marginBottom: 2,
                                             paddingBottom: 60,
-                                            paddingLeft: 16
+                                            paddingLeft: 16,
+                                            paddingTop: Platform.OS == 'ios' ? 16 : 0
                                         }} ></TextInput>
                                 </View>
 
@@ -2526,11 +2527,11 @@ const styles = StyleSheet.create({
     contentField: {
         fontFamily: "RukbikNormal",
         color: "#000",
-        fontSize: 16
+        fontSize: 16,
     },
     wrapitemAbove: {
         display: "flex",
-        width: "100%",
+        flex: 1
     },
     WeItem: {
         display: "flex",
@@ -2540,8 +2541,8 @@ const styles = StyleSheet.create({
         gap: 10,
     },
     itemAbove: {
-        flex: 1
-
+        flexGrow: 1,
+        justifyContent: "space-between"
     },
     buttonOption: {
         display: "flex",

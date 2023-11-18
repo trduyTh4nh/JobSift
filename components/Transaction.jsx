@@ -59,7 +59,7 @@ const Transaction = () => {
                                     fontSize: 16,
                                     fontFamily: "Rubik"
                                 }}>
-                                    Purchase
+                                    Mua KC
                                 </Text>
                             ),
                             tabBarIndicatorStyle: {
@@ -81,7 +81,7 @@ const Transaction = () => {
                             title: "TransactionHistory",
                             tabBarLabel: ({ focused, color }) => (
                                 <Text style={{ color: focused ? 'black' : 'gray', fontSize: 16, fontFamily: "Rubik" }}>
-                                    History
+                                    Lịch sử giao dịch
                                 </Text>
                             ),
 
