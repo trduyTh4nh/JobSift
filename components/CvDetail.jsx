@@ -20,7 +20,7 @@ import { useRoute } from '@react-navigation/native';
 const CvDetail = ({ navigation }) => {
 
     const route = useRoute();
-    const { cv } = route.params;
+    const {  cv } = route.params;
 
     console.log("CV đã tranfers: " + JSON.stringify(cv))
 
@@ -646,89 +646,89 @@ const CvDetail = ({ navigation }) => {
         const dayEnd = formattedDate(item.dateEnd)
 
         return (
-                <View style={
-                    checkLength ? styles.box : styles.empty
-                }>
-                    <View style={styles.WeItem}>
+            <View style={
+                checkLength ? styles.box : styles.empty
+            }>
+                <View style={styles.WeItem}>
 
-                        <View style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: 50
-                        }}>
-                            <View style={styles.itemAbove}>
-                                <View style={styles.wrapitemAbove}>
-                                    <Text style={styles.nameField}>Tên công ty</Text>
-                                    <Text style={styles.contentField}>{item.nameCompany}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.itemAbove}>
-                                <View style={styles.wrapitemAbove}>
-                                    <Text style={styles.nameField}>Vị trí</Text>
-                                    <Text style={styles.contentField}>{item.position}</Text>
-                                </View>
+                    <View style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 50
+                    }}>
+                        <View style={styles.itemAbove}>
+                            <View style={styles.wrapitemAbove}>
+                                <Text style={styles.nameField}>Tên công ty</Text>
+                                <Text style={styles.contentField}>{item.nameCompany}</Text>
                             </View>
                         </View>
 
-                        <View style={{
-                            display: "flex",
-                            flexDirection: "row",
-                            gap: 50,
-                            marginBottom: 10
-                        }}>
-                            <View style={styles.itemAbove}>
-                                <View style={styles.wrapitemAbove}>
-                                    <Text style={styles.nameField}>Ngày bắt đầu</Text>
-                                    <Text style={styles.contentField}>{item.dateStart !== undefined ? dayStart : "không có thông tin"}</Text>
-                                </View>
-                            </View>
-
-                            <View style={styles.itemAbove}>
-                                <View style={styles.wrapitemAbove}>
-                                    <Text style={styles.nameField}>Ngày kết thúc</Text>
-                                    <Text style={styles.contentField}>{item.dateEnd !== undefined ? dayEnd : "không có thông tin"}</Text>
-                                </View>
+                        <View style={styles.itemAbove}>
+                            <View style={styles.wrapitemAbove}>
+                                <Text style={styles.nameField}>Vị trí</Text>
+                                <Text style={styles.contentField}>{item.position}</Text>
                             </View>
                         </View>
                     </View>
 
+                    <View style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 50,
+                        marginBottom: 10
+                    }}>
+                        <View style={styles.itemAbove}>
+                            <View style={styles.wrapitemAbove}>
+                                <Text style={styles.nameField}>Ngày bắt đầu</Text>
+                                <Text style={styles.contentField}>{item.dateStart !== undefined ? dayStart : "không có thông tin"}</Text>
+                            </View>
+                        </View>
 
-                    <View style={styles.buttonOption}>
-                        <TouchableOpacity onPress={() => handleDeleteItemWE(item.key)} style={{
-                            backgroundColor: "#FFC1C5",
-                            padding: 10,
-                            borderRadius: 20,
-                            display: "flex",
-                            justifyContent: "center",
-                            alignItems: "center",
-                            width: 60
-                        }}>
-                            <Icon name="close-line"></Icon>
-                        </TouchableOpacity>
-
-                        <TouchableOpacity
-
-                            onPress={() => handleEditWE(item.key)}
-                            style={{
-                                display: "flex",
-                                flexDirection: "row",
-                                backgroundColor: "#E9E9E9",
-                                padding: 10,
-                                flex: 1,
-                                alignItems: "center",
-                                paddingLeft: 20,
-                                borderRadius: 20,
-                                justifyContent: "space-between"
-                            }}>
-                            <Text style={{
-                                fontFamily: "RukbikNormal",
-                                color: "#000"
-                            }} >Edit</Text>
-                            <Icon name="arrow-right-s-line"></Icon>
-                        </TouchableOpacity>
+                        <View style={styles.itemAbove}>
+                            <View style={styles.wrapitemAbove}>
+                                <Text style={styles.nameField}>Ngày kết thúc</Text>
+                                <Text style={styles.contentField}>{item.dateEnd !== undefined ? dayEnd : "không có thông tin"}</Text>
+                            </View>
+                        </View>
                     </View>
                 </View>
+
+
+                <View style={styles.buttonOption}>
+                    <TouchableOpacity onPress={() => handleDeleteItemWE(item.key)} style={{
+                        backgroundColor: "#FFC1C5",
+                        padding: 10,
+                        borderRadius: 20,
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                        width: 60
+                    }}>
+                        <Icon name="close-line"></Icon>
+                    </TouchableOpacity>
+
+                    <TouchableOpacity
+
+                        onPress={() => handleEditWE(item.key)}
+                        style={{
+                            display: "flex",
+                            flexDirection: "row",
+                            backgroundColor: "#E9E9E9",
+                            padding: 10,
+                            flex: 1,
+                            alignItems: "center",
+                            paddingLeft: 20,
+                            borderRadius: 20,
+                            justifyContent: "space-between"
+                        }}>
+                        <Text style={{
+                            fontFamily: "RukbikNormal",
+                            color: "#000"
+                        }} >Edit</Text>
+                        <Icon name="arrow-right-s-line"></Icon>
+                    </TouchableOpacity>
+                </View>
+            </View>
         )
     }
 
@@ -1124,11 +1124,11 @@ const CvDetail = ({ navigation }) => {
                                     ></Image>
                                 </View>
 
-                                <View style={{flex: 1}}>
+                                <View style={{ flex: 1 }}>
                                     <Text style={{
                                         ...STYLE.textTitle,
                                         fontSize: 28,
-                                        
+
                                         fontWeight: "700",
                                         color: "#000"
                                     }}>{cv ? cv.cv_title : 'Không có tiêu đề'}</Text>

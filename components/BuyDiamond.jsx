@@ -72,16 +72,22 @@ const BuyDiamond = ({ navigation }) => {
 
                                         </View>
                                     </View>
-
                                     <View style={styles.dongngang1}>
                                         <View style={styles.wrapSearchBtn}>
-                                            <TouchableOpacity onPress={() => { navigation.navigate('MuaKCDetail', { KC: 100, price: 1999, priceText: '199.999'}) }} style={styles.searchBtn}>
+                                            <TouchableOpacity onPress={() => { navigation.navigate('MuaKCDetail', { KC: 100, price: 1999, priceText: '199.999' }) }} style={styles.searchBtn}>
                                                 <Text style={styles.chucuaslart}>Chi tiết </Text>
                                                 <Icon name="arrow-right-s-line" size={27} color="#000"></Icon>
                                             </TouchableOpacity>
                                         </View>
                                         <View style={styles.dongngang} >
                                             <Text style={{ fontSize: 17, color: "#000000" }}>💎 100</Text>
+                                        </View>
+
+                                    </View>
+                                </View>
+                            </View>
+
+
 
                             <View style={styles.vien}>
                                 <View style={{ marginEnd: 10, marginStart: 10 }}>
@@ -142,13 +148,13 @@ const BuyDiamond = ({ navigation }) => {
                                     </View>
                                 </View>
                             </View>
+
                         </View>
+
                     </View>
                 </View>
-
-
-
             </View>
+
         </ScrollView>
     )
 }
