@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import STYLE from "../assets/css/universal";
 import { FlatList } from "react-native";
@@ -25,7 +25,7 @@ const Job = () => {
         ToastAndroid.show(title, ToastAndroid.SHORT)
     }
     const [showModal, setShowModal] = useState(false)
-    const applyCVRef = useRef<ActionSheet>(null)
+    const applyCVRef = useRef(null)
 
     const [dataSearch, setDataSearch] = useState('Không có nội dung')
 
