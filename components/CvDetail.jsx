@@ -1507,7 +1507,7 @@ const CvDetail = ({ navigation }) => {
                                                 </View>
                                                 <View style={{
                                                     display: "flex",
-                                                    justifyContent: "center",
+                                                    justifyContent: "center", 
                                                     width: 120
                                                 }}>
                                                     <Text style={{
