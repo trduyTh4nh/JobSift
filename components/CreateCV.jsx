@@ -1,5 +1,5 @@
 import React from "react"
-import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, Animated, FlatList, SafeAreaView, Platform } from 'react-native'
+import { View, Text, StyleSheet, Image, TouchableOpacity, ActivityIndicator, TextInput, ScrollView, Animated, FlatList, SafeAreaView, Platform, Alert } from 'react-native'
 import { useFonts } from "expo-font"
 import { useState } from "react"
 import DatePicker from "react-native-date-picker"
@@ -63,19 +63,21 @@ const CreateCV = ({ route, navigation }) => {
     const [keyCounter5, setKeyCounter5] = useState(0);
 
     const [dateBirtht, setDateBirtht] = useState(new Date());
-    const [datePickerOpent, setDatePickerOpent] = useState(false);
     const [dateBirth2, setDateBirth2] = useState(new Date());
-    const [datePickerOpen2, setDatePickerOpen2] = useState(false);
+
+    const [datePickerOpent, setDatePickerOpent] = useState(false); //
+    const [datePickerOpen2, setDatePickerOpen2] = useState(false); // 
 
     const [dateBirth3, setDateBirth3] = useState(new Date());
-    const [datePickerOpen3, setDatePickerOpen3] = useState(false);
     const [dateBirth4, setDateBirth4] = useState(new Date());
-    const [datePickerOpen4, setDatePickerOpen4] = useState(false);
+
+    const [datePickerOpen3, setDatePickerOpen3] = useState(false); //
+    const [datePickerOpen4, setDatePickerOpen4] = useState(false); //
 
     const [dateBirth5, setDateBirth5] = useState(new Date());
-    const [datePickerOpen5, setDatePickerOpen5] = useState(false);
     const [dateBirth6, setDateBirth6] = useState(new Date());
-    const [datePickerOpen6, setDatePickerOpen6] = useState(false);
+    const [datePickerOpen5, setDatePickerOpen5] = useState(false); //
+    const [datePickerOpen6, setDatePickerOpen6] = useState(false); //
 
     const [dateBirth7, setDateBirth7] = useState(new Date());
     const [datePickerOpen7, setDatePickerOpen7] = useState(false);
@@ -93,6 +95,15 @@ const CreateCV = ({ route, navigation }) => {
     const [showModalAC, setShowModalAC] = useState(false)
     const [showModalLA, setShowModalLA] = useState(false)
     const [showModalCer, setShowModalCer] = useState(false)
+
+
+    const [checkDate, setCheckDate] = useState(false)
+
+    const handleCheckDate = () => {
+        if ((dateBirth2 > datePickerOpent) && (datePickerOpen4 > datePickerOpen4) && (datePickerOpen6 > datePickerOpen5)) {
+            setCheckDate(true)
+        }
+    }
 
 
     const handleItalic = () => {
@@ -141,7 +152,40 @@ const CreateCV = ({ route, navigation }) => {
         })
     }
 
+    const checkDateCompany = (date) => {
+        if (date >= objWrk.dateStart) {
+            setOjbWrk({
+                ...objWrk,
+                dateEnd: date
+            });
+        } else {
+            showAlert("Ngày công ty không hợp lệ!");
+        }
+    };
 
+    const checkDateEdu = (date) => {
+        if (date >= objbBE.dateStart) {
+            setOjbBE({
+                ...objbBE,
+                dateEnd: date
+            })
+        }
+        else {
+            showAlert("Ngày học không hợp lệ!");
+        }
+    }
+
+    const checkAcDate = (date) => {
+        if (date >= objbAC.dateStart) {
+            setOjbAC({
+                ...objbAC,
+                dateEnd: date
+            })
+        }
+        else {
+            showAlert("Ngày hoạt động không hợp lệ!");
+        }
+    }
 
 
     const [dateBirth, setDateBirth] = useState(new Date());
@@ -553,6 +597,9 @@ const CreateCV = ({ route, navigation }) => {
         console.log("DATA ĐÃ TỔNG: " + JSON.stringify(objbCer))
         setShowModalCer(false)
     }
+    // check date
+
+
 
 
 
@@ -624,6 +671,26 @@ const CreateCV = ({ route, navigation }) => {
         })
     }
 
+    const showAlert = (text) => {
+        Alert.alert(
+            'Thông báo',
+            text,
+            [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'OK',
+                    onPress: () => console.log('OK Pressed'),
+                },
+            ],
+            { cancelable: false }
+        );
+    };
+
+
     const handleDoneInfoCV = () => {
         const dataGenrate = {
             ...DataCv,
@@ -636,6 +703,7 @@ const CreateCV = ({ route, navigation }) => {
         }
 
         const idUser = global.user.user.id_user
+
 
         axios.post(`http://${API_URL}:3001/genratecv/${idUser}`, dataGenrate, {
             headers: {
@@ -665,7 +733,8 @@ const CreateCV = ({ route, navigation }) => {
 
 
 
-        
+
+
 
 
     }
@@ -1410,10 +1479,9 @@ const CreateCV = ({ route, navigation }) => {
                                                 onConfirm={(date) => {
                                                     setDatePickerOpen2(false)
                                                     setDateBirth2(date)
-                                                    setOjbWrk({
-                                                        ...objWrk,
-                                                        dateEnd: date
-                                                    })
+
+                                                    checkDateCompany(date)
+
                                                     // setDataCv({
                                                     //     ...DataCv,
                                                     //     birthUserCV: date
@@ -1651,10 +1719,7 @@ const CreateCV = ({ route, navigation }) => {
                                                 onConfirm={(date) => {
                                                     setDatePickerOpen4(false)
                                                     setDateBirth4(date)
-                                                    setOjbBE({
-                                                        ...objbBE,
-                                                        dateEnd: date
-                                                    })
+                                                    checkDateEdu(date)
                                                     // setDataCv({
                                                     //     ...DataCv,
                                                     //     birthUserCV: date
@@ -1879,10 +1944,7 @@ const CreateCV = ({ route, navigation }) => {
                                                 onConfirm={(date) => {
                                                     setDatePickerOpen6(false)
                                                     setDateBirth6(date)
-                                                    setOjbAC({
-                                                        ...objbAC,
-                                                        dateEnd: date
-                                                    })
+                                                    checkAcDate(date)
                                                     // setDataCv({
                                                     //     ...DataCv,
                                                     //     birthUserCV: date

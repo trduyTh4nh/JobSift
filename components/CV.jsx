@@ -30,7 +30,7 @@ const CV = ({ navigation }) => {
     if (!fontLoaded) {
         return (
             <View>
-                <ActivityIndicator></ActivityIndicator> 
+                <ActivityIndicator></ActivityIndicator>
             </View>
         )
     }
@@ -144,7 +144,21 @@ const CV = ({ navigation }) => {
         setCvAdded(temp)
     }
     const handelNavigate = (item) => {
-        navigation.navigate('CV chi tiết', { cv: item })
+        axios.post(`http://${API_URL}:3001/getskill/${item.id_cv}`)
+            .then((result) => {
+                const Wrk = result.data.WkCV;
+                const Ac = result.data.ACCV;
+                const Cer = result.data.CerCv;
+                const Edu = result.data.EduCv;
+                const Lang = result.data.LangCV;
+
+                navigation.navigate('CV chi tiết', { cv: item, wk: Wrk, ac: Ac, cer: Cer, edu: Edu, lang: Lang })
+            })
+            .catch((error) => {
+                console.log("ERROR at line 152: " + error)
+            })
+
+
     }
     return (
         <View style={styles.cvManage}>

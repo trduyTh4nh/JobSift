@@ -17,12 +17,18 @@ import storage from '@react-native-firebase/storage';
 import { useRoute } from '@react-navigation/native';
 
 
+
 const CvDetail = ({ navigation }) => {
 
     const route = useRoute();
-    const {  cv } = route.params;
+    const { cv, wk, ac, cer, edu, lang } = route.params;
 
     console.log("CV đã tranfers: " + JSON.stringify(cv))
+    console.log("wk đã tranfers: " + JSON.stringify(wk))
+    console.log("ac đã tranfers: " + JSON.stringify(ac))
+    console.log("cer đã tranfers: " + JSON.stringify(cer))
+    console.log("edu đã tranfers: " + JSON.stringify(edu))
+    console.log("lang đã tranfers: " + JSON.stringify(lang))
 
 
     const [animation] = useState(new Animated.Value(0));
@@ -119,7 +125,6 @@ const CvDetail = ({ navigation }) => {
         })
     }
 
-
     const handleItalic2 = () => {
         setItalic2(!italic2)
     }
@@ -167,10 +172,6 @@ const CvDetail = ({ navigation }) => {
         )
     }
 
-
-
-    // EXPERIENCE
-
     const handleAddExperience = () => {
         setDataEditWorkEx({})
         setShowModalWE(true)
@@ -190,14 +191,6 @@ const CvDetail = ({ navigation }) => {
         }
 
         setKeyCounter(prevKeyCounter => prevKeyCounter + 1);
-
-        // setObjWorkEx(objWorkEx => [
-        //     ...objWorkEx,
-        //     data
-
-        // ]);
-
-
 
     }
 
@@ -639,6 +632,7 @@ const CvDetail = ({ navigation }) => {
 
         return `${day}/${month}/${year}`;
     };
+
 
     const WorkExperience = ({ item }) => {
         const dayStart = formattedDate(item.dateStart)
@@ -1137,7 +1131,7 @@ const CvDetail = ({ navigation }) => {
 
                             <View style={{
                                 borderWidth: 1,
-                                borderColor: "#B0B0B0"
+                                borderColor: "#E2F367"
                             }}></View>
 
                             <View style={{
@@ -1198,7 +1192,7 @@ const CvDetail = ({ navigation }) => {
                                 <View style={{
                                     display: "flex",
                                     flexDirection: "row",
-                                    gap: 85
+                                    gap: 90
                                 }}>
                                     <View style={{
                                         display: "flex",
@@ -1245,7 +1239,7 @@ const CvDetail = ({ navigation }) => {
 
                             <View style={{
                                 borderWidth: 1,
-                                borderColor: "#B0B0B0"
+                                borderColor: "#E2F367"
                             }}></View>
 
                             <View style={{
@@ -1276,7 +1270,7 @@ const CvDetail = ({ navigation }) => {
                                             marginBottom: 4
                                         }} >Ngày sinh</Text>
                                         <Text style={{
-                                            backgroundColor: '#F1F1F1',
+                                            backgroundColor: '#E2F367',
                                             padding: 15,
                                             borderRadius: 16,
                                             color: '#000',
@@ -1294,7 +1288,7 @@ const CvDetail = ({ navigation }) => {
                                             marginBottom: 4
                                         }} >Mô tả bản thân</Text>
                                         <Text style={{
-                                            backgroundColor: '#F1F1F1',
+                                            backgroundColor: '#E2F367',
                                             padding: 15,
                                             borderRadius: 16,
                                             color: '#000',
@@ -1315,7 +1309,7 @@ const CvDetail = ({ navigation }) => {
                                             marginBottom: 4
                                         }} >Mục tiêu cần đạt</Text>
                                         <Text style={{
-                                            backgroundColor: '#F1F1F1',
+                                            backgroundColor: '#E2F367',
                                             padding: 15,
                                             borderRadius: 16,
                                             color: '#000',
@@ -1343,6 +1337,114 @@ const CvDetail = ({ navigation }) => {
                                 <View style={styles.headTtitle}>
                                     <Text style={styles.imgeWETitle}>Kinh nghiệm làm việc</Text>
                                 </View>
+
+                            </View>
+
+                            <View style={{
+                                borderWidth: 3,
+                                borderColor: "#B0B0B0",
+                                borderRadius: 16,
+                                marginTop: 30,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+
+                                {Array.isArray(wk) &&
+                                    wk.map((item, index) => (
+                                        <View style={{
+                                            display: "flex",
+                                            gap: 20,
+                                            paddingTop: 15,
+                                            paddingBottom: 15,
+                                            borderTopWidth: index !== 0 ? 3 : 0,
+                                            borderColor: "#E2F367",
+                                            width: "90%",
+
+                                        }}>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 90
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Tên công ty</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.ten_doanh_nghiep ? item.ten_doanh_nghiep : "không có dữ liệu"}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Vị trí</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.position ? item.position : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 90
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày bắt đầu</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.start_day ? formattedDate(item.start_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày kết thúc</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.end_day ? formattedDate(item.end_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
                             </View>
 
                         </View>
@@ -1357,6 +1459,140 @@ const CvDetail = ({ navigation }) => {
                                 <View style={styles.headTtitle}>
                                     <Text style={styles.imgeWETitle}>Trình độ học vấn</Text>
                                 </View>
+                            </View>
+
+                            <View style={{
+                                borderWidth: 3,
+                                borderColor: "#B0B0B0",
+                                borderRadius: 16,
+                                marginTop: 30,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+
+                                {Array.isArray(edu) &&
+                                    edu.map((item, index) => (
+                                        <View style={{
+                                            display: "flex",
+                                            gap: 20,
+                                            paddingTop: 15,
+                                            paddingBottom: 15,
+                                            borderTopWidth: index !== 0 ? 3 : 0,
+                                            borderColor: "#E2F367",
+                                            width: "90%",
+
+                                        }}>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 120
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Tên trường</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.nameschool ? item.nameschool : "không có dữ liệu"}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                    width: 120
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Chuyên ngành</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.major ? item.major : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 90
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày bắt đầu</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.start_day ? formattedDate(item.start_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày kết thúc</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.end_day ? formattedDate(item.end_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 90
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Mô tả</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.description ? item.description : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
                             </View>
 
 
@@ -1375,6 +1611,137 @@ const CvDetail = ({ navigation }) => {
                                 </View>
                             </View>
 
+                            <View style={{
+                                borderWidth: 3,
+                                borderColor: "#B0B0B0",
+                                borderRadius: 16,
+                                marginTop: 30,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+
+                                {Array.isArray(ac) &&
+                                    ac.map((item, index) => (
+                                        <View style={{
+                                            display: "flex",
+                                            gap: 20,
+                                            paddingTop: 15,
+                                            paddingBottom: 15,
+                                            borderTopWidth: index !== 0 ? 3 : 0,
+                                            borderColor: "#E2F367",
+                                            width: "90%",
+
+                                        }}>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 90
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Tổ chức</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.name === "undefined" ? "không có dữ liệu" : item.name}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Vị trí</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.position === "undefined" ? "không có dữ liệu" : item.position}</Text>
+                                                </View>
+                                            </View>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 110
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày bắt đầu</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.start_day ? formattedDate(item.start_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày kết thúc</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.end_day ? formattedDate(item.end_day) : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Mô tả</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.mo_ta ? item.mo_ta : "không có dữ liệu"}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
+                            </View>
 
                         </View>
 
@@ -1392,6 +1759,98 @@ const CvDetail = ({ navigation }) => {
                             </View>
 
 
+                            <View style={{
+                                borderWidth: 3,
+                                borderColor: "#B0B0B0",
+                                borderRadius: 16,
+                                marginTop: 30,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
+
+                                {Array.isArray(lang) &&
+                                    lang.map((item, index) => (
+                                        <View style={{
+                                            display: "flex",
+                                            gap: 20,
+                                            paddingTop: 15,
+                                            paddingBottom: 15,
+                                            borderTopWidth: index !== 0 ? 3 : 0,
+                                            borderColor: "#E2F367",
+                                            width: "90%",
+
+                                        }}>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 100
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngôn ngữ</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.name === "undefined" ? "không có dữ liệu" : item.name}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Độ thông thạo</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.level === "undefined" ? "không có dữ liệu" : item.level}</Text>
+                                                </View>
+                                            </View>
+
+
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Mô tả</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{(item.description === 'undefined' ? "không có dữ liệu" : item.description) || (item.description ? item.description : "không có dữ liệu")}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
+                            </View>
+
                         </View>
 
                         {/* Chứng chỉ, bằng cấp */}
@@ -1406,7 +1865,97 @@ const CvDetail = ({ navigation }) => {
                                 </View>
                             </View>
 
+                            <View style={{
+                                borderWidth: 3,
+                                borderColor: "#B0B0B0",
+                                borderRadius: 16,
+                                marginTop: 30,
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                            }}>
 
+                                {Array.isArray(cer) &&
+                                    cer.map((item, index) => (
+                                        <View style={{
+                                            display: "flex",
+                                            gap: 20,
+                                            paddingTop: 15,
+                                            paddingBottom: 15,
+                                            borderTopWidth: index !== 0 ? 3 : 0,
+                                            borderColor: "#E2F367",
+                                            width: "90%",
+
+                                        }}>
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+                                                gap: 100
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Tên chứng chỉ</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.name_cert === "undefined" ? "không có dữ liệu" : item.name_cert}</Text>
+                                                </View>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Ngày cấp</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{item.ngaycap ? formattedDate(item.ngaycap) : 'không có dữ liệu'}</Text>
+                                                </View>
+                                            </View>
+
+
+                                            <View style={{
+                                                display: "flex",
+                                                flexDirection: "row",
+
+                                            }}>
+                                                <View style={{
+                                                    display: "flex",
+                                                    justifyContent: "center",
+                                                }}>
+                                                    <Text style={{
+                                                        ...styles.imgeWETitle,
+                                                        fontWeight: "400",
+                                                        fontSize: 14,
+                                                        color: "#B5B5B5"
+                                                    }}>Mô tả</Text>
+                                                    <Text style={{
+                                                        color: "#000",
+                                                        fontSize: 15,
+                                                        fontWeight: "700"
+
+                                                    }}>{(item.noi_dung === 'undefined' ? "không có dữ liệu" : item.noi_dung) || (item.noi_dung ? item.noi_dung : "không có dữ liệu")}</Text>
+                                                </View>
+                                            </View>
+                                        </View>
+                                    ))}
+
+                            </View>
                         </View>
 
 

@@ -26,9 +26,6 @@ const Home = ({ navigation }) => {
     // const focus = useIsFocused()
 
     const userDB = global.user
-
-
-
     const nearbyJobsData = [
         { id: '1', salary: [200, 500], title_job: 'SoftWare Engineer', jobCate: 'Full-time' },
         { id: '2', salary: [200], title_job: 'Front-End Dev', jobCate: 'Part-time' },
@@ -93,7 +90,7 @@ const Home = ({ navigation }) => {
                 })
 
 
-               
+
             } else {
                 navigation.getParent()?.setOptions({
                     tabBarStyle: STYLE.tabBarStyle
@@ -205,7 +202,7 @@ const Home = ({ navigation }) => {
 
 
 
-    
+
     if (!global.user) {
         return (
             <SafeAreaView style={{ height: '100%', justifyContent: 'center', alignItems: 'center' }}>
@@ -225,7 +222,11 @@ const Home = ({ navigation }) => {
                         </Text>
                     </View>
 
-                    <Text style={styles.welcomeMessage}>Hãy bắt đầu hành trình tìm việc của bạn</Text>
+                    <Text style={{
+                        fontFamily: "Rubik",
+                        fontSize: 24,
+                        fontWeight: "400"
+                    }}>Hãy bắt đầu hành trình tìm việc của bạn 💼</Text>
                     <TouchableOpacity onPress={() => { navigation.navigate('JobTab') }} style={styles.wrapSearch}>
                         <TextInput
                             editable={false}
@@ -248,7 +249,7 @@ const Home = ({ navigation }) => {
                     <View style={styles.wrapTitle}>
                         <Text style={styles.titleHomeJob}>Tất cả công việc</Text>
 
-                        <TouchableOpacity onPress={() => {navigation.navigate('All Jobs')}}><Text style={styles.titleHomeShowMore}>Hiển thị tất cả</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => { navigation.navigate('All Jobs') }}><Text style={styles.titleHomeShowMore}>Hiển thị tất cả</Text></TouchableOpacity>
                     </View>
 
 
@@ -300,7 +301,7 @@ const RenderItem = ({ item, onfavourite }) => (
     <CardJob onFavourite={onfavourite} dataPost={item} />
 );
 const styles = StyleSheet.create({
-    
+
     body: {
 
     },
@@ -314,8 +315,8 @@ const styles = StyleSheet.create({
         paddingRight: 16
     },
     container: {
-        paddingRight: 16,
-        paddingLeft: 16
+        paddingRight: 6,
+        paddingLeft: 6
         ,
         container: {
             flex: 1,
@@ -356,7 +357,7 @@ const styles = StyleSheet.create({
     },
 
     welcomeMessage: {
-        fontFamily: 'RukbikNormal',
+
         fontSize: 24,
 
     },

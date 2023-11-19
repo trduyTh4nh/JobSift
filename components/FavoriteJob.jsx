@@ -94,7 +94,7 @@ const FavoriteJob = () => {
                     />
 
 
-
+ 
 
                     <Tab.Screen name="NotifiChat" component={NotifiChat}
                         options={{

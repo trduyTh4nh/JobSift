@@ -385,8 +385,9 @@ const styles = StyleSheet.create({
     chucuaslart: {
         fontSize: 16,
         // fontWeight:'900',
-        color: '#000',
-        marginTop: 0
+        color: '#626262',
+        marginTop: 0,
+        fontFamily: 'Rubik'
     },
     chucuaslart1: {
         fontSize: 16,

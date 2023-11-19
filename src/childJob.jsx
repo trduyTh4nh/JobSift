@@ -11,6 +11,8 @@ import { API_URL } from "../ipConfig"
 import STYLE from '../assets/css/universal'
 import Error from "../components/Error";
 import { useIsFocused } from "@react-navigation/native";
+import Shadow from 'react-native-shadow';
+
 
 const IPcuaQuang = "192.168.1.113"
 const IPlD = "192.168.116.1"
@@ -153,9 +155,9 @@ const ChildInFoJob = ({ route }) => {
             .then((response) => {
                 if (response.status === 200) {
                     const currentstar = response.data.cur;
-                   
-                        setRating(currentstar.numberstar)
-                   
+
+                    setRating(currentstar.numberstar)
+
                 } else {
                     console.error('Error lỗi nè:', response.data.error);
                 }
@@ -195,26 +197,27 @@ const ChildInFoJob = ({ route }) => {
                 return response.json();
             })
             .then(data => {
-             console.log("FEED BACK: " + JSON.stringify(data.fbs))
+                console.log("FEED BACK: " + JSON.stringify(data.fbs))
                 setFb(data.fbs)
             })
             .catch(error => {
                 console.log('Feedback' + error);
             })
     }
- 
+
     const renderComment = ({ item }) => {
 
         const date = new Date(item.time)
         return (
+            
             <View style={styles.componentCmt}>
                 <View style={styles.headerCmt}>
                     <View style={styles.infoUserCmt}>
-                        <Image source={{uri: item.profile_picture ? item.profile_picture: 'https://cdn-icons-png.flaticon.com/512/21/21104.png' }}  style={{
+                        <Image source={{ uri: item.profile_picture ? item.profile_picture : 'https://cdn-icons-png.flaticon.com/512/21/21104.png' }} style={{
                             width: 50,
                             height: 50,
-                            borderRadius:100
-                        }}/>
+                            borderRadius: 100
+                        }} />
                         <Text style={styles.userNameCmt}>{item.full_name}</Text>
                     </View>
                     <Text style={styles.timeCmt}>{date.toLocaleDateString()}</Text>
@@ -230,7 +233,7 @@ const ChildInFoJob = ({ route }) => {
 
 
 
-    return (    
+    return (
         <ScrollView style={styles.scrollContainer}>
             <View style={styles.container}>
                 <View style={styles.JobSumary}>
@@ -319,15 +322,25 @@ const ChildInFoJob = ({ route }) => {
                     </View>
 
 
-                    <View style={styles.wrapComment}>
-                        <TextInput
-                            style={styles.inputCmt}
-                            placeholder="Nhập phản hồi"
-                            placeholderTextColor={"#000"}
+                    <View style={{
+                        display: "flex",
+                        flexDirection: "row",
+                        gap: 10
+                    }}>
+                        <View style={{
+                            ...styles.wrapComment,
+                            flex: 1
+                        }}>
+                            <TextInput
+                                style={styles.inputCmt}
+                                placeholder="Nhập phản hồi"
+                                placeholderTextColor={"#4A4A4A"}
 
-                            onChangeText={handleComment}
-                            value={comment}></TextInput>
+                                onChangeText={handleComment}
+                                value={comment}></TextInput>
 
+
+                        </View>
                         <TouchableOpacity style={styles.buttonCmt} onPress={upLoadFB}>
                             <Icon name="check-line"></Icon>
                             <Text style={{ fontFamily: "Rubik", color: "#000", alignSelf: 'center' }}>Đăng tải</Text>
@@ -392,10 +405,10 @@ const styles = StyleSheet.create({
         display: "flex",
         alignContent: "center",
         backgroundColor: "#fff",
- 
+
     },
     scrollContainer: {
-      height: "100%",
+        height: "100%",
     },
     JobSumary: {
         borderWidth: 2,
@@ -492,15 +505,19 @@ const styles = StyleSheet.create({
         gap: 5,
         borderRadius: 16,
         elevation: 3,
-        padding: 10
+        padding: 16,
+        height: 60
     },
     inputCmt: {
         backgroundColor: "#F1F1F1",
         flex: 1,
-        padding: 20,
-        fontFamily: "RubikNormal",
+        fontFamily: "Rubik",
         borderRadius: 16,
-        elevation: 2,
+        height: 100,
+        paddingBottom: 10,
+        paddingLeft: 20,
+        paddingRight: 10,
+        paddingTop: -20
 
     },
     wrapComment: {
@@ -516,9 +533,13 @@ const styles = StyleSheet.create({
     componentCmt: {
         borderColor: "#B0B0B0",
         borderWidth: 2,
-        padding: 10,
         borderRadius: 18,
-        marginTop: 18
+        marginTop: 18,
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingTop: 10,
+        paddingRight: 10,
+        paddingBottom: 10,
     },
     infoUserCmt: {
         display: "flex",
