@@ -730,13 +730,6 @@ const CreateCV = ({ route, navigation }) => {
             .catch((error) => {
                 console.log("ERROR!: " + error)
             })
-
-
-
-
-
-
-
     }
 
 

@@ -132,70 +132,7 @@ const PaymentDiamon = () => {
 
 
 
-    // const openPaymentSheet = async () => {
-    //     try {
-    //         const { error } = await presentPaymentSheet();
-    //         const iduser = user.id_user;
-    //         const paymentInfo = {
-    //             iduser: iduser,
-    //             kc: diamond,
-    //         };
 
-    //         if (error) {
-    //             Alert.alert(`Error code: ${error.code}`, error.message);
-    //         } else {
-
-    //             //executeAPICall()
-
-    //             // const response = await axios.post(`http://${API_URL}:3001/buykc`, paymentInfo, {
-    //             //     headers: {
-    //             //         'Content-Type': 'application/json',
-    //             //     },
-    //             // });
-
-    //             // console.log('Server response:', response.data);
-
-    //             let data = JSON.stringify({
-    //                 "iduser": iduser,
-    //                 "kc": diamond
-    //             });
-
-    //             let config = {
-    //                 method: 'post',
-    //                 maxBodyLength: Infinity,
-    //                 url: 'http://192.168.116.1:3001/buykc',
-    //                 headers: {
-    //                     'Content-Type': 'application/json'
-    //                 },
-    //                 data: data
-    //             };
-
-    //             axios.request(config)
-    //                 .then((response) => {
-    //                     console.log(JSON.stringify(response.data));
-
-    //                     axios.post(`${API_URL}:3001/diamond/${iduser}`).then(e => {
-    //                         const d = e.data
-    //                         axios.post(`${API_URL}:3001/diamond/set`, {
-    //                             "diamond_count": e.data.diamond_count + diamond,
-    //                             "id_user": iduser
-    //                         }).then((e) => {
-    //                             socket.emit('kcValChange', { diamond_count: d.diamond_count + diamond })
-    //                             Alert.alert('Thành công', 'Thanh toán thành công!');
-    //                         }).catch((error) => {
-    //                             console.log("ERRROR here: " +  error)
-    //                         })
-    //                     })
-    //                 })
-    //                 .catch((error) => {
-    //                     console.log(error);
-    //                 });
-
-    //         }
-    //     } catch (error) {
-    //         console.error('Error handling payment or server update:', error);
-    //     }
-    // };
 
     useEffect(() => {
         initializePaymentSheet();
@@ -577,3 +514,70 @@ const styles = StyleSheet.create({
 )
 
 export default PaymentDiamon
+
+
+
+// const openPaymentSheet = async () => {
+//     try {
+//         const { error } = await presentPaymentSheet();
+//         const iduser = user.id_user;
+//         const paymentInfo = {
+//             iduser: iduser,
+//             kc: diamond,
+//         };
+
+//         if (error) {
+//             Alert.alert(`Error code: ${error.code}`, error.message);
+//         } else {
+
+//             //executeAPICall()
+
+//             // const response = await axios.post(`http://${API_URL}:3001/buykc`, paymentInfo, {
+//             //     headers: {
+//             //         'Content-Type': 'application/json',
+//             //     },
+//             // });
+
+//             // console.log('Server response:', response.data);
+
+//             let data = JSON.stringify({
+//                 "iduser": iduser,
+//                 "kc": diamond
+//             });
+
+//             let config = {
+//                 method: 'post',
+//                 maxBodyLength: Infinity,
+//                 url: 'http://192.168.116.1:3001/buykc',
+//                 headers: {
+//                     'Content-Type': 'application/json'
+//                 },
+//                 data: data
+//             };
+
+//             axios.request(config)
+//                 .then((response) => {
+//                     console.log(JSON.stringify(response.data));
+
+//                     axios.post(`${API_URL}:3001/diamond/${iduser}`).then(e => {
+//                         const d = e.data
+//                         axios.post(`${API_URL}:3001/diamond/set`, {
+//                             "diamond_count": e.data.diamond_count + diamond,
+//                             "id_user": iduser
+//                         }).then((e) => {
+//                             socket.emit('kcValChange', { diamond_count: d.diamond_count + diamond })
+//                             Alert.alert('Thành công', 'Thanh toán thành công!');
+//                         }).catch((error) => {
+//                             console.log("ERRROR here: " +  error)
+//                         })
+//                     })
+//                 })
+//                 .catch((error) => {
+//                     console.log(error);
+//                 });
+
+//         }
+//     } catch (error) {
+//         console.error('Error handling payment or server update:', error);
+//     }
+// };
