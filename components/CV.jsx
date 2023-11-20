@@ -1,5 +1,5 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Pressable } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, ActivityIndicator, FlatList, Pressable, Alert } from "react-native";
 import Icon from "react-native-remix-icon";
 import { useFonts } from "expo-font";
 import { useNavigation } from '@react-navigation/native';
@@ -80,14 +80,24 @@ const CV = ({ navigation }) => {
                     }}>
                         <TouchableOpacity
                             onPress={() => {
-                                axios.post(`http://${API_URL}:3001/removecv/${item.id_cv}`)
-                                    .then((respone) => {
-                                        console.log(respone.data.message)
-                                        onDelete()
-                                    })
-                                    .catch((error) => {
-                                        console.log(error)
-                                    })
+                                Alert.alert('Xoá CV', 'Bạn có muốn xoá CV này? Bạn sẽ không thể lấy lại nó được nữa.',
+                                    [
+                                        { text: 'Không' },
+                                        {
+                                            text: 'Có', onPress: () => {
+                                                axios.post(`http://${API_URL}:3001/removecv/${item.id_cv}`)
+                                                    .then((respone) => {
+                                                        console.log(respone.data.message)
+                                                        onDelete()
+                                                    })
+                                                    .catch((error) => {
+                                                        console.log(error)
+                                                    })
+                                            }
+                                        },
+
+                                    ])
+
                             }}
                             style={{
                                 backgroundColor: "#FFA7B7",
@@ -140,7 +150,8 @@ const CV = ({ navigation }) => {
         )
     }
     const deleteItem = (item) => {
-        var temp = cvAdded.filter((obj) => item != obj)
+        console.log('delete')
+        var temp = cvAdded.filter((obj) => (item !== obj))
         setCvAdded(temp)
     }
     const handelNavigate = (item) => {
@@ -185,7 +196,9 @@ const CV = ({ navigation }) => {
                         <FlatList
                             data={cvAdded}
                             ItemSeparatorComponent={() => (<View style={{ height: 30 }}></View>)}
-                            renderItem={({ item }) => <ItemCV onNavigate={() => handelNavigate(item)} onDelete={() => { deleteItem(item) }} item={item} ></ItemCV>}
+                            renderItem={({ item }) => <ItemCV onNavigate={() => handelNavigate(item)} onDelete={() => {
+                                deleteItem(item)
+                            }} item={item} ></ItemCV>}
                         >
 
                         </FlatList>

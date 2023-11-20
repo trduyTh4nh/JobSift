@@ -105,7 +105,7 @@ const ApplicationItem = ({item, key, navigation}) => {
                 <Icon name="briefcase-4-line"/>
                 <View>
                     <Text style={{...STYLE.textNormal, fontSize: 15}}>Lĩnh vực</Text>
-                    <Text style={{...STYLE.textNormal, fontSize: 18}}>{item.nganh_nghe}</Text>
+                    <Text style={{...STYLE.textNormal, fontSize: 18}}>{item.ten_loai}</Text>
                 </View>
             </View>
             <View style={{...style.applicationStatus, borderWidth: 0, padding: 0}}>

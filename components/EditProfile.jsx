@@ -228,6 +228,13 @@ const EditProfile = ({ navigation }) => {
                                     placeholder="0908290382"
                                     placeholderTextColor="rgba(0,0,0,0.15)"
                                     fontWeight="700"
+                                    onChangeText={(e) =>{
+                                        setUser({
+                                            ...user,
+                                            phone: e
+                                        })
+                                    }}
+
                                 >
                                 </TextInput>
                             </View>
@@ -254,6 +261,12 @@ const EditProfile = ({ navigation }) => {
                                     //placeholder="Quận 3"
                                     placeholderTextColor="rgba(0,0,0,0.15)"
                                     fontWeight="700"
+                                    onChangeText={(e) => {
+                                        setUser({
+                                            ...user,
+                                            diachi: e
+                                        })
+                                    }}
                                 >
                                 </TextInput>
                             </View>
