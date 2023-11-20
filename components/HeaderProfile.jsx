@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
         // fontWeight:'900',
         color: '#000',
         fontFamily: 'Rubik',
-        marginTop: -10
     },
     Xuongdong:{
         display:'flex',
@@ -172,7 +171,6 @@ const styles = StyleSheet.create({
         color: '#000',
         fontWeight:'400',
         fontFamily: 'RukbikNormal',
-        marginTop: -16
     },
     wrapSearch: {
         display: 'flex',

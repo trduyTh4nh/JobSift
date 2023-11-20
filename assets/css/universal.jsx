@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 const STYLE = StyleSheet.create({
+    selectIOS: { borderColor: '#B0B0B0', borderWidth: 2, borderRadius: 16 },
     tabBarStyle: {
         position: 'absolute',
         bottom: 25,

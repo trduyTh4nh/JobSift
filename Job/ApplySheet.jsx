@@ -69,8 +69,8 @@ const ApplySheet = (props) => {
         }).then(e => {
             SheetManager.hide(props.sheetId, {
                 payload: {
-                    type: 'Apply',
-                    data: selectedCV
+                type: 'Apply',
+                data: selectedCV
                 }
             })
         }).catch(e => {

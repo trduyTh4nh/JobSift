@@ -12,7 +12,7 @@ import { API_URL } from "../ipConfig";
 import { useNavigation } from '@react-navigation/native';
 import STYLE from "../assets/css/universal";
 import { ActivityIndicator } from "react-native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useFonts } from "expo-font";
 
 import axios from "axios";
@@ -82,12 +82,24 @@ const Home = ({ navigation }) => {
 
             if (!global.user) {
                 console.log('User is not logged in')
-                setTimeout(() => {
-                    navigation.navigate('LoginForm')
-                }, 500)
-                navigation.getParent()?.setOptions({
-                    tabBarStyle: { display: 'none' }
+                AsyncStorage.getItem('user').then(e => {
+                    if(!e){
+                        setTimeout(() => {
+                            navigation.navigate('LoginForm')
+                        }, 500)
+                        navigation.getParent()?.setOptions({
+                            tabBarStyle: { display: 'none' }
+                        })
+                    } else {
+                        navigation.getParent()?.setOptions({
+                            tabBarStyle: STYLE.tabBarStyle
+                        })
+                        global.user = JSON.parse(e)
+                        fetchData().catch((e) => { console.error(e) });
+                    }
                 })
+                
+               
 
 
 
@@ -109,6 +121,7 @@ const Home = ({ navigation }) => {
                 throw new Error('Network response was not ok');
             }
             const data = await response.json();
+            console.log(data)
             setIsLoading(false);
             setPostData(data);
         } catch (error) {
