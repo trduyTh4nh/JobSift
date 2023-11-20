@@ -130,7 +130,7 @@ const NearbyJob = (props) => {
 
                         <View style={styles.itemInNearBy}>
                             <Icon name="briefcase-line"></Icon>
-                            <Text style={styles.nearByJobCategory}>{dataNearby.ten_loai}</Text>
+                            <Text style={styles.nearByJobCategory}>{dataNearby.job_category}</Text>
                         </View>
 
                         <View style={styles.itemInNearBy}>
@@ -201,7 +201,8 @@ const styles = StyleSheet.create({
     itemInNearBy: {
         display: "flex",
         flexDirection: "row",
-        gap: 5
+        gap: 5,
+        alignItems: "center"
     }
 
 

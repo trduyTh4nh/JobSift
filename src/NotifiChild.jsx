@@ -86,7 +86,7 @@ const styles = StyleSheet.create({
     },
     itemNotifi: {
         borderWidth: 2,
-        borderColor: "#000",
+        borderColor: "#B0B0B0",
         width: "85%",
         borderRadius: 16,
         padding: 10

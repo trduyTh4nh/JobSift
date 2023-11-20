@@ -39,10 +39,10 @@ const JobDetail = () => {
     const [showUngTuyen, setShowUngTuyen] = useState(false)
     const [doanhNghiep, setDoanhNghiep] = useState({})
     const ActionRef = useRef(null);
- 
+
     const [file, setFile] = useState()
     const [showSuccess, setSuccess] = useState(false)
-    
+
     const handleDataFromChild = (data) => {
         Animated.timing(fadeAnim, {
             toValue: 0,
@@ -121,7 +121,7 @@ const JobDetail = () => {
         fetchFav()
     }, [dataPostCurrent])
     useEffect(() => {
-        
+
         const dataPostID = {
             id_post: postData.id_post
         }
@@ -142,7 +142,7 @@ const JobDetail = () => {
 
     const focus = useIsFocused()
     useEffect(() => {
-        
+
         const dataUpdateViews = {
             id_post: postData.id_post,
             numberView: postData.views + 1
@@ -187,14 +187,14 @@ const JobDetail = () => {
         }
     }, [postData])
     const handleCVApply = () => {
-        if(diamond < 10){
+        if (diamond < 10) {
             setEnough(false)
             setShowPDFCV(true)
             return
         }
         setShowUngTuyen(false)
         setTimeout(() => showSheet(), 500)
-        
+
     }
     const showSheet = async () => {
         const data = await SheetManager.show('apply-sheet', {
@@ -203,17 +203,17 @@ const JobDetail = () => {
                 title: postData.tieu_de + ' @ ' + doanhNghiep.ntd.name_dn,
             }
         })
-        if(data){
-            if(data.type == 'CreateCV'){
+        if (data) {
+            if (data.type == 'CreateCV') {
                 navigation.navigate('CVBasic')
-            } else if(data.data){
+            } else if (data.data) {
                 setCV(data.data)
                 axios.post(URL + '/diamond/set', {
                     "id_user": global.user.user.id_user,
                     "diamond_count": diamond - 10
                 }).then(e => {
                     setDiamond(diamond - 10)
-                    socket.emit('kcValChange', {kcInfo: diamond - 30})
+                    socket.emit('kcValChange', { kcInfo: diamond - 30 })
                 }).catch(e => {
                     Alert.alert('ERROR subtracting diamond (FATAL): ' + e)
                 })
@@ -268,10 +268,10 @@ const JobDetail = () => {
             "id_user": global.user.user.id_user,
             "id_ntd": postData.id_ntd,
             "tieu_de": postData.tieu_de
-          }).then(e => {
+        }).then(e => {
             const data = e.data[0]
             navigation.navigate('Chat Details', { chatHeader: data })
-          })
+        })
     }
     useEffect(() => {
         let isMounted = true;
@@ -288,7 +288,7 @@ const JobDetail = () => {
             isMounted = false;
         };
     }, []);
-    
+
     if (!postData) {
         return (
             <Text>Opps...</Text>
@@ -327,9 +327,6 @@ const JobDetail = () => {
         },
 
     ]
-
-
-
 
 
     const StarRating = ({ totalStars, userRating }) => {
@@ -372,29 +369,29 @@ const JobDetail = () => {
             "id_post": postData.id_post
         }).then(e => {
             console.log(e.data.length)
-            if(e.data.length > 0){
-                Alert.alert('Bạn đã report bài đăng này với lý do ' + e.data[0].reason, 'Bài đăng này đã được report bởi bạn. Bạn có muốn tiếp tục ứng tuyển bài đăng này không?', 
-                [
-                    { text: 'Không' },
-                    {
-                        text: 'Có', onPress: () => {
-                            showUT()
-                        }
-                    },
-                ])
+            if (e.data.length > 0) {
+                Alert.alert('Bạn đã report bài đăng này với lý do ' + e.data[0].reason, 'Bài đăng này đã được report bởi bạn. Bạn có muốn tiếp tục ứng tuyển bài đăng này không?',
+                    [
+                        { text: 'Không' },
+                        {
+                            text: 'Có', onPress: () => {
+                                showUT()
+                            }
+                        },
+                    ])
             } else {
                 showUT()
             }
         })
 
-        
+
 
 
 
     }
     const showUT = () => {
         axios.post('http://' + API_URL + ':3001' + '/diamond/' + global.user.user.id_user).then(e => {
-            if(e.data.diamond_count >= 30){
+            if (e.data.diamond_count >= 30) {
                 setEnough(true)
             } else {
                 setEnough(false)
@@ -414,17 +411,17 @@ const JobDetail = () => {
             "id_user": global.user.user.id_user,
             "id_post": postData.id_post
         }).then(e => {
-            if(e.data.length > 0){
+            if (e.data.length > 0) {
                 popupRef.close()
                 Alert.alert('Đã report rồi', 'Bạn đã report bài đăng này rồi.')
             } else {
-                navigation.navigate('Report', {id_post: postData.id_post})
+                navigation.navigate('Report', { id_post: postData.id_post })
                 popupRef.close()
             }
         }).catch(e => {
             Alert.alert('Lỗi')
         })
-        
+
     }
     const convertSize = (size) => {
         if (size < 1024) {
@@ -464,7 +461,7 @@ const JobDetail = () => {
                             "diamond_count": diamond - 30
                         }).then(e => {
                             setDiamond(diamond - 30)
-                            socket.emit('kcValChange', {kcInfo: diamond - 30})
+                            socket.emit('kcValChange', { kcInfo: diamond - 30 })
                         }).catch(e => {
                             Alert.alert('ERROR subtracting diamond (FATAL): ' + e)
                         })
@@ -506,9 +503,9 @@ const JobDetail = () => {
     }
     const handleApply = () => {
         if (cv) {
-            setSuccess(true); return 
-        } 
-        if((new Date()) > (new Date(postData.ngay_hethan))){
+            setSuccess(true); return
+        }
+        if ((new Date()) > (new Date(postData.ngay_hethan))) {
             Alert.alert('Đã quá hạn nộp đơn ứng tuyển', 'Bài đăng này đã quá hạn nộp đơn ứng tuyển.')
             return
         }
@@ -528,7 +525,7 @@ const JobDetail = () => {
                             ]}
                         >
                             <View style={styles.headerJobInFoWrap} >
-                            
+
                                 <View style={styles.headerJobInFo} >
                                     <View style={styles.wrapInfoJob}>
                                         <Text style={styles.nameJob}>{postData.tieu_de}</Text>
@@ -536,7 +533,7 @@ const JobDetail = () => {
                                     </View>
                                     <View style={styles.wrapFeartureJob} >
 
-                                        <TouchableOpacity onPress={() => { handleApply() }} style={(new Date()) < (new Date(postData.ngay_hethan)) ? styles.buttonApplyJob : {...styles.buttonApplyJob, backgroundColor: '#E1E1E1'}}>
+                                        <TouchableOpacity onPress={() => { handleApply() }} style={(new Date()) < (new Date(postData.ngay_hethan)) ? styles.buttonApplyJob : { ...styles.buttonApplyJob, backgroundColor: '#E1E1E1' }}>
                                             <Icon name={(new Date()) < (new Date(postData.ngay_hethan)) ? "check-fill" : "time-line"} size={24} ></Icon>
                                         </TouchableOpacity>
 
@@ -574,16 +571,16 @@ const JobDetail = () => {
                                         </View>
                                     </View>
                                     <View style={styles.rateReview}>
-                                        <Text style={styles.rateReviewDetal}>{dataPostCurrent.views ? dataPostCurrent.views : "0"} lượt xem</Text>
+                                        <Text style={styles.rateReviewDetal}>{dataPostCurrent.views ? dataPostCurrent.views : "0"}  lượt xem</Text>
                                     </View>
-                                    
+
                                 </View>
-                                <View style={{flexDirection: 'row', gap: 16, marginTop: 5}}>
-                                    <TouchableOpacity onPress={gotoChat} style={{...styles.buttonApplyJob, flex: 1, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16}}>
+                                <View style={{ flexDirection: 'row', gap: 16, marginTop: 5 }}>
+                                    <TouchableOpacity onPress={gotoChat} style={{ ...styles.buttonApplyJob, flex: 1, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16 }}>
                                         <Icon name="chat-3-line" size={24}></Icon>
-                                        <Text style={{...STYLE.textTitle, fontSize: 16}}>Chat với nhà tuyển dụng</Text>
+                                        <Text style={{ ...STYLE.textTitle, fontSize: 16 }}>Chat với nhà tuyển dụng</Text>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={fav} style={{...styles.buttonApplyJob, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16}}>
+                                    <TouchableOpacity onPress={fav} style={{ ...styles.buttonApplyJob, flexDirection: 'row', gap: 10, paddingLeft: 16, paddingRight: 16 }}>
                                         <Icon name={isFav ? "heart-fill" : "heart-line"} size={24}></Icon>
                                     </TouchableOpacity>
                                 </View>
@@ -595,7 +592,7 @@ const JobDetail = () => {
                                     data={popUpList}
                                     onDataFromChild={handleDataFromChild}
                                     onNavigateReport={handNavigate}
-                                    >
+                                >
                                 </BottomPopup>
 
                             </View>
@@ -632,18 +629,18 @@ const JobDetail = () => {
                         {cv && !isLoading && apply ? (
                             <View style={styles.modalChild}>
 
-                            <View>
-                                <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Xin chúc mừng!' : apply.status == 'Rejected' ? 'Vẫn còn hy vọng cho cơ hội tiếp theo...' : 'Ứng tuyển thành công!'}</Text>
-                            </View>
-                            <Text style={{...STYLE.textBold, fontSize: 16}}>{apply.status == 'Accepted' ? 'Bạn đã ĐỖ ỨNG TUYỂN. Vui lòng liên hệ với nhà tuyển dụng để biết thêm về thời gian phỏng vấn và các vấn đề khác.' : apply.status == 'Rejected' ? 'Đơn ứng tuyển của bạn đã bị TRƯỢT ỨNG TUYỂN. Đừng từ bỏ hy vọng, vẫn còn cơ hội thứ hai.' : `Đơn ứng tuyển của bạn đã được gửi đến ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Hãy chill và chờ sự phản hồi của nhà tuyển dụng.`}</Text>
-                            <View style={{...styles.applicationStatus, borderColor: getStatus().color}}>
-                                <Icon name={getStatus().icon}/>
                                 <View>
-                                    <Text style={{color: '#B0B0B0', fontSize: 12}}>Tình trạng ứng tuyển</Text>
-                                    <Text style={{fontSize: 18}}>{apply.status == 'Accepted' ? 'Đỗ ứng tuyển' : apply.status == 'Rejected' ? 'Trượt ứng tuyển' : 'Đang chờ phản hồi'}</Text>
+                                    <Text style={STYLE.textTitle}>{apply.status == 'Accepted' ? 'Xin chúc mừng!' : apply.status == 'Rejected' ? 'Vẫn còn hy vọng cho cơ hội tiếp theo...' : 'Ứng tuyển thành công!'}</Text>
                                 </View>
-                            </View>
-                                <Text style={{...STYLE.textBold, fontSize: 16}}>Chi tiết CV</Text>
+                                <Text style={{ ...STYLE.textBold, fontSize: 16 }}>{apply.status == 'Accepted' ? 'Bạn đã ĐỖ ỨNG TUYỂN. Vui lòng liên hệ với nhà tuyển dụng để biết thêm về thời gian phỏng vấn và các vấn đề khác.' : apply.status == 'Rejected' ? 'Đơn ứng tuyển của bạn đã bị TRƯỢT ỨNG TUYỂN. Đừng từ bỏ hy vọng, vẫn còn cơ hội thứ hai.' : `Đơn ứng tuyển của bạn đã được gửi đến ${doanhNghiep.ntd ? doanhNghiep.ntd.name_dn : 'Loading'}. Hãy chill và chờ sự phản hồi của nhà tuyển dụng.`}</Text>
+                                <View style={{ ...styles.applicationStatus, borderColor: getStatus().color }}>
+                                    <Icon name={getStatus().icon} />
+                                    <View>
+                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Tình trạng ứng tuyển</Text>
+                                        <Text style={{ fontSize: 18 }}>{apply.status == 'Accepted' ? 'Đỗ ứng tuyển' : apply.status == 'Rejected' ? 'Trượt ứng tuyển' : 'Đang chờ phản hồi'}</Text>
+                                    </View>
+                                </View>
+                                <Text style={{ ...STYLE.textBold, fontSize: 16 }}>Chi tiết CV</Text>
 
                                 <View style={styles.CVDetails}>
                                     <Text style={{ ...STYLE.textBold, fontSize: 16 }}>{cv.cv_title ? cv.cv_title : 'Untitiled CV'}</Text>
@@ -680,31 +677,31 @@ const JobDetail = () => {
                                 </View>
                                 {
 
-                                    apply.status == 'Rejected' ? 
-                                    (
-                                        <View style={{gap: 16}}>
-                                            <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
-                                            <Text>Cảm thấy mình đã cải thiện?</Text>
-                                            <TouchableOpacity onPress={handleCVApply} style={styles.buttonStyle}>
-                                                <Text>Ứng tuyển với CV đã có</Text>
-                                                <View style={styles.priceTag}>
-                                                    <Text>💎 10</Text>
-                                                    <Icon name="arrow-right-s-line"/>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
-                                                <Text>Ứng tuyển với CV PDF</Text>
-                                                <View style={styles.priceTag}>
-                                                    <Text>💎 30</Text>
-                                                    <Icon name="arrow-right-s-line"/>
-                                                </View>
-                                            </TouchableOpacity>
-                                            <View style={{borderBottomColor: '#B0B0B0', borderBottomWidth: 2}}></View>
-                                        </View>
-                                    ) : ''
+                                    apply.status == 'Rejected' ?
+                                        (
+                                            <View style={{ gap: 16 }}>
+                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
+                                                <Text>Cảm thấy mình đã cải thiện?</Text>
+                                                <TouchableOpacity onPress={handleCVApply} style={styles.buttonStyle}>
+                                                    <Text>Ứng tuyển với CV đã có</Text>
+                                                    <View style={styles.priceTag}>
+                                                        <Text>💎 10</Text>
+                                                        <Icon name="arrow-right-s-line" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
+                                                    <Text>Ứng tuyển với CV PDF</Text>
+                                                    <View style={styles.priceTag}>
+                                                        <Text>💎 30</Text>
+                                                        <Icon name="arrow-right-s-line" />
+                                                    </View>
+                                                </TouchableOpacity>
+                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
+                                            </View>
+                                        ) : ''
                                 }
-                                
-                                <TouchableOpacity onPress={() => {setSuccess(false)}} style={styles.buttonStyle}>
+
+                                <TouchableOpacity onPress={() => { setSuccess(false) }} style={styles.buttonStyle}>
                                     <Text>Xong</Text>
 
                                     <View style={styles.priceTag}>
@@ -738,30 +735,30 @@ const JobDetail = () => {
                                         <Text>Vui lòng đăng tải CV của bạn (các loại file được chấp nhận: .pdf)</Text>
                                     </View>
                                     {isUploading ? (
-                                        <View style={{gap: 16}}>
-                                            <View style={{flexDirection: 'row', alignItems: 'center', gap: 16}}>
-                                                <ActivityIndicator size={16} style={{width: 16}}/>
+                                        <View style={{ gap: 16 }}>
+                                            <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>
+                                                <ActivityIndicator size={16} style={{ width: 16 }} />
                                                 <Text>Đăng đăng tải ({Math.round(uploadProgress * 100)}%)</Text>
                                             </View>
-                                            <ProgressBar progress={uploadProgress} color="#000" style={{backgroundColor: '#E9E9E9', borderRadius: 16, flex: 1}}/>
+                                            <ProgressBar progress={uploadProgress} color="#000" style={{ backgroundColor: '#E9E9E9', borderRadius: 16, flex: 1 }} />
                                         </View>
                                     ) : ''}
                                     <View>
 
-                                        <TouchableOpacity disabled={isUploading} onPress={handleUploadFile} style={{...styles.buttonStyle, paddingLeft: 24, paddingRight: 24,paddingTop: 20, paddingBottom: 20, backgroundColor: '#E9E9E9', borderRadius: 16}}>
+                                        <TouchableOpacity disabled={isUploading} onPress={handleUploadFile} style={{ ...styles.buttonStyle, paddingLeft: 24, paddingRight: 24, paddingTop: 20, paddingBottom: 20, backgroundColor: '#E9E9E9', borderRadius: 16 }}>
                                             {file ? (<View>
-                                                <Text style={{...STYLE.textBold, fontSize: 18}}>{file.assets[0].name}</Text>
+                                                <Text style={{ ...STYLE.textBold, fontSize: 18 }}>{file.assets[0].name}</Text>
                                                 {
-                                                    !isNaN(file.assets[0].size) ? 
-                                                    (<Text>{convertSize(file.assets[0].size)}</Text>)
-                                                    : ''
+                                                    !isNaN(file.assets[0].size) ?
+                                                        (<Text>{convertSize(file.assets[0].size)}</Text>)
+                                                        : ''
                                                 }
                                             </View>)
-                                            : ( <Text>Đăng tải file</Text>)}
-                                            <Icon name={file ? 'file-line' : 'add-line'}/>
+                                                : (<Text>Đăng tải file</Text>)}
+                                            <Icon name={file ? 'file-line' : 'add-line'} />
                                         </TouchableOpacity>
                                     </View>
-                                        <TouchableOpacity onPress={handleUpload} style={styles.buttonStyle}>
+                                    <TouchableOpacity onPress={handleUpload} style={styles.buttonStyle}>
 
                                         <Text>Ứng tuyển</Text>
                                         <View style={styles.priceTag}>
@@ -769,7 +766,7 @@ const JobDetail = () => {
                                             <Icon name="arrow-right-s-line" />
                                         </View>
                                     </TouchableOpacity>
-                                    <TouchableOpacity onPress={handlePDFCVCancel} style={{...styles.buttonStyle, backgroundColor: '#E9E9E9'}}>
+                                    <TouchableOpacity onPress={handlePDFCVCancel} style={{ ...styles.buttonStyle, backgroundColor: '#E9E9E9' }}>
 
                                         <Text>Huỷ</Text>
                                         <View style={styles.priceTag}>
@@ -781,38 +778,38 @@ const JobDetail = () => {
                                 </View>
                             ) : (
                                 <View style={styles.modalChild}>
-                                    <Text style={{...STYLE.textTitle, fontSize: 25}}>Không đủ kim cương</Text>
+                                    <Text style={{ ...STYLE.textTitle, fontSize: 25 }}>Không đủ kim cương</Text>
                                     <Text style={STYLE.textTitle}>Bạn không có đủ kim cương để ứng tuyển vị trí này.</Text>
-                                    <View style={{...styles.applicationStatus, borderColor: '#FC3903'}}>
-                                        <Icon name={'error-warning-line'}/>
+                                    <View style={{ ...styles.applicationStatus, borderColor: '#FC3903' }}>
+                                        <Icon name={'error-warning-line'} />
                                         <View>
-                                            <Text style={{color: '#B0B0B0', fontSize: 12}}>Số kim cương</Text>
-                                            <Text style={{...STYLE.textNormal, fontSize: 18}}>{diamond} <Text style={{...STYLE.textBold, color: 'rgba(0,0,0,0.65)', fontSize: 18}}>&lt; 30</Text></Text>
+                                            <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Số kim cương</Text>
+                                            <Text style={{ ...STYLE.textNormal, fontSize: 18 }}>{diamond} <Text style={{ ...STYLE.textBold, color: 'rgba(0,0,0,0.65)', fontSize: 18 }}>&lt; 30</Text></Text>
                                         </View>
                                     </View>
-                                    <View style={{gap: 16}}>
-                                    <TouchableOpacity style={styles.buttonStyle}>
-                                        <Text>Mua kim cương</Text>
-                                        <View style={styles.priceTag}>
-                                            <Text>199.000 VND</Text>
-                                            <Icon name="arrow-right-s-line"/>
-                                        </View>
-                                    </TouchableOpacity>
-                                    <TouchableOpacity onPress={() => {setShowPDFCV(false)}} style={styles.buttonStyle}>
-                                        <Text>Xong</Text>
-                                        <View style={styles.priceTag}>
-                                            <Icon name="arrow-right-s-line"/>
-                                        </View>
-                                    </TouchableOpacity>
+                                    <View style={{ gap: 16 }}>
+                                        <TouchableOpacity style={styles.buttonStyle}>
+                                            <Text>Mua kim cương</Text>
+                                            <View style={styles.priceTag}>
+                                                <Text>199.000 VND</Text>
+                                                <Icon name="arrow-right-s-line" />
+                                            </View>
+                                        </TouchableOpacity>
+                                        <TouchableOpacity onPress={() => { setShowPDFCV(false) }} style={styles.buttonStyle}>
+                                            <Text>Xong</Text>
+                                            <View style={styles.priceTag}>
+                                                <Icon name="arrow-right-s-line" />
+                                            </View>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             )
                         }
-                        
+
                     </SafeAreaView>
                 </Modal>
             </View>
-            
+
             <View style={styles.wrapModal}>
                 <Modal
                     style={{ margin: 0 }}
@@ -986,9 +983,11 @@ const styles = StyleSheet.create({
     },
     wrapCompany: {
         display: 'flex',
-        flexDirection: 'row',
+        flexDirection: 'column',
         gap: 2,
-        alignItems: 'center'
+        fontFamily: "RukbikNormal"
+
+        // alignItems: 'center'
     },
     buttonApplyJob: {
         backgroundColor: '#E2F367',
@@ -1070,7 +1069,8 @@ const styles = StyleSheet.create({
     },
     numberOfDiamond: {
         fontSize: 16,
-        fontFamily: "RukbikNormal"
+        fontFamily: "Rubik",
+        color: "#000"
     },
     JobRankNumber: {
         display: "flex",

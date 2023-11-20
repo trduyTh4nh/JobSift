@@ -1,5 +1,5 @@
 import React from "react";
-import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, ToastAndroid, SafeAreaView, Alert } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, ScrollView, ToastAndroid, SafeAreaView, Alert, Linking } from "react-native";
 import { create } from "react-test-renderer";
 import { isLoading, useFonts } from "expo-font";
 import Icon from 'react-native-remix-icon';
@@ -12,6 +12,7 @@ import STYLE from '../assets/css/universal'
 import { useIsFocused } from "@react-navigation/native";
 import { ActivityIndicator } from "react-native-paper";
 import Modal from "react-native-modal";
+import LinearGradient from 'react-native-linear-gradient';
 
 // import { ActivityIndicator } from "react-native";
 
@@ -217,6 +218,25 @@ const ChildCompany = ({ route }) => {
             });
     }, []);
 
+    const onpenFB = () => {
+        Linking.openURL('https://www.facebook.com/tran.duythanh.54');
+    }
+
+    const onpenTW = () => {
+        Linking.openURL('https://twitter.com/ThanhTrnDuy11');
+    }
+
+    const onpenLinked = () => {
+        Linking.openURL('https://www.linkedin.com/in/tranduy-th4nh-70311a234/');
+    }
+
+    const openInsta = () => {
+        Linking.openURL('https://www.instagram.com/trduyth4nh/')
+    }
+
+
+
+
 
 
 
@@ -229,8 +249,8 @@ const ChildCompany = ({ route }) => {
                     <View style={styles.companyHeader}>
 
                         <View style={styles.companyHeaderText}>
-                            <Image style={{ width: 45, height: 45 }} source={{uri: infoNTD.info ? infoNTD.info.logo_dn: "https://assets.materialup.com/uploads/01d7570f-01ca-4e3a-8dc1-b8a16864f916/preview.jpg"}}></Image>
-                            <View style={{flex: 1}}>
+                            <Image style={{ width: 45, height: 45 }} source={{ uri: infoNTD.info ? infoNTD.info.logo_dn : "https://assets.materialup.com/uploads/01d7570f-01ca-4e3a-8dc1-b8a16864f916/preview.jpg" }}></Image>
+                            <View style={{ flex: 1 }}>
                                 <Text style={styles.companyName}>{infoNTD.info ? infoNTD.info.name_dn : ''}</Text>
                                 <Text style={styles.companyDes}>Doanh nghiệp</Text>
                             </View>
@@ -292,7 +312,7 @@ const ChildCompany = ({ route }) => {
                         }}></Image>
 
                         <View style={styles.companyBodyInfo}>
-                            <Text style={styles.companyBodyInfoTitile}>Enterprise Description</Text>
+                            <Text style={styles.companyBodyInfoTitile}>Mô tả doanh nghiệp</Text>
                             <Text style={styles.companyBodyInfoContent}>
                                 {infoNTD.info ? infoNTD.info.description : 'No description'}
                             </Text>
@@ -306,19 +326,19 @@ const ChildCompany = ({ route }) => {
                             borderColor: "#B0B0B0",
                             display: "flex",
                             marginTop: 28,
-                            padding: 28,
+                            padding: 24,
                             borderRadius: 18,
                             width: "90%"
                         }} >
 
                             <View style={styles.title}>
-                                <Text style={styles.textTitle}>Enterprise Summary</Text>
+                                <Text style={styles.textTitle}>Tóm tắt doanh nghiệp</Text>
                             </View>
 
                             <View style={styles.jobCate}>
                                 <Icon size={24} name="briefcase-4-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Category</Text>
+                                    <Text style={styles.jobCateDeTailTitle}>Loại công việc</Text>
                                     <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.category : ''}</Text>
                                 </View>
                             </View>
@@ -326,7 +346,7 @@ const ChildCompany = ({ route }) => {
                             <View style={styles.jobCate}>
                                 <Icon size={24} name="map-pin-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Headquarters</Text>
+                                    <Text style={styles.jobCateDeTailTitle}>Trụ sở</Text>
                                     <Text style={styles.jobCateDetailContent}>{infoNTD.info ? infoNTD.info.address : ''}</Text>
                                 </View>
                             </View>
@@ -355,7 +375,7 @@ const ChildCompany = ({ route }) => {
                         }}>
 
                             <View style={styles.title}>
-                                <Text style={styles.textTitle}>Contacts</Text>
+                                <Text style={styles.textTitle}>Liên lạc</Text>
                             </View>
 
                             <View style={styles.jobCate}>
@@ -377,7 +397,7 @@ const ChildCompany = ({ route }) => {
                             <View style={styles.jobCate}>
                                 <Icon size={24} name="user-2-line"></Icon>
                                 <View style={styles.jobCateDeTail}>
-                                    <Text style={styles.jobCateDeTailTitle}>Person in charge</Text>
+                                    <Text style={styles.jobCateDeTailTitle}>Người phụ trách</Text>
                                     <Text style={styles.jobCateDetailContent}>{infoNTD.dataUserOfNtd ? infoNTD.dataUserOfNtd.full_name : 'no name'}</Text>
                                 </View>
                             </View>
@@ -388,19 +408,34 @@ const ChildCompany = ({ route }) => {
 
                                 <View style={styles.iconContainer}>
 
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={onpenFB} >
                                         <Icon name="facebook-circle-fill" style={styles.icon} size={30} color="#1877F2" />
                                     </TouchableOpacity>
 
 
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={onpenTW}>
                                         <Icon name="twitter-fill" style={styles.icon} size={30} color="#1DA1F2" />
                                     </TouchableOpacity>
 
 
-                                    <TouchableOpacity>
+                                    <TouchableOpacity onPress={onpenLinked}>
                                         <Icon name="linkedin-box-fill" style={styles.icon} size={30} color="#0077B5" />
                                     </TouchableOpacity>
+
+                                    <TouchableOpacity onPress={openInsta}>
+                                        <LinearGradient
+                                            colors={['#F58529', '#DD2A7B', '#8134AF']}
+                                            start={{ x: 0, y: 0 }}
+                                            end={{ x: 1, y: 0 }}
+                                            style={{
+                                                borderRadius: 10,
+                                                padding: 2,
+                                            }}
+                                        >
+                                            <Icon name="instagram-line" style={styles.icon} size={26} color="white" />
+                                        </LinearGradient>
+                                    </TouchableOpacity>
+
 
                                 </View>
                             </View>
@@ -448,7 +483,7 @@ const ChildCompany = ({ route }) => {
                     paddingLeft: 25,
                     paddingRight: 25
                 }}>
-                    <Text style={{ ...STYLE.textTitle, marginBottom: 10 }}>Review</Text>
+                    <Text style={{ ...STYLE.textTitle, marginBottom: 10 }}>Hình minh họa</Text>
                     <View style={{ marginBottom: 200, width: "100%", display: "flex", alignItems: "center" }}>
                         <MyCarousel data={data}></MyCarousel>
                     </View>

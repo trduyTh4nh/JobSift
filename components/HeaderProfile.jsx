@@ -97,7 +97,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         gap: 15,
         flex: 1,
-        alignItems: 'center'
+        display: "flex",
+        alignItems: 'center',
+        
     },
     wrap: {
         paddingTop:24 ,
@@ -134,10 +136,10 @@ const styles = StyleSheet.create({
     userName: {
         ...STYLE.textTitle,
         fontSize: 25,
-        fontWeight:'900',
+        // fontWeight:'900',
         color: '#000',
-        
-        // fontFamily: 'Rubik',
+        fontFamily: 'Rubik',
+        marginTop: -10
     },
     Xuongdong:{
         display:'flex',
@@ -168,9 +170,9 @@ const styles = StyleSheet.create({
         ...STYLE.textNormal,
         fontSize: 18,
         color: '#000',
-        fontWeight:'400'
-
-        // fontFamily: 'RukbikNormal',
+        fontWeight:'400',
+        fontFamily: 'RukbikNormal',
+        marginTop: -16
     },
     wrapSearch: {
         display: 'flex',

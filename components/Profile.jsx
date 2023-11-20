@@ -333,7 +333,7 @@ const styles = StyleSheet.create({
         flexDirection: "row",
         gap: 45,
         alignItems: "center",
-        borderColor: "#B0B0B0",
+        borderColor: "#E2F367",
         borderWidth: 3,
         borderRadius: 20,
 

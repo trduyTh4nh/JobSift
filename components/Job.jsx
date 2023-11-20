@@ -18,6 +18,7 @@ import NearbyJob from "../Job/NearbyJob";
 import { ActivityIndicator } from "react-native-paper";
 import ActionSheet from "react-native-actions-sheet";
 
+
 const Job = () => {
 
 

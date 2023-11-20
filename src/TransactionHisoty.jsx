@@ -131,14 +131,14 @@ const styles = StyleSheet.create({
     item: {
         marginTop: 24,
         padding: 20,
-        backgroundColor: '#fff',
+        backgroundColor: '#D4FFB9',
         fontSize: 24,
         borderRadius: 10,
         shadowOffset: { width: 1, height: 5 },
         shadowOpacity: 0.05,
         shadowRadius: 7,
-        elevation: 5,
-        width: "90%"
+        width: "90%",
+
     },
 
     time: {
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     money: {
         textAlign: 'right',
         fontWeight: 'bold',
-        color: '#E2F367',
+        color: '#286900',
         fontSize: 16,
         textShadowColor: '#000',
     },
