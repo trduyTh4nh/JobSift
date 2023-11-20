@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ToastAndroid, ToastAndroidStatic, ScrollView, SafeAreaView } from "react-native";
 import axios from 'axios';
 
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import { TextInput as PaperTextInput, DefaultTheme, Provider as PaperProvider } from 'react-native-paper';
 import { useFonts } from "expo-font";
@@ -68,9 +68,10 @@ const LoginForm = ({ navigation }) => {
      
         console.log("Login Success!")
         global.user = respone.data
-
-        console.log(global.user)
-        navigation.navigate('Home')
+        AsyncStorage.setItem('user', JSON.stringify(respone.data)).then(e => {
+          console.log(global.user)
+          navigation.navigate('Home')
+        })
        showToast()
 
       })

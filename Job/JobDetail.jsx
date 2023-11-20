@@ -840,9 +840,8 @@ const JobDetail = () => {
                     </SafeAreaView>
                 </Modal>
             </View>
-            <View style={styles.bodyJobDetail}>
-
-                <Tab.Navigator style={styles.tabInFoJob}
+            <View style={{...styles.bodyJobDetail, height: !hide ? '90%' : '60%'}}>
+                <Tab.Navigator style={{...styles.tabInFoJob}}
                     screenOptions={{
                         activeTintColor: 'black',
                         inactiveTintColor: 'gray',
@@ -1057,7 +1056,7 @@ const styles = StyleSheet.create({
         fontFamily: "RukbikNormal"
     },
     bodyJobDetail: {
-        height: '70%'
+        height: '60%'
     },
     tabInFoJob: {
         fontFamily: "Rubik"

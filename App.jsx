@@ -11,12 +11,10 @@ import LoginForm from './src/LoginForm';
 import Main from './components/Main';
 import { RootSiblingParent } from 'react-native-root-siblings';
 import { StripeProvider } from '@stripe/stripe-react-native';
-
 const Stack = createStackNavigator();
 
 
 export default function App() {
-
   return (
     <SheetProvider>
       <StripeProvider

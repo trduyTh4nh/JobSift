@@ -9,7 +9,7 @@ import STYLE from "../assets/css/universal";
 import axios from "axios";
 import { API_URL } from "../constants/etc";
 import { useIsFocused } from "@react-navigation/native";
-
+import AsyncStorage from '@react-native-async-storage/async-storage';
 const Profile = ({ navigation }) => {
     const [applyCount, setApplyCount] = useState(-1)
     const [cvCount, setCVCount] = useState(-1)
@@ -21,7 +21,9 @@ const Profile = ({ navigation }) => {
                 {
                     text: 'Có', onPress: () => {
                         global.user = null
-                        navigation.navigate('Home')
+                        AsyncStorage.removeItem('user').then(e => {
+                            navigation.navigate('Home')
+                        })
                     }
                 },
 

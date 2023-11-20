@@ -16,7 +16,7 @@ import { API_URL } from "../ipConfig";
 
 import NearbyJob from "../Job/NearbyJob";
 import { ActivityIndicator } from "react-native-paper";
-import ActionSheet from "react-native-actions-sheet";
+import ActionSheet, { SheetManager } from "react-native-actions-sheet";
 
 
 const Job = () => {
@@ -123,13 +123,15 @@ const Job = () => {
     //     )
     // }
 
-    const handlePopUpModal = () => {
-        setShowModal(true)
+    const handlePopUpModal = async () => {
+        const sheet = await SheetManager.show('search-sheet')
+        console.log(sheet)
+        handleGetAllData(sheet)
     }
 
-    const handleGetAllData = () => {
+    const handleGetAllData = (data) => {
         const apiUrl = `http://${API_URL}:3001/searchfilter`;
-        axios.post(apiUrl, formData, {
+        axios.post(apiUrl, data, {
             headers: {
                 'Content-Type': 'application/json'
             }
@@ -199,140 +201,7 @@ const Job = () => {
                     <Icon name="equalizer-fill"></Icon>
                 </TouchableOpacity>
             </View>
-            <ActionSheet ref={applyCVRef}>
-                <Text>Hi</Text>
-            </ActionSheet>
-            <Modal
-                isVisible={showModal}
-                // onSwipeComplete={() => { setShowModal(false) }}
-                onBackdropPress={() => { setShowModal(false) }}
-                swipeDirection={'down'}
-                style={{ margin: 0 }}
-            >
-                <SafeAreaView style={STYLE.modal}>
-                    <View style={STYLE.modalChild}>
-                        <ScrollView>
-                            <View style={{gap: 16}}>
-
-                                <View style={{
-                                    ...styles.wrapTextOption,
-                                    display: "flex",
-                                    flexDirection: "row",
-                                    alignItems: "center",
-                                }}>
-                                    <Text style={{
-                                        ...STYLE.textTitle
-                                    }}>Bộ lọc</Text>
-
-                                    <Icon name="filter-2-fill"></Icon>
-                                </View>
-                                <View style={styles.modal_item}>
-                                    <Text style={styles.titleFilter}>Tên công việc</Text>
-                                    <TextInput style={styles.textInputModal}
-                                        placeholder=""
-                                        value={formData.nameJob}
-                                        onChangeText={text => handleInputChange('nameJob', text)}
-
-                                    ></TextInput>
-                                </View>
-
-                                <View style={styles.modal_item}>
-                                    <Text style={styles.titleFilter}>Tên công ty</Text>
-                                    <TextInput style={styles.textInputModal}
-                                        placeholder=""
-                                        value={formData.company}
-                                        onChangeText={text => handleInputChange('company', text)}
-
-                                    ></TextInput>
-                                </View>
-                                <View style={styles.modal_item}>
-                                    <Text style={styles.titleFilter}>Loại công việc</Text>
-                                    <TextInput style={styles.textInputModal}
-                                        placeholder=""
-                                        value={formData.category}
-                                        onChangeText={text => handleInputChange('category', text)}
-                                    ></TextInput>
-                                </View>
-                                <View style={styles.modal_item}>
-                                    <Text style={styles.titleFilter}>Vị trí</Text>
-                                    <TextInput style={styles.textInputModal}
-                                        placeholder=""
-                                        value={formData.position}
-                                        onChangeText={text => handleInputChange('position', text)}
-
-                                    ></TextInput>
-                                </View>
-
-                                <View style={{
-                                    ...styles.modal_item,
-                                    marginBottom: 16
-                                }}>
-                                    <Text style={styles.titleFilter}>Lương</Text>
-                                    <View style={{
-                                        display: "flex",
-                                        flexDirection: "row",
-                                        justifyContent: "space-between",
-                                        alignItems: "center",
-                                        gap: 10
-                                    }}>
-                                        <TextInput style={{
-                                            ...styles.textInputModal,
-                                            width: "42%",
-                                            borderWidth: checkVar ? 1 : 0,
-                                            borderColor: checkVar ? "red" : "#000"
-
-                                        }}
-                                            placeholder="Thấp nhất"
-                                            value={formData.salaryFrom ? formData.salaryFrom : ""}
-                                            onChangeText={text => handleInputChange('salaryFrom', text)}
-                                        ></TextInput>
-                                        <Icon name="arrow-left-right-fill"></Icon>
-                                        <TextInput style={{
-                                            ...styles.textInputModal,
-                                            width: "42%",
-                                            borderWidth: checkVar ? 1 : 0,
-                                            borderColor: checkVar ? "red" : "#000",
-
-                                        }}
-                                            placeholder="Cao nhất"
-                                            value={formData.salaryTo ? formData.salaryTo : ""}
-                                            onChangeText={text => handleInputChange('salaryTo', text)}
-                                        ></TextInput>
-                                    </View>
-                                </View>
-
-
-                                <View style={{
-                                    display: "flex",
-                                    justifyContent: "center",
-                                    alignItems: "center",
-                                    marginBottom: 16
-
-                                }}>
-                                    <TouchableOpacity style={{
-                                        backgroundColor: "#e2f367",
-                                        width: '100%',
-                                        display: "flex",
-                                        justifyContent: "center",
-                                        alignItems: "center",
-                                        padding: 16,
-                                        borderRadius: 10
-
-                                    }}
-
-                                        onPress={handleGetAllData}
-                                    >
-                                        <Text style={{
-                                            fontFamily: 'RukbikNormal',
-                                        }}>Hoàn thành</Text>
-                                    </TouchableOpacity>
-                                </View>
-                            </View>
-                        </ScrollView>
-                    </View>
-                </SafeAreaView>
-            </Modal>
-
+            
 
             <View style={{
                 paddingLeft: 14,
