@@ -704,32 +704,34 @@ const CreateCV = ({ route, navigation }) => {
 
         const idUser = global.user.user.id_user
 
-
-        axios.post(`http://${API_URL}:3001/genratecv/${idUser}`, dataGenrate, {
-            headers: {
-                'Content-Type': 'application/json'
+        axios.post(`http://${API_URL}:3001/diamond/${idUser}`).then(e => {
+            const d = e.data
+            if (e.data.diamond_count >= 20) {
+                axios.post(`http://${API_URL}:3001/diamond/set`, {
+                    "diamond_count": e.data.diamond_count - 20,
+                    "id_user": idUser
+                }).then((e) => {
+                    axios.post(`http://${API_URL}:3001/genratecv/${idUser}`, dataGenrate, {
+                        headers: {
+                            'Content-Type': 'application/json'
+                        }
+                    })
+                        .then((e) => {
+                            navigation.navigate('CV')
+                            console.log("SUCCESSFULLY! : " + JSON.stringify(e.data))
+                        })
+                        .catch((error) => {
+                            console.log("ERROR!: " + error)
+                        })
+                    socket.emit('kcValChange', { diamond_count: d.diamond_count - 20 })
+                    
+                }).catch((error) => {
+                    console.log(error)
+                })
+            } else {
+                Alert.alert('Không đủ kim cương', 'Bạn không có đủ kim cương để tạo CV')
             }
         })
-            .then((e) => {
-                console.log("SUCCESSFULLY! : " + JSON.stringify(e.data))
-                axios.post(`http://${API_URL}:3001/diamond/${idUser}`).then(e => {
-                    const d = e.data
-                    if (e.data.diamond_count > 20) {
-                        axios.post(`http://${API_URL}:3001/diamond/set`, {
-                            "diamond_count": e.data.diamond_count - 20,
-                            "id_user": idUser
-                        }).then((e) => {
-                            socket.emit('kcValChange', { diamond_count: d.diamond_count - 20 })
-                            navigation.navigate('CV')
-                        }).catch((error) => {
-                            console.log(error)
-                        })
-                    }
-                })
-            })
-            .catch((error) => {
-                console.log("ERROR!: " + error)
-            })
     }
 
 
@@ -823,7 +825,7 @@ const CreateCV = ({ route, navigation }) => {
                             paddingLeft: 20,
                             borderRadius: 20,
                             justifyContent: "space-between",
-                            
+
                         }}>
                         <Text style={{
                             fontFamily: "RukbikNormal",
@@ -2663,7 +2665,7 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         flexDirection: "row",
-        gap: 10, 
+        gap: 10,
         marginTop: 10
     }
 
