@@ -822,12 +822,13 @@ const CreateCV = ({ route, navigation }) => {
                             alignItems: "center",
                             paddingLeft: 20,
                             borderRadius: 20,
-                            justifyContent: "space-between"
+                            justifyContent: "space-between",
+                            
                         }}>
                         <Text style={{
                             fontFamily: "RukbikNormal",
                             color: "#000"
-                        }} >Edit</Text>
+                        }} >Chỉnh sửa</Text>
                         <Icon name="arrow-right-s-line"></Icon>
                     </TouchableOpacity>
                 </View>
@@ -927,7 +928,7 @@ const CreateCV = ({ route, navigation }) => {
                         <Text style={{
                             fontFamily: "RukbikNormal",
                             color: "#000"
-                        }} >Edit</Text>
+                        }} >Chỉnh sửa</Text>
                         <Icon name="arrow-right-s-line"></Icon>
                     </TouchableOpacity>
                 </View>
@@ -1026,7 +1027,7 @@ const CreateCV = ({ route, navigation }) => {
                         <Text style={{
                             fontFamily: "RukbikNormal",
                             color: "#000"
-                        }} >Edit</Text>
+                        }} >Chỉnh sửa</Text>
                         <Icon name="arrow-right-s-line"></Icon>
                     </TouchableOpacity>
                 </View>
@@ -1099,7 +1100,7 @@ const CreateCV = ({ route, navigation }) => {
                         <Text style={{
                             fontFamily: "RukbikNormal",
                             color: "#000"
-                        }} >Edit</Text>
+                        }} >Chỉnh sửa</Text>
                         <Icon name="arrow-right-s-line"></Icon>
                     </TouchableOpacity>
                 </View>
@@ -1176,7 +1177,7 @@ const CreateCV = ({ route, navigation }) => {
                         <Text style={{
                             fontFamily: "RukbikNormal",
                             color: "#000"
-                        }} >Edit</Text>
+                        }} >Chỉnh sửa</Text>
                         <Icon name="arrow-right-s-line"></Icon>
                     </TouchableOpacity>
                 </View>
@@ -1576,7 +1577,7 @@ const CreateCV = ({ route, navigation }) => {
                                     <Text style={{
                                         fontFamily: "RukbikNormal",
                                         color: "#000"
-                                    }}>Add Experience</Text>
+                                    }}>Thêm chứng chỉ</Text>
 
                                     <Icon name="arrow-right-s-line"></Icon>
                                 </TouchableOpacity>
@@ -1693,8 +1694,6 @@ const CreateCV = ({ route, navigation }) => {
                                     </View>
 
 
-
-
                                     <View style={{
                                         flex: 1
                                     }}>
@@ -1809,7 +1808,7 @@ const CreateCV = ({ route, navigation }) => {
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
                                     color: "#000"
-                                }}>Add Education</Text>
+                                }}>Thêm trình độ học vấn</Text>
 
                                 <Icon name="arrow-right-s-line"></Icon>
                             </TouchableOpacity>
@@ -2038,7 +2037,7 @@ const CreateCV = ({ route, navigation }) => {
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
                                     color: "#000"
-                                }}>Add Acitivity</Text>
+                                }}>Thêm hoạt động</Text>
 
                                 <Icon name="arrow-right-s-line"></Icon>
                             </TouchableOpacity>
@@ -2176,7 +2175,7 @@ const CreateCV = ({ route, navigation }) => {
                                             borderRadius: 20,
                                             flex: 1,
                                         }}>
-                                        <Text>Add</Text>
+                                        <Text>Thêm</Text>
                                     </TouchableOpacity>
                                 </View>
 
@@ -2225,7 +2224,7 @@ const CreateCV = ({ route, navigation }) => {
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
                                     color: "#000"
-                                }}>Add Language</Text>
+                                }}>Thêm ngôn ngữ</Text>
 
                                 <Icon name="arrow-right-s-line"></Icon>
                             </TouchableOpacity>
@@ -2396,7 +2395,7 @@ const CreateCV = ({ route, navigation }) => {
                                 <Text style={{
                                     fontFamily: "RukbikNormal",
                                     color: "#000"
-                                }}>Add Experience</Text>
+                                }}>Thêm kinh nghiệm</Text>
 
                                 <Icon name="arrow-right-s-line"></Icon>
                             </TouchableOpacity>
@@ -2472,6 +2471,9 @@ const styles = StyleSheet.create({
         justifyContent: "center",
         marginTop: 40,
         gap: 10
+    },
+    buttonOption: {
+        marginTop: 10
     },
     imageProfile: {
         padding: 10
@@ -2599,7 +2601,8 @@ const styles = StyleSheet.create({
     },
     itemAbove: {
         flexGrow: 1,
-        justifyContent: "space-between"
+        justifyContent: "space-between",
+        marginTop: 10
     },
     buttonOption: {
         display: "flex",
@@ -2660,7 +2663,8 @@ const styles = StyleSheet.create({
         display: "flex",
         justifyContent: "center",
         flexDirection: "row",
-        gap: 10
+        gap: 10, 
+        marginTop: 10
     }
 
 })

@@ -650,15 +650,15 @@ const JobDetail = () => {
                                                 <View style={styles.CVDetailsSection}>
                                                     <Icon name="briefcase-4-line" />
                                                     <View>
-                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
+                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Loại công việc</Text>
                                                         <Text style={{ fontSize: 18 }}>{cv.loai_cong_viec}</Text>
                                                     </View>
                                                 </View>
                                                 <View style={styles.CVDetailsSection}>
                                                     <Icon name="user-2-line" />
                                                     <View>
-                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Category</Text>
-                                                        <Text style={{ fontSize: 18 }}>{cv.vi_tri}</Text>
+                                                        <Text style={{ color: '#B0B0B0', fontSize: 12 }}>Vị trí</Text>
+                                                        <Text style={{ fontSize: 18 }}>{cv.position}</Text>
                                                     </View>
                                                 </View>
                                             </View>
@@ -675,31 +675,7 @@ const JobDetail = () => {
 
 
                                 </View>
-                                {
-
-                                    apply.status == 'Rejected' ?
-                                        (
-                                            <View style={{ gap: 16 }}>
-                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
-                                                <Text>Cảm thấy mình đã cải thiện?</Text>
-                                                <TouchableOpacity onPress={handleCVApply} style={styles.buttonStyle}>
-                                                    <Text>Ứng tuyển với CV đã có</Text>
-                                                    <View style={styles.priceTag}>
-                                                        <Text>💎 10</Text>
-                                                        <Icon name="arrow-right-s-line" />
-                                                    </View>
-                                                </TouchableOpacity>
-                                                <TouchableOpacity onPress={handlePDFCVChoose} style={styles.buttonStyle}>
-                                                    <Text>Ứng tuyển với CV PDF</Text>
-                                                    <View style={styles.priceTag}>
-                                                        <Text>💎 30</Text>
-                                                        <Icon name="arrow-right-s-line" />
-                                                    </View>
-                                                </TouchableOpacity>
-                                                <View style={{ borderBottomColor: '#B0B0B0', borderBottomWidth: 2 }}></View>
-                                            </View>
-                                        ) : ''
-                                }
+          
 
                                 <TouchableOpacity onPress={() => { setSuccess(false) }} style={styles.buttonStyle}>
                                     <Text>Xong</Text>

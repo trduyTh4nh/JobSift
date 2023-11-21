@@ -90,7 +90,7 @@ const CardJobDetail = (props) => {
 
                             <View style={styles.jobCardName}>
                                 <Text style={styles.jobCardNameCompany}>{dataPostDetail.tieu_de}</Text>
-                                <Text style={styles.jobCardAddress}>{truncateText(dataPostDetail.dia_chi, 18)}</Text>
+                                <Text style={styles.jobCardAddress}>{dataPostDetail.dia_chi ? truncateText(dataPostDetail.dia_chi, 18) : ''}</Text>
 
                             </View>
 

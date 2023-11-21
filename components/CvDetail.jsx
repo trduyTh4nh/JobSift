@@ -648,7 +648,8 @@ const CvDetail = ({ navigation }) => {
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
-                        gap: 50
+                        flex: 1,
+                        justifyContent: 'space-between'
                     }}>
                         <View style={styles.itemAbove}>
                             <View style={styles.wrapitemAbove}>
@@ -668,7 +669,7 @@ const CvDetail = ({ navigation }) => {
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
-                        gap: 50,
+                        justifyContent: 'space-between',
                         marginBottom: 10
                     }}>
                         <View style={styles.itemAbove}>
@@ -740,7 +741,7 @@ const CvDetail = ({ navigation }) => {
                     <View style={{
                         display: "flex",
                         flexDirection: "row",
-                        gap: 50
+                        justifyContent: 'space-between'
                     }}>
                         <View style={styles.itemAbove}>
                             <View style={styles.wrapitemAbove}>
@@ -1192,7 +1193,7 @@ const CvDetail = ({ navigation }) => {
                                 <View style={{
                                     display: "flex",
                                     flexDirection: "row",
-                                    gap: 90
+                                    gap: 95
                                 }}>
                                     <View style={{
                                         display: "flex",
@@ -1267,14 +1268,16 @@ const CvDetail = ({ navigation }) => {
                                             ...styles.imgeWETitle,
                                             fontSize: 16,
                                             color: '#000',
-                                            marginBottom: 4
+                                            marginBottom: 4,
+                                            
                                         }} >Ngày sinh</Text>
                                         <Text style={{
                                             backgroundColor: '#E2F367',
                                             padding: 15,
-                                            borderRadius: 16,
                                             color: '#000',
                                             ...styles.imgeWETitle,
+                                            borderRadius: 16,
+                                            overflow: 'hidden',
                                             fontSize: 14
                                         }}>{cv ? (new Date(cv.ngaysinh)).toLocaleDateString() : 'không có'}</Text>
                                     </View>
@@ -1288,6 +1291,7 @@ const CvDetail = ({ navigation }) => {
                                             marginBottom: 4
                                         }} >Mô tả bản thân</Text>
                                         <Text style={{
+                                            overflow: 'hidden',
                                             backgroundColor: '#E2F367',
                                             padding: 15,
                                             borderRadius: 16,
@@ -1309,6 +1313,7 @@ const CvDetail = ({ navigation }) => {
                                             marginBottom: 4
                                         }} >Mục tiêu cần đạt</Text>
                                         <Text style={{
+                                            overflow: 'hidden',
                                             backgroundColor: '#E2F367',
                                             padding: 15,
                                             borderRadius: 16,
@@ -1486,7 +1491,7 @@ const CvDetail = ({ navigation }) => {
                                             <View style={{
                                                 display: "flex",
                                                 flexDirection: "row",
-                                                gap: 120
+                                                justifyContent: 'space-between'
                                             }}>
                                                 <View style={{
                                                     display: "flex",
@@ -1527,7 +1532,7 @@ const CvDetail = ({ navigation }) => {
                                             <View style={{
                                                 display: "flex",
                                                 flexDirection: "row",
-                                                gap: 90
+                                                justifyContent: 'space-between'
 
                                             }}>
                                                 <View style={{
@@ -1636,7 +1641,7 @@ const CvDetail = ({ navigation }) => {
                                             <View style={{
                                                 display: "flex",
                                                 flexDirection: "row",
-                                                gap: 90
+                                                justifyContent: 'space-between'
                                             }}>
                                                 <View style={{
                                                     display: "flex",
@@ -2066,7 +2071,8 @@ const styles = StyleSheet.create({
     imgeWETitle: {
         color: "#000",
         fontFamily: "Rubik",
-        fontSize: 20
+        fontSize: 20,
+        borderRadius: 16
     },
     workExperience: {
         marginTop: 24
@@ -2094,7 +2100,6 @@ const styles = StyleSheet.create({
     },
     wrapitemAbove: {
         display: "flex",
-        width: "100%",
     },
     WeItem: {
         display: "flex",
@@ -2105,7 +2110,7 @@ const styles = StyleSheet.create({
     },
     itemAbove: {
         flex: 1
-
+        
     },
     buttonOption: {
         display: "flex",

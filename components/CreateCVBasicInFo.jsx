@@ -154,20 +154,29 @@ const CreateCVBasicInFo = () => {
                                 </Picker>
 
                                 <Text style={styles.inputItemTitle}>Vị trí</Text>
-                                <View style={styles.wrapPicker1}>
-                                    <TextInput 
-                                    onChangeText={(value) => {
-                                        setPosition(value)
-                                    }}
-                                    style={{
-                                        width: "100%",
-                                        paddingLeft: 18,
-                                        paddingTop: 18,
-                                        paddingBottom: 18
-                                    }}>
-
-                                    </TextInput>
-                                </View>
+                                
+                                     <Picker
+                                            selectedValue={position}
+                                            style={styles.selectIOS}
+                                            onValueChange={(itemValue, itemIndex) => {
+                                                setPosition(itemValue);
+                                            }}
+                                        >
+                                            {Array.isArray(allPosition) &&
+                                                allPosition.map((item, index) => (
+                                                    <Picker.Item
+                                                        key={index}
+                                                        label={item.ten_vitri}
+                                                        value={item.ten_vitri}
+                                                        style={{
+                                                            fontSize: 16,
+                                                            fontWeight: "800",
+                                                            fontFamily: "RukbikNormal"
+                                                        }}
+                                                    />
+                                                ))}
+                                        </Picker>
+                                
                             </View>
 
                         ) : (
