@@ -7,7 +7,7 @@ Tiến độ: 100% (Đã hoàn thành \[8.5 điểm\])
 
 
 # Last words
-## Best wishes from Quang.
+## Best wishes.
 ```
      =/\                 /\=
      / \'._   (\_/)   _.'/ \
