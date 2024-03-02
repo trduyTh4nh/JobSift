@@ -115,6 +115,7 @@ const LoginForm = ({ navigation }) => {
           <View style={styles.wrapEmail}>
             {/* <Text style={styles.lableInput}>Email</Text> */}
             <PaperTextInput
+            testID="email"
             mode='outlined'
             theme={{
               roundness: 16,
@@ -177,7 +178,7 @@ const LoginForm = ({ navigation }) => {
 
         <View style={styles.descBottom}>
           <Text style={styles.desQuestion}>Bạn đã có tài khoản?</Text>
-          <TouchableOpacity onPress={changeSignupScreen}>
+          <TouchableOpacity testID="test" onPress={changeSignupScreen}>
             <Text style={styles.descBottomLogin}>Signup</Text>
           </TouchableOpacity>
         </View>
